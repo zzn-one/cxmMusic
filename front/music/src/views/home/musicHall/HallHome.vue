@@ -31,18 +31,17 @@
                                 shadow="never">
                                 <img src="@/assets/bg.jpg" class="card-img">
                                 <div style="margin-top: 10px;">
-                                    <button class="card-btn" @click="card_btn" @mousemove="changeColor"
-                                        @mouseout="restoreColor" :value="item">
-                                        流行粤语了歌曲触动了几代人的青春啦啦，歌单名称最长限制为30
-                                    </button>
+
+                                    <TextBtn  @click.native="card_btn" :value="item" class="card-btn">
+                                        流行粤语歌曲,歌单名称最长限制为15
+                                    </TextBtn>
+                                    
                                 </div>
 
                                 <div style="color:#adabab">播放量：2299万</div>
                             </el-card>
-
+                            
                         </div>
-
-
                     </el-carousel-item>
                 </el-carousel>
             </div>
@@ -51,8 +50,12 @@
 </template>
 
 <script>
+import TextBtn from '@/components/publish/TextBtn.vue';
 export default {
     name: 'HallHome',
+    components:{
+        TextBtn,
+    },
     data() {
         return {
             title: '歌  单  推  荐',
@@ -77,14 +80,6 @@ export default {
                     id: e.target.value
                 }
             })
-        },
-        //改变颜色
-        changeColor(e) {
-            e.target.style.color = 'rgb(240, 99, 18)'
-        },
-        //恢复颜色
-        restoreColor(e) {
-            e.target.style.color = 'black'
         },
         //轮播图的切换事件
         changeCarousel(index) {
@@ -132,7 +127,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style scoped lang="less">
 .title-box {
     width: 1200px;
     height: 100px;
@@ -171,7 +166,7 @@ export default {
 }
 
 .tag-li-button :hover {
-    color: rgb(240, 99, 18);
+    color: #f06312;
 }
 
 .card-box {
@@ -201,5 +196,12 @@ export default {
     background-color: rgba(255, 255, 255, 0);
     text-align: left;
     margin-bottom: 10px;
+}
+/* 轮播图两边的按钮*/
+/deep/ .el-carousel__arrow {
+
+    margin: 0 -16px;
+
+    font-size: 20px;
 }
 </style>

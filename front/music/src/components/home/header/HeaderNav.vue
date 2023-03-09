@@ -41,14 +41,48 @@
             </el-col>
             <!-- 登录按钮 / 我的音乐 -->
             <el-col :span="3">
-                <div class="navItem">
+                <!-- 未登录  -->
+                <div class="navItem" v-show="!isLogin">
                     <el-button type="text" @click="openLoginDialog">
                         <span class="login_btn">登录</span>
                     </el-button>
                 </div>
+                <!-- 已有用户登录(jwt) -->
+                <div class="navItem" v-show="isLogin">
+                    <div>
+                        <el-popover placement="top-start" width="150" trigger="hover">
+                            <div>
+
+                                <div>
+                                    <img class="avatar-img" src="@/assets/3.jpg" style="display: inline-block;">
+                                    <div style="display: inline-block; margin-top:25px;margin-left:10px;position:absolute;font-size:16px">
+                                        疯原万叶
+                                    </div>
+                                </div>
+
+                                <TextBtn class="avatar-btn" @click.native="userCenter(e)">
+                                    个人中心
+                                </TextBtn>
+                                <TextBtn class="avatar-btn" @click.native="updateUserName(e)">
+                                    修改昵称
+                                </TextBtn>
+                                <TextBtn class="avatar-btn" @click.native="updatePassword(e)">
+                                    修改密码
+                                </TextBtn>
+                                <TextBtn class="avatar-btn" @click.native="logout(e)">
+                                    退出登录
+                                </TextBtn>
+                            </div>
+
+                            <el-button type="text" slot="reference">
+                                <img class="avatar-img" src="@/assets/3.jpg">
+                            </el-button>
+                        </el-popover>
+                    </div>
+                </div>
             </el-col>
 
-
+            <!-- 登录窗口 -->
             <el-dialog :visible.sync="loginDialogVisible" width="500px" center>
                 <el-card class="box-card">
                     <!-- 登录表单 -->
@@ -74,12 +108,17 @@
     </div>
 </template>
 <script>
+import TextBtn from '@/components/publish/TextBtn.vue';
 export default {
     name: "HeaderNav",
+    components: {
+        TextBtn
+    },
     data() {
         return {
             searchKey: '',
             loginDialogVisible: false,
+            isLogin: true,
             userForm: {
                 account: '',
                 password: ''
@@ -105,6 +144,22 @@ export default {
         openRegister() {
             this.$router.push('/userRegister')
         },
+        //个人中心
+        userCenter(e) {
+            //跳转到  userMusic 界面
+        },
+        //修改用户名 按钮点击
+        updateUserName(e) {
+
+        },
+        //修改密码 按钮点击
+        updatePassword(e) {
+
+        },
+        //退出登录
+        logout(e) {
+
+        }
     }
 }
 </script>
@@ -164,5 +219,19 @@ export default {
     line-height: 60px;
     margin: 0 auto;
     margin-bottom: 20px;
+}
+
+.avatar-img {
+    margin-top: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 60px;
+    
+}
+
+.avatar-btn {
+    display: block;
+    font-size: 16px;
+    margin: 8px 0;
 }
 </style>

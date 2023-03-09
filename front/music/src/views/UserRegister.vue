@@ -79,19 +79,8 @@ export default {
 .box-card {
     height: 970px;
 
-    background: #FFEEEE;
-    /* fallback for old browsers */
-    background: -webkit-linear-gradient(to top, #DDEFBB, #FFEEEE);
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to top, #DDEFBB, #FFEEEE);
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-
-
-
-
-
-    /*background-image: url("@/assets/bg.jpg")*/
+    background: url("@/assets/2.jpg");
+    background-size: 100%;
 }
 
 .box-card-item {

@@ -7,9 +7,11 @@
 <script>
 
 export default {
-    name: "App",
+    name: "PlayList",
 }
 </script>
   
   
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+
+</style>

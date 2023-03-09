@@ -4,6 +4,11 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/',
+    name: '/',
+    redirect: '/home',
+  },
 
   {
     //主页
@@ -22,7 +27,22 @@ const routes = [
         //我的音乐
         path: 'userMusic',
         name: 'userMusic',
-        component: () => import('@/views/home/UserMusic.vue')
+        component: () => import('@/views/home/UserMusic.vue'),
+        redirect: '/home/userMusic/userSong',
+        children: [
+          {
+            //收藏的歌曲
+            path: 'userSong',
+            name: 'userSong',
+            component: () => import('@/views/home/userMusic/UserSong.vue'),
+          },
+          {
+            //收藏的歌单
+            path: 'userSongList',
+            name: 'userSongList',
+            component: () => import('@/views/home/userMusic/UserSongList.vue'),
+          },
+        ]
       },
       {
         //搜索的结果页面

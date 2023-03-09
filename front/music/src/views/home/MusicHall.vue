@@ -60,6 +60,6 @@ export default {
 }
 
 .active {
-    color: rgb(240, 99, 18);
+    color: #f06312;
 }
 </style>
