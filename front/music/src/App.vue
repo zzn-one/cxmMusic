@@ -21,6 +21,9 @@ a {
   text-decoration: none;
   color: black;
 }
+a:hover{
+  color: #f06312;
+}
 body{
   margin: 0;
   padding: 0;
