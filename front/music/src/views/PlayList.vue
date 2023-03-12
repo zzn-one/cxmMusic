@@ -6,7 +6,7 @@
             <div class="header-box">
                 <div class="header-logo">
                     <a href="/" style="color: rgba(3, 3, 3, 0.616)" @mouseover="$event.target.style.color = 'white'"
-                        @mouseout="$event.target.style.color = 'black'">
+                        @mouseout="$event.target.style.color = 'black'"  target="_blank">
                         {{ logo }}
                     </a>
                 </div>
@@ -106,9 +106,9 @@ export default {
     created() {
         for (let i = 0; i < 20; i++) {
             this.songsTableData.push({
-                name: "只因你太霉",
-                songerName: "鸡哥",
-                duration: '3:08'
+                name: "泡沫",
+                songerName: "凳子齐",
+                duration: '4:19'
             })
         }
     }
@@ -136,6 +136,7 @@ export default {
 .header-box {
     display: flex;
     color: rgba(3, 3, 3, 0.616);
+    margin-bottom: 90px;
 }
 
 .header-logo {
@@ -239,5 +240,9 @@ export default {
     font-size: 18px;
     text-align: center;
     margin: 10px 0;
+}
+
+.play-box{
+    margin-top: 50px;
 }
 </style>

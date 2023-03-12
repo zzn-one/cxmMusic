@@ -4,7 +4,7 @@
         <div class="play-btns-box">
             <div class="play-btns-body">
                 <!-- 上一首 -->
-                <el-button type="text" class="play-btns-item">
+                <el-button type="text" class="play-btns-item" @click="previousSong">
                     <img src="https://img.icons8.com/ios/20/null/left-squared--v1.png" />
                 </el-button>
 
@@ -20,7 +20,7 @@
 
 
                 <!-- 下一首 -->
-                <el-button type="text" class="play-btns-item">
+                <el-button type="text" class="play-btns-item" @click="nextSong">
                     <img src="https://img.icons8.com/ios/20/null/right-squared--v1.png" />
                 </el-button>
             </div>
@@ -45,9 +45,12 @@
             </div>
 
         </div>
-        <!-- 3.占位 -->
-        <div class="play-placeHolder-box">
-
+        <!-- 3.其他功能 -->
+        <div class="play-other-box">
+            <!-- 音量 -->
+            <el-slider v-model="volume" vertical height="50px" max="1" step="0.01" >
+            </el-slider>
+            <img src="https://img.icons8.com/ios/20/null/medium-volume--v1.png" style="margin-left:10px ;" />
         </div>
         <!-- 播放控件 -->
         <audio id="audio" preload="auto" :src="songUrl">
@@ -60,24 +63,40 @@ export default {
     name: "MusicPlayer",
     data() {
         return {
+            //播放列表
+            songList: [],
             //当前歌曲索引
             currentIndex: 0,
 
             songName: '',
             singerName: '',
+
+            // 当前已播放时长
             playedTime: 0,
+
+            //歌曲时长
             duration: 0,
 
+            //歌曲播放状态 暂停/正在播放
             paused: false,
 
             // 歌曲的url
             songUrl: '',
+
+            //音量
+            volume: 0.5,
         }
     },
     computed: {
         // 进度条进度
-        percentage() {
-            return this.playedTime / this.duration * 100
+        percentage: {
+            get() {
+                return this.playedTime / this.duration * 100
+            },
+            set(value) {
+                //防止报错
+            }
+
         },
 
 
@@ -94,15 +113,87 @@ export default {
             }
         },
         //上一首
-
+        previousSong() {
+            let songNumber = this.songList.length
+            if (this.currentIndex > 0) {
+                this.currentIndex = (this.currentIndex - 1) % songNumber
+            } else {
+                this.currentIndex = (songNumber - 1) & songNumber
+            }
+            //播放 延迟一秒
+            setTimeout(() => {
+                this.play()
+            }, 1000)
+        },
         //下一首
+        nextSong() {
+            let songNumber = this.songList.length
+            if (this.currentIndex < songNumber) {
+                this.currentIndex = (this.currentIndex + 1) % songNumber
+            }
+            //播放 延迟一秒
+            setTimeout(() => {
+                this.play()
+            }, 1000)
+
+        },
 
         //时间的格式转换
         timeFormat(v) {
             let minute = Math.floor(v / 60)
-            let second = (v % 60).toFixed(0)
+            let second = Math.floor(v % 60).toFixed(0)
+            if (minute < 10) {
+                minute = "0" + minute
+            }
+            if (second < 10) {
+                second = "0" + second
+            }
             return minute + ":" + second
-        }
+        },
+
+        //假数据
+        testData() {
+            this.songList.push(
+                {
+                    name: "泡沫",
+                    singerName: "邓紫棋",
+                    sourceUrl: "http://music.163.com/song/media/outer/url?id=233931.mp3"
+                },
+                {
+                    name: "关于本人生活状态的报告",
+                    singerName: "天然卷夏祭,Sx",
+                    sourceUrl: "http://music.163.com/song/media/outer/url?id=1447792630.mp3"
+                },
+                {
+                    name: "请吃饭的关系",
+                    singerName: "不靠谱组合",
+                    sourceUrl: "http://ws.stream.qqmusic.qq.com/C400000aZWZr4TuUOi.m4a?guid=878565261&vkey=F128FB7C34D46ECB841B8E2DD23FE06015C8FBDB0C5DF8E60FEE868613EEF896793FB48A1270FDDED989CAF12F5ED1BCAD423B7430CF98AA&uin=&fromtag=120032"
+                },
+            )
+        },
+        //歌曲索引变动 改变当前播放器的歌曲信息
+        changeSongMsg() {
+            this.songUrl = this.songList[this.currentIndex].sourceUrl
+            this.songName = this.songList[this.currentIndex].name
+            this.singerName = this.songList[this.currentIndex].singerName
+        },
+        //获取歌曲当前播放进度
+        getCurrentTime() {
+            const audioDOM = document.getElementById("audio");
+
+            setInterval(() => {
+                if (!audioDOM.ended) {
+                    if (isNaN(audioDOM.currentTime)) {
+                        console.log("歌曲未加载3");
+                    } else {
+                        this.playedTime = audioDOM.currentTime
+                    }
+                } else {
+                    this.nextSong()
+                }
+            }, 1000)
+        },
+
     },
     watch: {
         songUrl(n) {
@@ -113,7 +204,6 @@ export default {
                     //获取歌曲时长
                     if (isNaN(audioDOM.duration)) {
                         console.log("歌曲未加载1");
-
                     } else {
                         this.duration = audioDOM.duration
                     }
@@ -125,27 +215,35 @@ export default {
                     } else {
                         this.paused = audioDOM.paused
                     }
-
-                    //获取歌曲当前播放时长
-                    if (!audioDOM.ended) {
-                        setInterval(() => {
-                            if (isNaN(audioDOM.currentTime)) {
-                                console.log("歌曲未加载3");
-                            } else {
-                                this.playedTime = audioDOM.currentTime
-                            }
-                        }, 1000)
-                    }
-
                 }, 1000)
             }
+        },
+        currentIndex() {
+            this.changeSongMsg()
+        },
+        //音量
+        volume(newValue) {
+            const audioDOM = document.getElementById("audio");
+            if (!isNaN(audioDOM.volume)) {
+                audioDOM.volume = newValue;
+            }
+            console.log(audioDOM.volume);
         }
     },
-    created() {
-        this.songUrl = 'http://music.163.com/song/media/outer/url?id=233931.mp3'
+    async created() {
+        //播放引导
+        this.$alert("由于您的浏览器设置，音乐无法自动播放，请手动点击播放。", "MM音乐提醒您", {
+            confirmButtonText: '我知道了',
+            callback: action => {
+                this.play()
+            }
+        })
 
-        this.songName = '明明就'
-        this.singerName = '周杰伦'
+        await this.testData()
+        this.changeSongMsg()
+
+        //获取歌曲当前播放进度
+        this.getCurrentTime()
 
     }
 }
@@ -171,12 +269,12 @@ export default {
 
 .play-progress-box {
     height: 100px;
-    flex: 17;
+    flex: 16;
 }
 
-.play-placeHolder-box {
+.play-other-box {
     height: 100px;
-    flex: 6;
+    flex: 7;
 }
 
 /*歌曲信息*/
@@ -198,5 +296,13 @@ export default {
 /*进度条*/
 /deep/.el-slider__bar {
     background-color: rgb(195, 200, 204);
+}
+
+/*音量进度条的按钮*/
+/deep/.el-slider__button {
+    width: 0;
+    height: 0;
+    border: none;
+
 }
 </style>

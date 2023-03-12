@@ -12,10 +12,8 @@
             <!-- 导航栏 -->
             <div class="songs-nav-box">
                 <ul class="nav-ul">
-                    <li v-for="item in navList" :key="item.id" class="nav-li">
-                        <TextBtn :value="item.id" @click.native="nav_btn" class="nav-btn">
-                            {{ item.name }}
-                        </TextBtn>
+                    <li v-for="item in navList" class="nav-li">
+                        <RouterLink :to="{ name: item.routerName }" active-class="active">{{ item.name }}</RouterLink>
                     </li>
                 </ul>
 
@@ -29,10 +27,12 @@
 
 <script>
 import TextBtn from '@/components/publish/TextBtn.vue';
+import { RouterLink } from 'vue-router';
 export default {
     name: "UserMusic",
     components: {
         TextBtn,
+        RouterLink
     },
     data() {
         return {
@@ -42,36 +42,9 @@ export default {
         };
     },
     methods: {
-        nav_btn(e) {
-            //被点击的导航标签变色
-            this.currentNav = e.target;
 
-            console.log(e.target.parentNode);
-
-            //导航到对应页面
-            if (e.target.value == 1) {
-                //歌曲页面
-                this.$router.push({
-                    name: "userSong"
-                })
-            } else {
-                //歌单页面
-                this.$router.push({
-                    name: 'userSongList'
-                })
-
-            }
-        },
     },
-    watch: {
-        //导航标签变色
-        currentNav(t, ot) {
-            if (ot !== "") {
-                ot.style.color = "black";
-            }
-            t.style.color = "rgb(240, 99, 18)";
-        }
-    },
+
     created() {
         this.user = {
             name: "疯原万叶",
@@ -79,12 +52,13 @@ export default {
         };
         this.navList = [
             {
-                id: 1,
-                name: "歌曲"
+                name: "歌曲",
+                routerName: "userSong"
             },
             {
-                id: 2,
-                name: "歌单"
+
+                name: "歌单",
+                routerName: "userSongList"
             }
         ];
     },
@@ -144,5 +118,9 @@ export default {
 
 .nav-btn {
     font-size: 16px;
+}
+
+.active {
+    color: rgb(240, 99, 18);
 }
 </style>
