@@ -16,6 +16,9 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
 
+/* moment 时间格式工具 */
+import moment from 'moment'
+Vue.prototype.$moment = moment
 
 new Vue({
   router,

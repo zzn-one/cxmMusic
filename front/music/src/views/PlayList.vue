@@ -6,7 +6,7 @@
             <div class="header-box">
                 <div class="header-logo">
                     <a href="/" style="color: rgba(3, 3, 3, 0.616)" @mouseover="$event.target.style.color = 'white'"
-                        @mouseout="$event.target.style.color = 'black'"  target="_blank">
+                        @mouseout="$event.target.style.color = 'black'" target="_blank">
                         {{ logo }}
                     </a>
                 </div>
@@ -49,6 +49,9 @@
                                 <el-table-column prop="songerName" label="歌手" width="120">
                                 </el-table-column>
                                 <el-table-column prop="duration" label="时长" width="120" show-overflow-tooltip>
+                                    <template slot-scope="scope">
+                                        {{ $moment(scope.row.duration).format("mm:ss") }}
+                                    </template>
                                 </el-table-column>
                             </el-table>
                         </div>
@@ -57,7 +60,7 @@
                     <!-- 歌曲信息展示 -->
                     <div class="song-msg-box">
                         <div class="song-info-box">
-                            <img class="song-info-img" src="@/assets/篮球鸡.webp" >
+                            <img class="song-info-img" src="@/assets/篮球鸡.webp">
                             <div class="song-info-item">
                                 歌曲名：只因你太霉
                             </div>
@@ -72,7 +75,7 @@
                 <!-- 底部 播放组件 -->
                 <div class="play-box">
                     <MusicPlayer>
-                        
+
                     </MusicPlayer>
                 </div>
             </div>
@@ -86,7 +89,7 @@
 import MusicPlayer from '@/components/playList/MusicPlayer.vue';
 export default {
     name: "PlayList",
-    components:{
+    components: {
         MusicPlayer,
     },
     data() {
@@ -108,7 +111,7 @@ export default {
             this.songsTableData.push({
                 name: "泡沫",
                 songerName: "凳子齐",
-                duration: '4:19'
+                duration: 279000,
             })
         }
     }
@@ -199,50 +202,58 @@ export default {
 }
 
 /*修改el-table背景色*/
-.song-table-box{
+.song-table-box {
     width: 100%;
     margin: auto;
 }
 
-.song-table-box /deep/ .el-table--fit{
+.song-table-box /deep/ .el-table--fit {
     padding: 0px;
 }
-.song-table-box /deep/  .el-table, .el-table__expanded-cell {
+
+.song-table-box /deep/ .el-table,
+.el-table__expanded-cell {
     background-color: transparent;
 }
 
 .song-table-box /deep/ .el-table tr {
-    background-color: transparent!important;
+    background-color: transparent !important;
 }
+
 .song-table-box /deep/ .el-table th {
-    background-color: transparent!important;
+    background-color: transparent !important;
 }
-.song-table-box /deep/  .el-table--enable-row-transition .el-table__body td, .el-table .cell{
-   background-color: transparent;
+
+.song-table-box /deep/ .el-table--enable-row-transition .el-table__body td,
+.el-table .cell {
+    background-color: transparent;
 }
+
 .el-table::before {
-	 left: 0;
-	 bottom: 0;
-	 width: 100%;
-	 height: 0px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 0px;
 }
 
 /*歌曲信息*/
-.song-info-box{
+.song-info-box {
     margin-left: 40px;
 }
-.song-info-img{
+
+.song-info-img {
     margin: 0 auto;
     width: 300px;
-    height:300px;
+    height: 300px;
 }
-.song-info-item{
+
+.song-info-item {
     font-size: 18px;
     text-align: center;
     margin: 10px 0;
 }
 
-.play-box{
+.play-box {
     margin-top: 50px;
 }
 </style>

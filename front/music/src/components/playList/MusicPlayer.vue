@@ -35,25 +35,28 @@
                 </div>
                 <!-- 已播放时间/总时间 -->
                 <div class="play-song-msg-time">
-                    {{ timeFormat(playedTime) }} / {{ timeFormat(duration) }}
+                    {{ $moment(this.playedTime * 1000).format("mm:ss") }} / {{ $moment(this.duration * 1000).format("mm:ss") }}
                 </div>
             </div>
             <!-- 进度条 -->
             <div>
-                <el-slider class="play-slider" v-model="percentage"
-                    :format-tooltip="v => { return timeFormat(this.playedTime) }"></el-slider>
+                <el-slider class="play-slider" v-model="percentage" :format-tooltip="v => {
+                    return this.$moment(this.playedTime).format('mm:ss')
+                }"></el-slider>
             </div>
 
         </div>
         <!-- 3.其他功能 -->
         <div class="play-other-box">
             <!-- 音量 -->
-            <el-slider v-model="volume" vertical height="50px" max="1" step="0.01" >
+            <el-slider v-model="volume" vertical height="50px" :max="1" :step="0.01">
             </el-slider>
             <img src="https://img.icons8.com/ios/20/null/medium-volume--v1.png" style="margin-left:10px ;" />
         </div>
         <!-- 播放控件 -->
-        <audio id="audio" preload="auto" :src="songUrl">
+        <audio id="audio">
+            <source :src="songUrl" type="audio/ogg">
+            <source :src="songUrl" type="audio/mpeg">
         </audio>
     </div>
 </template>
@@ -84,7 +87,7 @@ export default {
             songUrl: '',
 
             //音量
-            volume: 0.5,
+            volume: 0.3,
         }
     },
     computed: {
@@ -118,7 +121,7 @@ export default {
             if (this.currentIndex > 0) {
                 this.currentIndex = (this.currentIndex - 1) % songNumber
             } else {
-                this.currentIndex = (songNumber - 1) & songNumber
+                this.currentIndex = (songNumber - 1) % songNumber
             }
             //播放 延迟一秒
             setTimeout(() => {
@@ -138,18 +141,7 @@ export default {
 
         },
 
-        //时间的格式转换
-        timeFormat(v) {
-            let minute = Math.floor(v / 60)
-            let second = Math.floor(v % 60).toFixed(0)
-            if (minute < 10) {
-                minute = "0" + minute
-            }
-            if (second < 10) {
-                second = "0" + second
-            }
-            return minute + ":" + second
-        },
+
 
         //假数据
         testData() {
@@ -169,6 +161,17 @@ export default {
                     singerName: "不靠谱组合",
                     sourceUrl: "http://ws.stream.qqmusic.qq.com/C400000aZWZr4TuUOi.m4a?guid=878565261&vkey=F128FB7C34D46ECB841B8E2DD23FE06015C8FBDB0C5DF8E60FEE868613EEF896793FB48A1270FDDED989CAF12F5ED1BCAD423B7430CF98AA&uin=&fromtag=120032"
                 },
+                {
+                    name: "差不多姑娘",
+                    singerName: "邓紫棋",
+                    sourceUrl: "http://ws.stream.qqmusic.qq.com/C400004VYbhm18YnBH.m4a?guid=124560908&vkey=7721D4102DA6B179C0EEC02ABE56C991E966604577D9C0335C17E3B3262A5B9D441654766D6996E3294E01D40F704DDB92C8DFF2E386B016&uin=&fromtag=120032"
+                },
+                {
+                    name: "给你一瓶魔法药水",
+                    singerName: "告五人",
+                    sourceUrl: "http://music.163.com/song/media/outer/url?id=1959667345.mp3"
+                },
+
             )
         },
         //歌曲索引变动 改变当前播放器的歌曲信息
@@ -176,6 +179,9 @@ export default {
             this.songUrl = this.songList[this.currentIndex].sourceUrl
             this.songName = this.songList[this.currentIndex].name
             this.singerName = this.songList[this.currentIndex].singerName
+            //重新加载
+            document.getElementById("audio").load()
+
         },
         //获取歌曲当前播放进度
         getCurrentTime() {
@@ -227,7 +233,6 @@ export default {
             if (!isNaN(audioDOM.volume)) {
                 audioDOM.volume = newValue;
             }
-            console.log(audioDOM.volume);
         }
     },
     async created() {

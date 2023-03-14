@@ -85,6 +85,14 @@ const routes = [
             name: 'songListDetail',
             component: () => import('@/views/home/musicHall/SongListDetail.vue'),
           },
+          {
+            //歌手的简介页面
+            path: 'singerDetail',
+            name: 'singerDetail',
+            component: () => import('@/views/home/musicHall/SingerDetail.vue'),
+          },
+
+
         ]
       },
       //用户中心

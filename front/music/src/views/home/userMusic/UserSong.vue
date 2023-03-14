@@ -31,6 +31,9 @@
                 <el-table-column prop="songerName" label="歌手" width="180">
                 </el-table-column>
                 <el-table-column prop="duration" label="时长" width="180">
+                    <template slot-scope="scope">
+                        {{ $moment(scope.row.duration).format("mm:ss") }}
+                    </template>
                 </el-table-column>
             </el-table>
         </div>
@@ -48,14 +51,7 @@ export default {
         }
     },
     methods: {
-        // 处理歌曲时长
-        durationFormat() {
-            this.songTable.forEach(song => {
-                let minute = Math.floor(song.duration / 60)
-                let second = song.duration % 60
-                song.duration = minute + ":" + second
-            })
-        },
+
         handleSelectionChange(val) {
             this.multipleSelection = val;
         }
@@ -69,11 +65,10 @@ export default {
             this.songTable.push({
                 name: "半岛铁盒",
                 songerName: "周杰伦",
-                duration: 239,
+                duration: 239000,
             },)
         }
 
-        this.durationFormat()
 
     }
 }

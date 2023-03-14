@@ -45,7 +45,10 @@
                         </el-table-column>
                         <el-table-column prop="songerName" label="歌手" width="180">
                         </el-table-column>
-                        <el-table-column prop="duration" label="时长" width="180">
+                        <el-table-column label="时长" width="180">
+                            <template slot-scope="scope">
+                                {{ $moment(scope.row.duration).format("mm:ss") }}
+                            </template>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -58,13 +61,14 @@
                 <div class="introduce_box_header">
                     <b>简介</b>
                 </div>
-                <div class="introduce_box_body">{{songList.introduce}}</div>
+                <div class="introduce_box_body">{{ songList.introduce }}</div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+
 
 export default {
     name: 'SongListDetail',
@@ -77,14 +81,7 @@ export default {
         }
     },
     methods: {
-        // 处理歌曲时长
-        durationFormat() {
-            this.songTable.forEach(song => {
-                let minute = Math.floor(song.duration / 60)
-                let second = song.duration % 60
-                song.duration = minute + ":" + second
-            })
-        }
+
     },
     created() {
         //获取歌单id
@@ -97,18 +94,16 @@ export default {
             tag: "流行",
             playNumber: 8392.2,
             favoritesNumber: 22.3,
-            introduce:"“996”“007”已成当代打工人的日常， 下班了即兴唱两句歌， 对于释放压力缓解疲劳， 有着很好的辅助作用， 快来唱歌吧！ 把烦恼紧张压抑都丢掉， 重新拾起生活的快乐！"
+            introduce: "“996”“007”已成当代打工人的日常， 下班了即兴唱两句歌， 对于释放压力缓解疲劳， 有着很好的辅助作用， 快来唱歌吧！ 把烦恼紧张压抑都丢掉， 重新拾起生活的快乐！"
         }
 
         for (let i = 1; i <= 100; i++) {
             this.songTable.push({
                 name: "半岛铁盒",
                 songerName: "周杰伦",
-                duration: 239,
+                duration: 239000,
             },)
         }
-
-        this.durationFormat()
 
     }
 }

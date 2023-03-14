@@ -14,12 +14,9 @@
     </div>
 </template>
 <script>
-import TextBtn from '@/components/publish/TextBtn.vue';
 export default {
     name: "UserSongList",
-    components: {
-        TextBtn,
-    },
+
     data() {
         return {
             songTable: []
