@@ -55,23 +55,20 @@
 
                                 <div>
                                     <img class="avatar-img" src="@/assets/3.jpg" style="display: inline-block;">
-                                    <div style="display: inline-block; margin-top:25px;margin-left:10px;position:absolute;font-size:16px">
+                                    <div
+                                        style="display: inline-block; margin-top:25px;margin-left:10px;position:absolute;font-size:16px">
                                         疯原万叶
                                     </div>
                                 </div>
 
-                                <TextBtn class="avatar-btn" @click.native="userCenter(e)">
+                                <RouterLink :to="{ name: 'userMsg' }" class="avatar-btn">
                                     个人中心
-                                </TextBtn>
-                                <TextBtn class="avatar-btn" @click.native="updateUserName(e)">
-                                    修改昵称
-                                </TextBtn>
-                                <TextBtn class="avatar-btn" @click.native="updatePassword(e)">
-                                    修改密码
-                                </TextBtn>
-                                <TextBtn class="avatar-btn" @click.native="logout(e)">
+                                </RouterLink>
+
+                                <el-button class="avatar-btn" type="text" @click="logout()">
                                     退出登录
-                                </TextBtn>
+                                </el-button>
+
                             </div>
 
                             <el-button type="text" slot="reference">
@@ -108,59 +105,45 @@
     </div>
 </template>
 <script>
-import TextBtn from '@/components/publish/TextBtn.vue';
+import { RouterLink } from 'vue-router'
+
 export default {
     name: "HeaderNav",
-    components: {
-        TextBtn
-    },
     data() {
         return {
-            searchKey: '',
+            searchKey: "",
             loginDialogVisible: false,
             isLogin: true,
             userForm: {
-                account: '',
-                password: ''
+                account: "",
+                password: ""
             }
-        }
+        };
     },
     methods: {
         // 搜索音乐、歌单
         searchMusic() {
             //携带搜索关键字 跳转到搜索结果页面
             this.$router.push({
-                name: 'searchResult',
+                name: "searchResult",
                 params: {
                     searchKey: this.searchKey,
                 }
-            })
+            });
         },
         //打开登录页面
         openLoginDialog() {
-            this.loginDialogVisible = true
+            this.loginDialogVisible = true;
         },
         //打开注册页面
         openRegister() {
-            this.$router.push('/userRegister')
-        },
-        //个人中心
-        userCenter(e) {
-            //跳转到  userMusic 界面
-        },
-        //修改用户名 按钮点击
-        updateUserName(e) {
-
-        },
-        //修改密码 按钮点击
-        updatePassword(e) {
-
+            this.$router.push("/userRegister");
         },
         //退出登录
-        logout(e) {
-
+        logout() {
         }
-    }
+    },
+    components: { RouterLink }
 }
 </script>
 <style scoped lang="less">
@@ -175,7 +158,7 @@ export default {
 }
 
 .active {
-   color: rgb(240, 99, 18);
+    color: rgb(240, 99, 18);
 }
 
 
@@ -226,12 +209,13 @@ export default {
     height: 50px;
     width: 50px;
     border-radius: 60px;
-    
+
 }
 
 .avatar-btn {
     display: block;
     font-size: 16px;
     margin: 8px 0;
+    color: black;
 }
 </style>

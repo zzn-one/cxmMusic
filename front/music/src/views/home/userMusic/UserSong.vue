@@ -13,11 +13,17 @@
                     @click="popoverVisible = !popoverVisible" style="margin-left: 10px;">添加到</el-button>
             </el-popover>
 
+            <el-button icon="el-icon-delete" class="btns" style="margin-left: 10px;" type="danger">
+                删除
+            </el-button>
+
         </div>
 
         <!-- 收藏的歌曲列表 -->
         <div class="table-box">
-            <el-table :data="songTable" stripe style="width: 100%" height="432px">
+            <el-table :data="songTable" stripe style="width: 100%" height="432px" @selection-change="handleSelectionChange">
+                <el-table-column type="selection" width="55">
+                </el-table-column>
                 <el-table-column type="index" width="50">
                 </el-table-column>
                 <el-table-column prop="name" label="歌曲">
@@ -36,7 +42,9 @@ export default {
     data() {
         return {
             popoverVisible: false,
-            songTable: []
+            songTable: [],
+
+            multipleSelection: []
         }
     },
     methods: {
@@ -47,7 +55,11 @@ export default {
                 let second = song.duration % 60
                 song.duration = minute + ":" + second
             })
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
         }
+
     },
     created() {
 
@@ -72,7 +84,8 @@ export default {
     width: 150px;
     font-size: 16px;
 }
-.btn-box{
+
+.btn-box {
     margin-bottom: 30px;
 }
 </style>

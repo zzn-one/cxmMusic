@@ -1,20 +1,16 @@
 <template>
-    <div>
-        <el-table :data="songTable" stripe style="width: 100%" height="432px">
-            <el-table-column label="歌单">
-                <template slot-scope="scope">
-                    <TextBtn @click.native="name_btn_click(scope.row)">
-                        {{ scope.row.name }}
-                    </TextBtn>
-                </template>
-            </el-table-column>
-            <el-table-column prop="songNumber" label="曲目数" width="180">
-            </el-table-column>
-            <el-table-column prop="authorName" label="创建人" width="180">
-            </el-table-column>
-            <el-table-column prop="playNumber" label="播放量" width="180">
-            </el-table-column>
-        </el-table>
+    <div class="songList-box">
+        <el-card class="card-box" :body-style="{ padding: '0px' }" v-for="item in 9" :key="item" shadow="never">
+            <RouterLink :to="{ name: 'songListDetail', params: { id: item } }">
+                <img src="@/assets/1.jpg" class="card-img">
+
+                <div style="margin-top: 10px; ">
+                    流行粤语歌曲,歌单名称最长限制为15
+                </div>
+
+                <div style="color:#adabab">播放量：2299万</div>
+            </RouterLink>
+        </el-card>
     </div>
 </template>
 <script>
@@ -30,12 +26,6 @@ export default {
         }
     },
     methods: {
-        //歌单名称被点击了
-        name_btn_click(row) {
-            console.log("row:" + row.name);
-            //跳转到songListDetail页面
-
-        },
         // 播放量处理
         playNumberFormat() {
             this.songTable.forEach(item => {
@@ -76,3 +66,22 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.card-box {
+    padding: 0;
+    border: 0;
+    height: 320px;
+    width: 240px;
+    float: left;
+    background-color: rgba(255, 255, 255, 0);
+    margin: 0 30px;
+    margin-top: 30px;
+}
+
+.card-img {
+    height: 240px;
+    width: 240px;
+    display: block;
+}
+</style>

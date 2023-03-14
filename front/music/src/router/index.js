@@ -17,14 +17,16 @@ const routes = [
     component: () => import('@/views/Home.vue'),
     redirect: '/home/musicHall',
     children: [
+      // MM音乐
       {
-        // MM音乐
+
         path: 'mMusic',
         name: 'mMusic',
         redirect: '/home/musicHall'
       },
+      //我的音乐
       {
-        //我的音乐
+
         path: 'userMusic',
         name: 'userMusic',
         component: () => import('@/views/home/UserMusic.vue'),
@@ -44,14 +46,16 @@ const routes = [
           },
         ]
       },
+      //搜索的结果页面
       {
-        //搜索的结果页面
+
         path: 'searchResult',
         name: 'searchResult',
         component: () => import('@/views/home/SearchResult.vue')
       },
+      // 音乐馆
       {
-        // 音乐馆
+
         path: 'musicHall',
         name: 'musicHall',
         component: () => import('@/views/home/MusicHall.vue'),
@@ -82,6 +86,12 @@ const routes = [
             component: () => import('@/views/home/musicHall/SongListDetail.vue'),
           },
         ]
+      },
+      //用户中心
+      {
+        path: 'userMsg',
+        name: 'userMsg',
+        component: () => import('@/views/home/UserMsg.vue')
       },
 
     ]

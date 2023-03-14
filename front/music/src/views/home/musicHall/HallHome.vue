@@ -29,18 +29,17 @@
 
                             <el-card class="card-box" :body-style="{ padding: '0px' }" v-for="item in 4" :key="item"
                                 shadow="never">
-                                <img src="@/assets/bg.jpg" class="card-img">
-                                <div style="margin-top: 10px;">
+                                <RouterLink :to="{ name: 'songListDetail', params: { id: item } }">
+                                    <img src="@/assets/1.jpg" class="card-img">
 
-                                    <TextBtn  @click.native="card_btn" :value="item" class="card-btn">
+                                    <div style="margin-top: 10px; ">
                                         流行粤语歌曲,歌单名称最长限制为15
-                                    </TextBtn>
-                                    
-                                </div>
+                                    </div>
 
-                                <div style="color:#adabab">播放量：2299万</div>
+                                    <div style="color:#adabab">播放量：2299万</div>
+                                </RouterLink>
                             </el-card>
-                            
+
                         </div>
                     </el-carousel-item>
                 </el-carousel>
@@ -50,12 +49,9 @@
 </template>
 
 <script>
-import TextBtn from '@/components/publish/TextBtn.vue';
 export default {
     name: 'HallHome',
-    components:{
-        TextBtn,
-    },
+
     data() {
         return {
             title: '歌  单  推  荐',
@@ -69,17 +65,6 @@ export default {
             this.tagCurrentNav = e.target
             //发送请求，获取标签对应的歌单
 
-        },
-        card_btn(e) {
-            //携带歌单id跳转到歌单详情页
-            console.log('歌单的id是：' + e.target.value);
-
-            this.$router.push({
-                name: 'songListDetail',
-                params: {
-                    id: e.target.value
-                }
-            })
         },
         //轮播图的切换事件
         changeCarousel(index) {
@@ -187,16 +172,7 @@ export default {
     display: block;
 }
 
-.card-btn {
-    border: 0;
-    font-size: 16px;
-    color: black;
-    padding: 0;
-    width: 240px;
-    background-color: rgba(255, 255, 255, 0);
-    text-align: left;
-    margin-bottom: 10px;
-}
+
 /* 轮播图两边的按钮*/
 /deep/ .el-carousel__arrow {
 

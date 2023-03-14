@@ -7,6 +7,8 @@
                 <div class="user-msg-name">{{ user.name }}</div>
             </div>
         </div>
+
+
         <!-- 歌曲与歌单 -->
         <div class="songs-box">
             <!-- 导航栏 -->
@@ -26,14 +28,10 @@
 </template>
 
 <script>
-import TextBtn from '@/components/publish/TextBtn.vue';
-import { RouterLink } from 'vue-router';
+
 export default {
     name: "UserMusic",
-    components: {
-        TextBtn,
-        RouterLink
-    },
+
     data() {
         return {
             user: {},
@@ -94,6 +92,8 @@ export default {
     margin-top: 160px;
 
 }
+
+
 
 .songs-box {
     margin: 0 auto;
