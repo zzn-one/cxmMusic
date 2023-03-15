@@ -6,7 +6,8 @@
                 <div class="navItem">
                     <RouterLink to="/home/mMusic" active-class="active">
                         <!-- 跳转到音乐馆 -->
-                        <span style="font-size: 32px;">MM音乐</span>
+                        <img src="@/assets/logo.png" class="logo">
+                        <!-- <span style="font-size: 32px;">MM音乐</span> -->
                     </RouterLink>
 
                 </div>
@@ -148,8 +149,8 @@ export default {
 </script>
 <style scoped lang="less">
 .headerNav {
-    min-height: 90px;
-    height: 90px;
+    min-height: 110px;
+    height: 110px;
 }
 
 .navItem {
@@ -160,7 +161,10 @@ export default {
 .active {
     color: rgb(240, 99, 18);
 }
-
+.logo{
+    margin-top: 30px;
+    height:40px;
+}
 
 
 .login_btn {

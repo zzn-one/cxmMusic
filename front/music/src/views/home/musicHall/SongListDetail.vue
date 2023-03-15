@@ -38,14 +38,22 @@
             <!-- 歌曲列表table与评论区 -->
             <div class="list_comment_box">
                 <div class="table_box">
-                    <el-table :data="songTable" stripe style="width: 100%" height="528px">
-                        <el-table-column type="index" width="50">
-                        </el-table-column>
+                    <el-table :data="songTable" stripe style="width: 100%" height="528px"
+                        @selection-change="handleSelectionChange">
+                        <el-table-column type="selection" width="55"></el-table-column>
+                        <el-table-column type="index" width="50"></el-table-column>
                         <el-table-column prop="name" label="歌曲">
                         </el-table-column>
-                        <el-table-column prop="songerName" label="歌手" width="180">
+                        <el-table-column label="歌手" width="300">
+                            <template slot-scope="scope">
+                                <RouterLink :to='{
+                                    name: "singerDetail", params: { id: 1 }
+                                }'>
+                                    {{ scope.row.songerName }}
+                                </RouterLink>
+                            </template>
                         </el-table-column>
-                        <el-table-column label="时长" width="180">
+                        <el-table-column label="时长" width="80">
                             <template slot-scope="scope">
                                 {{ $moment(scope.row.duration).format("mm:ss") }}
                             </template>
@@ -68,25 +76,31 @@
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
 
 
 export default {
-    name: 'SongListDetail',
+    name: "SongListDetail",
     data() {
         return {
-            id: '',
+            id: "",
             songList: {},
             popoverVisible: false,
-            songTable: []
-        }
+            songTable: [],
+            //被选中的数据
+            multipleSelection: []
+        };
     },
     methods: {
-
+        //表格选中数据
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        }
     },
     created() {
         //获取歌单id
-        this.id = this.$route.params.id
-
+        this.id = this.$route.params.id;
         // 假数据
         this.songList = {
             name: "流行粤语歌曲,歌单名称最长限制为15",
@@ -95,17 +109,16 @@ export default {
             playNumber: 8392.2,
             favoritesNumber: 22.3,
             introduce: "“996”“007”已成当代打工人的日常， 下班了即兴唱两句歌， 对于释放压力缓解疲劳， 有着很好的辅助作用， 快来唱歌吧！ 把烦恼紧张压抑都丢掉， 重新拾起生活的快乐！"
-        }
-
+        };
         for (let i = 1; i <= 100; i++) {
             this.songTable.push({
                 name: "半岛铁盒",
                 songerName: "周杰伦",
                 duration: 239000,
-            },)
+            });
         }
-
-    }
+    },
+    components: { RouterLink }
 }
 </script>
 

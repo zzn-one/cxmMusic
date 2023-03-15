@@ -28,9 +28,24 @@
             <div class="songList-title-box">
                 歌曲
             </div>
+            <!-- 按钮 -->
+            <div class="songList-btns">
+                <el-button class="btns-item" icon="el-icon-video-play" type="success" plain>
+                    播放
+                </el-button>
+                <el-button class="btns-item" icon="el-icon-star-off" >
+                    收藏
+                </el-button>
+                <el-button class="btns-item" icon="el-icon-plus">
+                    添加到
+                </el-button>
+            </div>
             <!-- 歌曲表格 -->
             <div class="songList-table-box">
-                <el-table :data="songList" stripe style="width: 100%" height="520px">
+                <el-table :data="songList" stripe style="width: 100%" height="520px"
+                    @selection-change="handleSelectionChange">
+                    <el-table-column type="selection" width="55"></el-table-column>
+                    <el-table-column type="index" width="50"></el-table-column>
                     <el-table-column label="歌名">
                         <template slot-scope="scope">
                             {{ scope.row.name }}
@@ -54,7 +69,15 @@ export default {
     data() {
         return {
             singer: {},
-            songList: []
+            songList: [],
+
+            //被选中的数据（歌曲）
+            multipleSelection: []
+        }
+    },
+    methods: {
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
         }
     },
     created() {
@@ -147,5 +170,16 @@ export default {
 .songList-title-box {
     font-size: 24px;
     margin-bottom: 10px;
+}
+
+.songList-btns {
+    margin: 20px 0;
+}
+
+.btns-item {
+    color: rgb(97, 95, 95);
+    font-size: 16px;
+    width: 150px;
+
 }
 </style>

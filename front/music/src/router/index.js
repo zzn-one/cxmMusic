@@ -19,27 +19,27 @@ const routes = [
     children: [
       // MM音乐
       {
-
         path: 'mMusic',
         name: 'mMusic',
         redirect: '/home/musicHall'
       },
       //我的音乐
       {
-
         path: 'userMusic',
         name: 'userMusic',
         component: () => import('@/views/home/UserMusic.vue'),
         redirect: '/home/userMusic/userSong',
         children: [
+          //收藏的歌曲
           {
-            //收藏的歌曲
+
             path: 'userSong',
             name: 'userSong',
             component: () => import('@/views/home/userMusic/UserSong.vue'),
           },
+          //收藏的歌单
           {
-            //收藏的歌单
+
             path: 'userSongList',
             name: 'userSongList',
             component: () => import('@/views/home/userMusic/UserSongList.vue'),
@@ -61,32 +61,37 @@ const routes = [
         component: () => import('@/views/home/MusicHall.vue'),
         redirect: '/home/musicHall/hallHome',
         children: [
+          //音乐馆首页
           {
-            //音乐馆首页
+
             path: 'hallHome',
             name: 'hallHome',
             component: () => import('@/views/home/musicHall/HallHome.vue'),
           },
+          //歌手页面
           {
-            //歌手页面
+
             path: 'singerList',
             name: 'singerList',
             component: () => import('@/views/home/musicHall/SingerList.vue'),
           },
+          //歌单分类页面
           {
-            //歌单分类页面
+
             path: 'songList',
             name: 'songList',
             component: () => import('@/views/home/musicHall/SongList.vue'),
           },
+          //（单个）歌单的简介页面
           {
-            //（单个）歌单的简介页面
+
             path: 'songListDetail',
             name: 'songListDetail',
             component: () => import('@/views/home/musicHall/SongListDetail.vue'),
           },
+          //歌手的简介页面
           {
-            //歌手的简介页面
+
             path: 'singerDetail',
             name: 'singerDetail',
             component: () => import('@/views/home/musicHall/SingerDetail.vue'),
@@ -99,7 +104,27 @@ const routes = [
       {
         path: 'userMsg',
         name: 'userMsg',
-        component: () => import('@/views/home/UserMsg.vue')
+        component: () => import('@/views/home/UserMsg.vue'),
+        children: [
+          //个人信息
+          {
+            path: 'personalMsg',
+            name: 'personalMsg',
+            component: () => import('@/views/home/userMsg/PersonalMsg.vue'),
+          },
+          //我的歌单
+          {
+            path: 'personalSongList',
+            name: 'personalSongList',
+            component: () => import('@/views/home/userMsg/PersonalSongList.vue'),
+          },
+          //听歌记录
+          {
+            path: 'historySongs',
+            name: 'historySongs',
+            component: () => import('@/views/home/userMsg/HistorySongs.vue'),
+          }
+        ]
       },
 
     ]

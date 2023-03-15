@@ -28,9 +28,16 @@
                 </el-table-column>
                 <el-table-column prop="name" label="歌曲">
                 </el-table-column>
-                <el-table-column prop="songerName" label="歌手" width="180">
+                <el-table-column label="歌手" width="300">
+                    <template slot-scope="scope">
+                        <RouterLink :to='{
+                            name: "singerDetail", params: { id: 1 }
+                        }'>
+                            {{ scope.row.songerName }}
+                        </RouterLink>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="duration" label="时长" width="180">
+                <el-table-column prop="duration" label="时长" width="80">
                     <template slot-scope="scope">
                         {{ $moment(scope.row.duration).format("mm:ss") }}
                     </template>

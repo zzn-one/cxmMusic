@@ -5,7 +5,7 @@
             <!-- 头部 -->
             <div class="header-box">
                 <div class="header-logo">
-                    <a href="/" style="color: rgba(3, 3, 3, 0.616)" @mouseover="$event.target.style.color = 'white'"
+                    <a href="/" style="color: rgba(3, 3, 3, 0.616)" @mouseover="$event.target.style.color = 'rgb(156, 193, 224)'"
                         @mouseout="$event.target.style.color = 'black'" target="_blank">
                         {{ logo }}
                     </a>
@@ -46,9 +46,16 @@
                                 <el-table-column label="歌曲">
                                     <template slot-scope="scope">{{ scope.row.name }}</template>
                                 </el-table-column>
-                                <el-table-column prop="songerName" label="歌手" width="120">
+                                <el-table-column label="歌手" width="300">
+                                    <template slot-scope="scope">
+                                        <RouterLink :to='{
+                                            name: "singerDetail", params: { id: 1 }
+                                        }'>
+                                            {{ scope.row.songerName }}
+                                        </RouterLink>
+                                    </template>
                                 </el-table-column>
-                                <el-table-column prop="duration" label="时长" width="120" show-overflow-tooltip>
+                                <el-table-column prop="duration" label="时长" width="80" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{ $moment(scope.row.duration).format("mm:ss") }}
                                     </template>
@@ -125,8 +132,6 @@ export default {
     background: url('@/assets/2.jpg');
     background-size: 200%;
     color: rgb(77, 76, 76);
-
-
 }
 
 .playList-mask-box {

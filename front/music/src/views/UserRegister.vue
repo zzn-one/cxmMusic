@@ -77,10 +77,10 @@ export default {
 
 <style scoped>
 .box-card {
-    height: 970px;
+    height: 967px;
 
     background: url("@/assets/2.jpg");
-    background-size: 100%;
+    background-size: cover;
 }
 
 .box-card-item {

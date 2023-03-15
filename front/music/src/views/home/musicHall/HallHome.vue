@@ -23,24 +23,86 @@
         <!-- 歌单轮播 -->
         <div class="playList-box">
             <div class="playlist-body">
-                <el-carousel indicator-position="outside" :autoplay="false" height="400px" @change="changeCarousel">
-                    <el-carousel-item v-for="item in 4" :key="item">
-                        <div style="display: flex;">
+                <el-carousel indicator-position="outside" :autoplay="false" height="400px">
+                    <el-carousel-item v-for="index in carouselItemNumber" :key="index">
+                        <!-- 如果刚好 歌单都是满页 -->
+                        <div style="display: flex;" v-if="carouselItemRemainingNumber === 0">
+                            <el-card class="card-box" :body-style="{ padding: '0px' }" v-for="index2 in carouselItemSize"
+                                :key="index2" shadow="never">
 
-                            <el-card class="card-box" :body-style="{ padding: '0px' }" v-for="item in 4" :key="item"
-                                shadow="never">
-                                <RouterLink :to="{ name: 'songListDetail', params: { id: item } }">
-                                    <img src="@/assets/1.jpg" class="card-img">
+                                <RouterLink :to="{
+                                    name: 'songListDetail',
+                                    params: {
+                                        id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
+                                    }
+                                }
+                                ">
+                                    <!--  -->
+                                    <img :src="songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
+                                        class="card-img">
 
                                     <div style="margin-top: 10px; ">
-                                        流行粤语歌曲,歌单名称最长限制为15
+                                        {{ songList[(index - 1) * carouselItemSize + (index2 - 1)].name }}
                                     </div>
 
-                                    <div style="color:#adabab">播放量：2299万</div>
+                                    <div style="color:#adabab">
+                                        播放量：{{ songList[(index - 1) * carouselItemSize + (index2 - 1)].playNumber }}
+                                    </div>
                                 </RouterLink>
                             </el-card>
-
                         </div>
+                        <!-- 如果不是 -->
+                        <div style="display: flex;" v-else-if="index <= carouselItemNumber - 1">
+                            <el-card class="card-box" :body-style="{ padding: '0px' }" v-for="index2 in carouselItemSize"
+                                :key="index2" shadow="never">
+
+                                <RouterLink :to="{
+                                    name: 'songListDetail',
+                                    params: {
+                                        id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
+                                    }
+                                }
+                                ">
+                                    <img :src="songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
+                                        class="card-img">
+
+                                    <div style="margin-top: 10px; ">
+                                        {{ songList[(index - 1) * carouselItemSize + (index2 - 1)].name }}
+                                    </div>
+
+                                    <div style="color:#adabab">
+                                        播放量：{{ songList[(index - 1) * carouselItemSize + (index2 - 1)].playNumber }}
+                                    </div>
+                                </RouterLink>
+                            </el-card>
+                        </div>
+                        <!-- 处理最后一页  余下的歌单 -->
+                        <div style="display: flex;" v-else>
+                            <el-card class="card-box" :body-style="{ padding: '0px' }"
+                                v-for="index2 in carouselItemRemainingNumber " :key="index2" shadow="never">
+
+                                <RouterLink :to="{
+                                    name: 'songListDetail',
+                                    params: {
+                                        id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
+                                    }
+                                }
+                                ">
+                                    <!--  -->
+                                    <img :src="songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
+                                        class="card-img">
+
+                                    <div style="margin-top: 10px; ">
+                                        {{ songList[(index - 1) * carouselItemSize + (index2 - 1)].name }}
+                                    </div>
+
+                                    <div style="color:#adabab">
+                                        播放量：{{ songList[(index - 1) * carouselItemSize + (index2 - 1)].playNumber }}
+                                    </div>
+                                </RouterLink>
+                            </el-card>
+                        </div>
+
                     </el-carousel-item>
                 </el-carousel>
             </div>
@@ -57,6 +119,13 @@ export default {
             title: '歌  单  推  荐',
             tagList: [],
             tagCurrentNav: '',
+            songList: [],
+            //一个轮播图页面展示歌单的数量(最大是4)
+            carouselItemSize: 1,
+            // 有多少个轮播图页面
+            carouselItemNumber: 0,
+            //轮播图最后一页剩下的歌单数量
+            carouselItemRemainingNumber: 0,
         }
     },
     methods: {
@@ -66,10 +135,6 @@ export default {
             //发送请求，获取标签对应的歌单
 
         },
-        //轮播图的切换事件
-        changeCarousel(index) {
-            console.log("幻灯片索引" + index);
-        }
     },
     watch: {
         //导航标签变色
@@ -83,6 +148,7 @@ export default {
 
     },
     created() {
+        // 获取标签列表
         this.tagList = [
             {
                 id: 1,
@@ -109,6 +175,22 @@ export default {
                 tag: '影视'
             },
         ]
+        //获取歌单列表
+        for (let index = 0; index < 17; index++) {
+            this.songList.push(
+                {
+                    id: index,
+                    name: "歌单名称" + index,
+                    playNumber: 728793842,
+                    imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+                }
+            )
+        }
+        //计算轮播图页面数量
+        this.carouselItemNumber = Math.ceil(this.songList.length / this.carouselItemSize)
+
+        //计算轮播图最后一页剩下的歌单数量
+        this.carouselItemRemainingNumber = Math.floor(this.songList.length % this.carouselItemSize)
     }
 }
 </script>
