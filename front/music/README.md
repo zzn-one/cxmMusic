@@ -297,8 +297,11 @@ result{
 #### 1.获取歌单列表
 
 ```json
-//访问接口 拦截
-/songList/
+//访问接口 不拦截
+/songList/list/{number}/{tag.text}
+//根据author_name创建者名称
+/songList/list/{number}/{authorName}
+
 
 //输入
 jwt的用户账号 account
@@ -306,15 +309,30 @@ jwt的用户账号 account
 //返回 成功
 result{
 	code:200;  
-    data:musicUser对象;			
+    data:List<SongList>对象;			
     msg:null;		
 }
 
-//返回 失败 无此用户
+```
+
+#### 2.获取单个歌单`songListDetail`
+
+```json
+//访问接口 不拦截
+
+//根据tag标签
+/songList/one/{tag.text}
+//根据id主键
+/songList/one/{id}
+//根据author_name创建者名称
+/songList/one/{authorName}
+
+
+//返回 成功
 result{
-	code:10004;  
-    data:null;			
-    msg:"没有此用户！";		
+	code:200;  
+    data:List<SongList>对象;			
+    msg:null;		
 }
 ```
 
@@ -322,4 +340,34 @@ result{
 
 ### 歌曲
 
+#### 1.获取歌曲列表
+
+```json
+//访问接口 不拦截
+/song/list/{songList.id}
+
+```
+
+
+
 ### 歌手
+
+### 标签
+
+#### 1.获取标签列表
+
+```json
+//访问接口 不拦截 未登录时推荐的标签列表
+/tag/list/{number}
+//访问接口 拦截  给用户推荐的标签列表
+/tag/list/{number}/{account}
+
+
+//返回 成功
+result{
+	code:200;  
+    data:DictTag对象;			
+    msg:null;		
+}
+```
+

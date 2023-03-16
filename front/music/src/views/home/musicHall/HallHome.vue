@@ -5,15 +5,17 @@
             <div class="title-body">
                 {{ title }}
             </div>
+
+
         </div>
 
         <!-- 条件过滤标签 -->
         <div class="tag-box">
             <div class="tag-body">
                 <ul class="tag-ul">
-                    <li v-for="item of tagList" class="tag-li" :key="item.id">
-                        <el-button type="text" class="tag-li-button" @click="tag_btn">
-                            {{ item.tag }}
+                    <li v-for="tag of tagList" class="tag-li" :key="tag.id">
+                        <el-button type="text" class="tag-li-button" @click="tag_btn($event, tag)">
+                            {{ tag.text }}
                         </el-button>
                     </li>
                 </ul>
@@ -102,7 +104,6 @@
                                 </RouterLink>
                             </el-card>
                         </div>
-
                     </el-carousel-item>
                 </el-carousel>
             </div>
@@ -121,7 +122,7 @@ export default {
             tagCurrentNav: '',
             songList: [],
             //一个轮播图页面展示歌单的数量(最大是4)
-            carouselItemSize: 1,
+            carouselItemSize: 4,
             // 有多少个轮播图页面
             carouselItemNumber: 0,
             //轮播图最后一页剩下的歌单数量
@@ -129,11 +130,11 @@ export default {
         }
     },
     methods: {
-        tag_btn(e) {
+        tag_btn(e, tag) {
             //被点击的导航标签变色
             this.tagCurrentNav = e.target
             //发送请求，获取标签对应的歌单
-
+            console.log(tag);
         },
     },
     watch: {
@@ -152,27 +153,27 @@ export default {
         this.tagList = [
             {
                 id: 1,
-                tag: '为你推荐'
+                text: '为你推荐'
             },
             {
                 id: 2,
-                tag: '官方歌单'
+                text: '官方歌单'
             },
             {
                 id: 3,
-                tag: '节奏控'
+                text: '节奏控'
             },
             {
                 id: 4,
-                tag: '轻音乐'
+                text: '轻音乐'
             },
             {
                 id: 5,
-                tag: '粤语'
+                text: '粤语'
             },
             {
                 id: 6,
-                tag: '影视'
+                text: '影视'
             },
         ]
         //获取歌单列表

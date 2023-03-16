@@ -114,7 +114,7 @@ export default {
         return {
             searchKey: "",
             loginDialogVisible: false,
-            isLogin: true,
+            isLogin: false,
             userForm: {
                 account: "",
                 password: ""
