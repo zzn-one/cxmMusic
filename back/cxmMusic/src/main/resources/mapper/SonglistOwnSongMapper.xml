@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxm.cxmmusic.mapper.SonglistOwnSongMapper">
+
+    <resultMap id="BaseResultMap" type="com.cxm.cxmmusic.pojo.SonglistOwnSong">
+            <result property="songListId" column="songListId" jdbcType="INTEGER"/>
+            <result property="songId" column="songId" jdbcType="INTEGER"/>
+            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        songListId,songId,deleted,
+        version
+    </sql>
+</mapper>

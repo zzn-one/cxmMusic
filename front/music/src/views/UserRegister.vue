@@ -1,7 +1,10 @@
 <template>
     <el-card class="box-card">
         <div slot="header">
-            <span>MM音乐</span>
+            <RouterLink :to="{ name: '/' }">
+                <img src="@/assets/logo.png" style="height: 40px; width:160px">
+            </RouterLink>
+
         </div>
         <div class="form-box">
             <!-- 注册表单 -->
@@ -75,7 +78,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .box-card {
     height: 967px;
 
@@ -133,5 +136,10 @@ export default {
 
 .icon {
     font-size: 50px;
+}
+
+/deep/.el-card__header {
+    padding: 0;
+
 }
 </style>
