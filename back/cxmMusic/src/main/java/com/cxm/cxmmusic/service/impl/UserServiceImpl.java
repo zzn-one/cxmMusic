@@ -1,13 +1,14 @@
 package com.cxm.cxmmusic.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cxm.cxmmusic.Exception.GlobalException;
 import com.cxm.cxmmusic.Exception.StatusCodeEnum;
 import com.cxm.cxmmusic.mapper.UserMapper;
-import com.cxm.cxmmusic.pojo.LoginUser;
-import com.cxm.cxmmusic.pojo.Result;
+import com.cxm.cxmmusic.vo.LoginUser;
+import com.cxm.cxmmusic.vo.Result;
 import com.cxm.cxmmusic.pojo.User;
 import com.cxm.cxmmusic.service.UserService;
-import com.cxm.cxmmusic.utils.Account;
+import com.cxm.cxmmusic.utils.AccountUtils;
 import com.cxm.cxmmusic.utils.JwtUtils;
 import com.cxm.cxmmusic.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public Result<String> register(String name, String password, String password2) {
         if (!password.equals(password2)) {
             //两次密码不一致 异常
-            System.out.println("密码不一致");
+            throw new GlobalException(StatusCodeEnum.DIFFERENT_PASSWORD);
         }
 
         //密码加密
@@ -57,7 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //新增用户
         User newUser = new User();
         //生成账号
-        String account = Account.getInstance().getAccount();
+        String account = AccountUtils.getInstance().createAccount();
         newUser.setAccount(account);
 
         newUser.setName(name);
@@ -67,7 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         int insert = userMapper.insert(newUser);
         if (insert == 0) {
             //创建失败 异常
-            System.out.println("创建失败");
+            throw new GlobalException(StatusCodeEnum.REGISTER_ERROR);
         }
 
         return new Result<>(StatusCodeEnum.OK, account);
@@ -90,7 +91,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String account = loginUser.getUser().getAccount();
 
         //1.生成jwt
-        //设置payload
+        //设置payload（存在token里的部分用户信息）
         HashMap<String, String> payload = new HashMap<>();
         payload.put("account", account);
         payload.put("name", loginUser.getUser().getName());
@@ -102,6 +103,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         redisUtils.setValue(LoginUser.USER_REDIS_PREFIX + account, loginUser, JwtUtils.EXPIRES, TimeUnit.MINUTES);
 
         return new Result<>(StatusCodeEnum.OK, token);
+    }
+
+    @Override
+    public Result<Boolean> logout(User user) {
+        //删除redis中的用户信息
+        String account = user.getAccount();
+
+        Boolean delete = redisUtils.deleteValue(LoginUser.USER_REDIS_PREFIX + account);
+
+        return new Result<>(StatusCodeEnum.OK,delete);
     }
 
 

@@ -67,7 +67,7 @@ public class SecurityConfig {
 
 
         //运行跨域
-//        http.cors();
+        http.cors();
 
         return http.build();
     }

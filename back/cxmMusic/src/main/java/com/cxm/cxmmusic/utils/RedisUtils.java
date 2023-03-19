@@ -35,4 +35,8 @@ public class RedisUtils {
 
         stringRedisTemplate.opsForValue().set(key, jsonString, timeout, unit);
     }
+
+    public Boolean deleteValue(String key){
+        return stringRedisTemplate.delete(key);
+    }
 }

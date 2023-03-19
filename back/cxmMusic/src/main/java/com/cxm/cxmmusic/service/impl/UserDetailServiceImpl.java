@@ -1,10 +1,8 @@
 package com.cxm.cxmmusic.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.cxm.cxmmusic.Exception.GlobalException;
-import com.cxm.cxmmusic.Exception.StatusCodeEnum;
 import com.cxm.cxmmusic.mapper.UserMapper;
-import com.cxm.cxmmusic.pojo.LoginUser;
+import com.cxm.cxmmusic.vo.LoginUser;
 import com.cxm.cxmmusic.pojo.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

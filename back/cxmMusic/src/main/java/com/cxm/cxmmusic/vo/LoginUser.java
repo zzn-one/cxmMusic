@@ -1,5 +1,6 @@
-package com.cxm.cxmmusic.pojo;
+package com.cxm.cxmmusic.vo;
 
+import com.cxm.cxmmusic.pojo.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

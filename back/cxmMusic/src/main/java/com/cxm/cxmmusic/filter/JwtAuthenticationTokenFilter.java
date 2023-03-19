@@ -1,7 +1,9 @@
 package com.cxm.cxmmusic.filter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.cxm.cxmmusic.pojo.LoginUser;
+import com.cxm.cxmmusic.Exception.GlobalException;
+import com.cxm.cxmmusic.Exception.StatusCodeEnum;
+import com.cxm.cxmmusic.vo.LoginUser;
 import com.cxm.cxmmusic.utils.JwtUtils;
 import com.cxm.cxmmusic.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 
 @Component
@@ -27,7 +30,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
         if (!StringUtils.hasText(token)) {
             //放行 去登录接口
             filterChain.doFilter(request, response);
@@ -45,6 +48,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         //从redis中获取用户信息
         String redisKey = LoginUser.USER_REDIS_PREFIX + account;
         LoginUser loginUser = redisUtils.getValue(redisKey, LoginUser.class);
+        if(Objects.isNull(loginUser)){
+            //用户未登录
+            throw new RuntimeException(StatusCodeEnum.NOT_LOGGED_IN.getMessage());
+        }
+
 
         //把通过认证的用户封装到Authentication
         //TODO 获取权限信息封装到Authentication中

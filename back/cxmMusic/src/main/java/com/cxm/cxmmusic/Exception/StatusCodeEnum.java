@@ -21,8 +21,12 @@ public enum StatusCodeEnum {
 
     // 登录模块
     ACCOUNT_UNMATCHED_PASSWORD(10001,"账号或密码错误！"),
-    NO_ACCOUNT(10002,"账号不存在");
+    NO_ACCOUNT(10002,"账号不存在"),
+    NOT_LOGGED_IN(10003,"账号未登录"),
     // 注册模块
+    DIFFERENT_PASSWORD(10011,"两次输入的密码不一致"),
+    REGISTER_ERROR(10012,"注册失败");
+
     private final Integer code;
     private final String message;
 }

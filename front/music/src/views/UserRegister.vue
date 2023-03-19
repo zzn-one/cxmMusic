@@ -20,6 +20,10 @@
                 <el-input class="box-card-item" v-model="userForm.name" placeHolder="昵称" />
             </el-row>
             <el-row>
+                <!-- 密码为空提示的信息 -->
+                <span v-show="passwordIsEmpty" class="box-card-item-errorTip">
+                    {{ passwordEmptyTip }}
+                </span>
                 <el-input class="box-card-item" v-model="userForm.password" placeHolder="密码" type="password" />
             </el-row>
 
@@ -52,6 +56,8 @@ export default {
             passwordErrorTip: '两次密码不相同，请重新输入！',
             nameIsEmpty: false,
             nameEmptyTip: '昵称不能为空！',
+            passwordIsEmpty: false,
+            passwordEmptyTip: '密码不能为空！',
         }
     },
     methods: {
@@ -63,6 +69,13 @@ export default {
                 return;
             }
 
+            // 验证密码是否为空
+            if (this.userForm.password.trim() === '' || this.userForm.password === null ) {
+                //密码为空，出提示
+                this.passwordIsEmpty = true
+                return;
+            }
+
             // 验证两个密码是否相同
             if (this.userForm.password !== this.userForm.password2) {
                 //不相同 出提示
@@ -71,8 +84,47 @@ export default {
             }
 
             //表单验证通过，提交注册请求 
-
+            this.registerAxios()
         },
+        //注册请求
+        async registerAxios() {
+            const resp = await this.$axios({
+                method: "post",
+                url: "/user/register",
+                data: this.userForm
+            })
+            const code = resp.data.code
+            if (code === 200) {
+                //返回新账号
+                this.$alert("你的账号是：" + resp.data.data, "注册成功", {
+                    confirmButtonText: '去登录',
+                    callback: action => {
+                        this.$router.push("/")
+                    }
+                })
+
+            } else if (code === 10011) {
+                //两次密码不一致
+                this.$message({
+                    message: "两次密码不一致",
+                    type: "error"
+                })
+            } else if (code === 10012) {
+                //注册失败
+                this.$message({
+                    message: "注册失败",
+                    type: "error"
+                })
+
+            } else {
+                //系统异常
+                this.$message({
+                    message: "系统异常",
+                    type: "error"
+                })
+            }
+
+        }
 
     }
 }

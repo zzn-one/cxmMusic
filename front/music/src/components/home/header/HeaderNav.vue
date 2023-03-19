@@ -55,14 +55,18 @@
                             <div>
 
                                 <div>
-                                    <img class="avatar-img" src="@/assets/3.jpg" style="display: inline-block;">
+                                    <img class="avatar-img" :src="user.avatarUrl" style="display: inline-block;">
                                     <div
                                         style="display: inline-block; margin-top:25px;margin-left:10px;position:absolute;font-size:16px">
-                                        疯原万叶
+                                        {{ user.name }}
                                     </div>
                                 </div>
 
-                                <RouterLink :to="{ name: 'userMsg' }" class="avatar-btn">
+                                <RouterLink :to="{
+                                    name: 'userMsg', params: {
+                                        account: user.account
+                                    }
+                                }" class="avatar-btn">
                                     个人中心
                                 </RouterLink>
 
@@ -73,7 +77,7 @@
                             </div>
 
                             <el-button type="text" slot="reference">
-                                <img class="avatar-img" src="@/assets/3.jpg">
+                                <img class="avatar-img" :src="user.avatarUrl">
                             </el-button>
                         </el-popover>
                     </div>
@@ -93,7 +97,7 @@
                     <el-row>
                         <el-input class="box-card-item" v-model="userForm.password" placeHolder="请输入密码" type="password" />
                     </el-row>
-                    <el-button class="box-card-item box-card-item-button">登 录</el-button>
+                    <el-button class="box-card-item box-card-item-button" @click="login">登 录</el-button>
                     <div class="box-card-item">
                         <el-button style="float: left;color:black" type="text">找回密码</el-button>
                         <el-button style="float: right;color:black" type="text" @click="openRegister">注册账号</el-button>
@@ -106,8 +110,7 @@
     </div>
 </template>
 <script>
-import { RouterLink } from 'vue-router'
-
+import token from '@/assets/js/token';
 export default {
     name: "HeaderNav",
     data() {
@@ -118,6 +121,11 @@ export default {
             userForm: {
                 account: "",
                 password: ""
+            },
+            user: {
+                account: "",
+                name: "",
+                avatarUrl: ""
             }
         };
     },
@@ -141,10 +149,100 @@ export default {
             this.$router.push("/userRegister");
         },
         //退出登录
-        logout() {
+        async logout() {
+            //发请求
+            const resp = await this.$axios({
+                method: "post",
+                url: "/user/logout",
+                data: this.user
+            })
+
+            const code = resp.data.code
+
+            if (code === 200 && resp.data.data === true) {
+                //成功退出登录
+
+                //删除本地token
+                localStorage.removeItem("token")
+
+                this.isLogin = false
+            }
+        },
+        //登录
+        async login() {
+            //发请求
+            const resp = await this.$axios({
+                method: "post",
+                url: "/user/login",
+                data: this.userForm
+            })
+
+            const code = resp.data.code
+            if (code === 200) {
+                //登录成功
+                //1.用户本地存token（身份认证）
+                localStorage.setItem("token", resp.data.data)
+                //2.展示头像(页面标记已有用户登录)
+                this.isLogin = true
+
+                //3.给点提示信息
+                this.$message({
+                    message: "登录成功",
+                    type: "success"
+                })
+                //4.清空输入的密码
+                this.userForm.password = ''
+                //5.关闭登录窗口
+                this.loginDialogVisible = false
+                
+
+            }
+            else if (code === 10001) {
+                //账号或密码错误
+                this.$message({
+                    message: resp.data.msg,
+                    type: "error"
+                })
+            } else if (code === 10002) {
+                //账号不存在
+                this.$message({
+                    message: resp.data.msg,
+                    type: "error"
+                })
+            } else if (code === 10003) {
+                //账号未登录
+                this.$message({
+                    message: resp.data.msg,
+                    type: "error"
+                })
+            } else {
+                //系统异常
+                this.$message({
+                    message: "系统异常",
+                    type: "error"
+                })
+            }
         }
     },
-    components: { RouterLink }
+    watch: {
+        //监听用户登录状态
+        isLogin(newValue) {
+            if (newValue === true) {
+                //初始化用户信息
+                this.user.account = token().account
+                this.user.name = token().name
+                this.user.avatarUrl = token().avatarUrl
+            }
+
+        }
+    },
+    created() {
+        //查看有无本地token
+        if (localStorage.getItem("token") !== null) {
+            this.isLogin = true
+        }
+
+    }
 }
 </script>
 <style scoped lang="less">
@@ -161,9 +259,10 @@ export default {
 .active {
     color: rgb(240, 99, 18);
 }
-.logo{
+
+.logo {
     margin-top: 30px;
-    height:40px;
+    height: 40px;
 }
 
 

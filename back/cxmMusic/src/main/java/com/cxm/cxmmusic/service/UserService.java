@@ -1,6 +1,6 @@
 package com.cxm.cxmmusic.service;
 
-import com.cxm.cxmmusic.pojo.Result;
+import com.cxm.cxmmusic.vo.Result;
 import com.cxm.cxmmusic.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -24,6 +24,7 @@ public interface UserService extends IService<User> {
     Result<String> login(User user);
 
     /*
-    * 登出
-    * */
+     * 登出
+     * */
+    Result<Boolean> logout(User user);
 }

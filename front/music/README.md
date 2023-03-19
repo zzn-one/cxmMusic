@@ -192,23 +192,18 @@ result{
 //1.通知后台删除jwt
 //2.后台jwt删除后 删除本地jwt
 //输入 
-jwt中的account
+user: {
+    account: "",
+    name: "",
+    avatarUrl: ""
+}
 
 //返回 成功
 result{
 	code:200;  
-    data:true;			
-    msg:"账号已登出！";		
+    data:null;			
+    msg:"ok";		
 }
-
-//返回 
-//失败 
-result{
-	code:10005;  
-    data:false;			
-    msg:"账号登出失败！";		
-}
-
 ````
 
 #### 4.修改密码`personalMsg`

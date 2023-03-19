@@ -1,6 +1,6 @@
 package com.cxm.cxmmusic.controller;
 
-import com.cxm.cxmmusic.pojo.Result;
+import com.cxm.cxmmusic.vo.Result;
 import com.cxm.cxmmusic.pojo.User;
 import com.cxm.cxmmusic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,10 @@ public class LoginController {
         return userService.login(user);
     }
 
+    @PostMapping("/logout")
+    public Result<Boolean> logout(@RequestBody User user) {
+        return userService.logout(user);
+    }
     @PostMapping("/register")
     public Result<String> register(@RequestBody HashMap<String,String> registerForm) {
         String name = registerForm.get("name");
@@ -35,4 +39,6 @@ public class LoginController {
 
         return userService.register(name,password,password2);
     }
+
+
 }
