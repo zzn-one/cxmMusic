@@ -270,7 +270,7 @@ result{
 /user/{account}
 
 //输入
-jwt的用户账号 account
+用户账号 account
 
 //返回 成功
 result{

@@ -53,7 +53,15 @@ public class SecurityConfig {
         http.authorizeRequests()
                 // permitAll() 全部都可以访问  anonymous() 未登录的时候才可以访问
                 .antMatchers("/user/login").anonymous() //放行登录接口
-                .antMatchers("/user/register").anonymous() //放行登录接口
+                .antMatchers("/user/register").anonymous() //放行注册接口
+
+
+                .antMatchers("/dict/*").permitAll() // 放行数据字典接口
+                /*todo 放行数据导入接口*/
+                .antMatchers("/singer").permitAll()
+                .antMatchers("/singer/list").permitAll()
+                .antMatchers("/song").permitAll()
+
                 .anyRequest().authenticated(); //其它接口 任意用户认证后可以访问
 
         //关闭csrf
