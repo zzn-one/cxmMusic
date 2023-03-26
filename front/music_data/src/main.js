@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 
 import axios from 'axios';
-axios.defaults.baseURL = 'http://localhost:10000'
+axios.defaults.baseURL = 'http://1.12.54.183:10000'
 Vue.prototype.$axios = axios
 
 

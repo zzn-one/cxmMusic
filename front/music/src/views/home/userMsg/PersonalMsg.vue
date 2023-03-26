@@ -115,6 +115,8 @@
 </template>
 
 <script>
+
+import token from '@/assets/js/token';
 export default {
     name: "personalMsg",
     data() {
@@ -132,7 +134,7 @@ export default {
         var validateOldPassword2 = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('请再次输入旧密码'));
-            } else if (value !== this.ruleForm.oldPassword) {
+            } else if (value !== this.passwordForm.oldPassword) {
                 callback(new Error('两次输入的旧密码不一致!'));
             } else {
                 callback();
@@ -151,7 +153,7 @@ export default {
         var validateNewPassword2 = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('请再次输入新密码'));
-            } else if (value !== this.ruleForm.newPassword) {
+            } else if (value !== this.passwordForm.newPassword) {
                 callback(new Error('两次输入的新密码不一致!'));
             } else {
                 callback();
@@ -168,6 +170,8 @@ export default {
             //修改信息对话框
             passwordFormVisible: false,
             passwordForm: {
+                id: "",
+                account: "",
                 oldPassword: '',
                 oldPassword2: '',
                 newPassword: '',
@@ -203,10 +207,40 @@ export default {
     methods: {
         //提交密码表单
         submitPasswordForm(formName) {
+            const _this = this
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     //校验通过
-                    alert('submit!');
+
+                    //设置用户的id和account
+                    _this.passwordForm.id = _this.user.id
+                    _this.passwordForm.account = _this.user.account
+
+                    //发生请求
+                    _this.$axios({
+                        method: "put",
+                        data: this.passwordForm,
+                        url: "/user/update/password"
+                    }).then(resp => {
+                        const code = resp.data.code
+                        if (code === 200) {
+                            this.$message({
+                                message: "密码已修改！",
+                                type: "success"
+                            })
+
+                            //关闭密码表单窗口
+                            this.passwordFormVisible = false
+
+                        } else {
+                            this.$message({
+                                message: resp.data.msg,
+                                type: "error"
+                            })
+                        }
+                    })
+
+
                 } else {
                     return false;
                 }
@@ -215,44 +249,83 @@ export default {
 
         //提交个人信息表单
         submitMsgForm(formName) {
+            const _this = this
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     //校验通过
-                    alert('submit!');
+                    _this.$axios({
+                        method: "put",
+                        data: this.msgForm,
+                        url: "/user/update/msg"
+                    }).then(resp => {
+                        const code = resp.data.code
+
+                        if (code === 200) {
+                            this.$message({
+                                message: "信息已修改！",
+                                type: "success"
+                            })
+
+                            //关闭表单窗口 并 刷新个人信息
+                            this.msgFormVisible = false
+                            this.getUserMsg()
+
+                        } else {
+                            this.$message({
+                                message: resp.data.msg,
+                                type: "error"
+                            })
+                        }
+                    })
                 } else {
                     return false;
                 }
             });
         },
+
+        //获得用户个人信息
+        async getUserMsg() {
+            const account = token().account
+            const resp = await this.$axios("/user/one/" + account)
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.user = resp.data.data
+                //对象深拷贝
+                this.msgForm = structuredClone(this.user)
+            } else if (code === 10021) {
+                this.$message({
+                    message: resp.data.msg,
+                    type: "error"
+                })
+            } else {
+                this.$message({
+                    message: resp.data.msg,
+                    type: "error"
+                })
+            }
+        },
+        //获取性别列表
+        async getGenderList() {
+
+            const resp = await this.$axios("/dict/gender")
+
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.genderList = resp.data.data
+            }
+
+        }
     },
     created() {
-        this.user = {
-            id: 1,
-            name: "枫原",
-            account: "10000032",
-            avatarUrl: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            gender: "保密",
-            signature: "个性签名飞走啦~",
-            registerTime: new Date(),
-        }
 
-        //对象深拷贝
-        this.msgForm = structuredClone(this.user)
+        this.getGenderList()
+        this.getUserMsg()
 
-        this.genderList = [
-            {
-                id: 0,
-                text: "保密"
-            },
-            {
-                id: 1,
-                text: "男"
-            },
-            {
-                id: 2,
-                text: "女"
-            },
-        ]
+
+
+
     }
 
 }

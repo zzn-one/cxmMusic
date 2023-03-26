@@ -151,22 +151,27 @@ export default {
         //退出登录
         async logout() {
             //发请求
-            const resp = await this.$axios({
+            this.$axios({
                 method: "post",
                 url: "/user/logout",
                 data: this.user
+            }).then((resp) => {
+                const code = resp.data.code
+
+
+                if (code === 200 && resp.data.data === true) {
+                    //成功退出登录
+
+                    //删除本地token
+                    localStorage.removeItem("token")
+
+                    this.isLogin = false
+                }
+            }).catch(error => {
+                localStorage.removeItem("token")
             })
 
-            const code = resp.data.code
-
-            if (code === 200 && resp.data.data === true) {
-                //成功退出登录
-
-                //删除本地token
-                localStorage.removeItem("token")
-
-                this.isLogin = false
-            }
+            this.$router.push("/")
         },
         //登录
         async login() {
@@ -194,7 +199,7 @@ export default {
                 this.userForm.password = ''
                 //5.关闭登录窗口
                 this.loginDialogVisible = false
-                
+
 
             }
             else if (code === 10001) {

@@ -214,6 +214,8 @@ result{
 
 //输入 
 passwordForm: {
+    id:"",
+    account:"",
     oldPassword: '',
     oldPassword2: '',
     newPassword: '',
@@ -256,7 +258,7 @@ user  {
 result{
 	code:200;  
     data:true;			
-    msg:"个人信息已成功修改！";		
+    msg:"ok";		
 }
 
 ```
@@ -267,7 +269,7 @@ result{
 
 ```json
 //访问接口 拦截
-/user/{account}
+/user/one/{account}
 
 //输入
 用户账号 account

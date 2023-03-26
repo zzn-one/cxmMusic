@@ -6,6 +6,7 @@ import com.cxm.cxmmusic.Exception.StatusCodeEnum;
 import com.cxm.cxmmusic.vo.LoginUser;
 import com.cxm.cxmmusic.utils.JwtUtils;
 import com.cxm.cxmmusic.utils.RedisUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
-
+@Slf4j
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
@@ -48,7 +49,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         //从redis中获取用户信息
         String redisKey = LoginUser.USER_REDIS_PREFIX + account;
         LoginUser loginUser = redisUtils.getValue(redisKey, LoginUser.class);
-        if(Objects.isNull(loginUser)){
+        if (Objects.isNull(loginUser)) {
             //用户未登录
             throw new RuntimeException(StatusCodeEnum.NOT_LOGGED_IN.getMessage());
         }
@@ -61,6 +62,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         //存入SecurityContextHolder
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
+        log.info("用户：" + loginUser.getUsername() + "发来了请求");
         //放行
         filterChain.doFilter(request, response);
     }

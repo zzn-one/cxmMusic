@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /*jwt异常*/
+//    /*jwt异常*/
     @ExceptionHandler(TokenExpiredException.class)
     public Result<String> handleTokenExpiredException() {
         return new Result<>(StatusCodeEnum.UNAUTHORIZED, null);
@@ -37,13 +37,7 @@ public class GlobalExceptionHandler {
         return new Result<>(StatusCodeEnum.UNAUTHORIZED, null);
     }
 
-    /*
-     *全局异常处理
-     * */
-    @ExceptionHandler(GlobalException.class)
-    public Result<String> handleGlobalException() {
-        return new Result<>(StatusCodeEnum.UNAUTHORIZED, null);
-    }
+
 
 
     @ExceptionHandler(Exception.class)
@@ -58,7 +52,8 @@ public class GlobalExceptionHandler {
             //处理jwt认证异常
             return new Result<>(StatusCodeEnum.UNAUTHORIZED, null);
 
-        } else if (e instanceof BadCredentialsException) {
+        }
+        else if (e instanceof BadCredentialsException) {
             //处理  用户账号认证异常 （用户名或密码错误）
             return new Result<>(StatusCodeEnum.ACCOUNT_UNMATCHED_PASSWORD, null);
 
@@ -70,8 +65,6 @@ public class GlobalExceptionHandler {
             //todo 处理其他原因导致的异常
 
         }
-
-
         e.printStackTrace();
         return new Result<>(StatusCodeEnum.EXCEPTION, null);
     }

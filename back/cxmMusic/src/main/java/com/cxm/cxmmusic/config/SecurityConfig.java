@@ -55,7 +55,6 @@ public class SecurityConfig {
                 .antMatchers("/user/login").anonymous() //放行登录接口
                 .antMatchers("/user/register").anonymous() //放行注册接口
 
-
                 .antMatchers("/dict/*").permitAll() // 放行数据字典接口
                 /*todo 放行数据导入接口*/
                 .antMatchers("/singer").permitAll()

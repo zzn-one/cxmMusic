@@ -105,6 +105,7 @@ const routes = [
         path: 'userMsg',
         name: 'userMsg',
         component: () => import('@/views/home/UserMsg.vue'),
+        redirect: "/home/userMsg/personalMsg",
         children: [
           //个人信息
           {

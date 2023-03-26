@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: mysql8
-    url: jdbc:mysql://1.12.54.183:3306/cxm_music
+    url: jdbc:mysql://localhost:3306/cxm_music
     type: com.alibaba.druid.pool.DruidDataSource
   #redis
   redis:
