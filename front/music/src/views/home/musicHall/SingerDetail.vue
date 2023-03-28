@@ -4,7 +4,7 @@
         <div class="singer-msg-box">
             <!-- 照片 -->
             <div class="singer-img-box">
-                <img :src="singer.avatar_url" class="singer-img">
+                <img :src="singer.avatarUrl" class="singer-img">
             </div>
             <!-- 文字信息 -->
             <div class="singer-introduce-box">
@@ -14,7 +14,7 @@
                 </div>
                 <!-- 简介 -->
                 <div class="introducr-box">
-                    {{ singer.introduce }}
+                    {{ singer.introduction }}
                 </div>
                 <!-- 歌曲数量 -->
                 <div class="singer-song-number-box">
@@ -30,10 +30,10 @@
             </div>
             <!-- 按钮 -->
             <div class="songList-btns">
-                <el-button class="btns-item" icon="el-icon-video-play" type="success" plain>
+                <el-button class="btns-item" icon="el-icon-video-play" @click="addToPlayList">
                     播放
                 </el-button>
-                <el-button class="btns-item" icon="el-icon-star-off" >
+                <el-button class="btns-item" icon="el-icon-star-off">
                     收藏
                 </el-button>
                 <el-button class="btns-item" icon="el-icon-plus">
@@ -64,6 +64,8 @@
     </div>
 </template>
 <script>
+import play from '@/assets/js/playSong';
+import token from '@/assets/js/token';
 export default {
     name: "SingerDetail",
     data() {
@@ -78,60 +80,37 @@ export default {
     methods: {
         handleSelectionChange(val) {
             this.multipleSelection = val;
-        }
-    },
-    created() {
-        this.singer = {
-            name: "陈奕迅",
-            avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            introduce: "这是歌手简介啊啊啊嗷嗷嗷哈哈哈",
-            songNumber: 132,
+        },
+        //页面初始化
+        init() {
+            this.singer = this.$route.query.singer
+            const _this = this
+            this.$axios("/song/list/" + this.singer.id).then(resp => {
+                const code = resp.data.code
+
+                if (code === 200) {
+                    this.songList = resp.data.data
+                }
+            })
+        },
+        //播放按钮
+        addToPlayList() {
+            const account = token().account
+            if (this.multipleSelection.length > 0) {
+                play(this.multipleSelection, account)
+            } else {
+                this.$message({
+                    message: "请先选择歌曲！",
+                    type: "error"
+                })
+            }
+
         }
 
-        this.songList = [
-            {
-                name: "不要说话",
-                duration: 237000,
-            },
-            {
-                name: "红玫瑰",
-                duration: 217000,
-            },
-            {
-                name: "红玫瑰",
-                duration: 217000,
-            }, {
-                name: "红玫瑰",
-                duration: 217000,
-            }, {
-                name: "红玫瑰",
-                duration: 217000,
-            }, {
-                name: "红玫瑰",
-                duration: 217000,
-            }, {
-                name: "红玫瑰",
-                duration: 217000,
-            }, {
-                name: "红玫瑰",
-                duration: 217000,
-            }, {
-                name: "红玫瑰",
-                duration: 217000,
-            }, {
-                name: "红玫瑰",
-                duration: 217000,
-            }, {
-                name: "红玫瑰",
-                duration: 217000,
-            }, {
-                name: "红玫瑰",
-                duration: 217000,
-            }, {
-                name: "红玫瑰",
-                duration: 217000,
-            },
-        ]
+    },
+    created() {
+        this.init()
+
     }
 }
 </script>

@@ -4,6 +4,8 @@ import com.cxm.cxmmusic.Exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.DictSingerType;
 import com.cxm.cxmmusic.service.DictSingerTypeService;
 import com.cxm.cxmmusic.vo.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +19,13 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/dict/singerType")
+@Api(tags = "歌手类型字典接口")
 public class DictSingerTypeController {
     @Autowired
     private DictSingerTypeService dictSingerTypeService;
 
     @GetMapping()
+    @ApiOperation("获取歌手类型列表")
     public Result<List<DictSingerType>> all() {
         List<DictSingerType> list = dictSingerTypeService.list();
 

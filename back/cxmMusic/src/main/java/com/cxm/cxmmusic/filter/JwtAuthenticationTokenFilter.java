@@ -1,11 +1,10 @@
 package com.cxm.cxmmusic.filter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.cxm.cxmmusic.Exception.GlobalException;
 import com.cxm.cxmmusic.Exception.StatusCodeEnum;
-import com.cxm.cxmmusic.vo.LoginUser;
 import com.cxm.cxmmusic.utils.JwtUtils;
 import com.cxm.cxmmusic.utils.RedisUtils;
+import com.cxm.cxmmusic.vo.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

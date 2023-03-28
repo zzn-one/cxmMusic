@@ -3,6 +3,9 @@ package com.cxm.cxmmusic.pojo;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -11,61 +14,52 @@ import lombok.Data;
  */
 @TableName(value ="song")
 @Data
+@ApiModel("歌曲实体")
 public class Song implements Serializable {
-    /**
-     * 主键
-     */
+
+    @ApiModelProperty("主键")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    /**
-     * 歌曲名称
-     */
+
+    @ApiModelProperty("歌曲名称")
     @TableField(value = "name")
     private String name;
 
-    /**
-     * 歌曲封面
-     */
+
+    @ApiModelProperty("歌曲封面")
     @TableField(value = "img_url")
     private String imgUrl;
 
-    /**
-     * 歌曲时长（毫秒）
-     */
+
+    @ApiModelProperty("歌曲时长（毫秒）")
     @TableField(value = "duration")
     private Long duration;
 
-    /**
-     * 歌曲资源路径
-     */
+
+    @ApiModelProperty("歌曲资源路径")
     @TableField(value = "source_url")
     private String sourceUrl;
 
-    /**
-     * 播放量
-     */
+
+    @ApiModelProperty("播放量")
     @TableField(value = "play_number")
     private Long playNumber;
 
-    /**
-     * 收藏量
-     */
+
+    @ApiModelProperty("收藏量")
     @TableField(value = "star_number")
     private Long starNumber;
 
-    /**
-     * 逻辑删除 
-     */
+
+    @ApiModelProperty("逻辑删除 ")
     @TableField(value = "deleted")
     private Integer deleted;
 
-    /**
-     * 
-     */
+
+    @ApiModelProperty("乐观锁")
     @TableField(value = "version")
     @Version
-
     private Integer version;
 
     @TableField(exist = false)

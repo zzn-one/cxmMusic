@@ -6,6 +6,10 @@ import com.cxm.cxmmusic.Exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.User;
 import com.cxm.cxmmusic.service.UserService;
 import com.cxm.cxmmusic.vo.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +21,7 @@ import java.util.HashMap;
  * @author
  * @create 2023-03-22 13:37
  */
+@Api(tags = "用户接口")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -28,9 +33,9 @@ public class UserController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     //    ---------------------------------------------------查---------------------------------------------------------------
-    /*
-     * 获取用户信息 根据account
-     * */
+
+    @ApiOperation("获取用户信息")
+    @ApiImplicitParam(name = "account",value = "用户账户",required = true,paramType = "path")
     @GetMapping("/one/{account}")
     public Result<User> getOne(@PathVariable("account") String account) {
         Result<User> result;
@@ -53,6 +58,7 @@ public class UserController {
     /*
      * 修改 个人信息
      * */
+    @ApiOperation("更新用户个人信息")
     @PutMapping("/update/msg")
     public Result<Boolean> updateMsg(@RequestBody User user) {
         Result<Boolean> result;
@@ -71,7 +77,16 @@ public class UserController {
     /*
      * 修改 个人密码
      * */
+    @ApiOperation("更新用户个人信息")
     @PutMapping("/update/password")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id"),
+            @ApiImplicitParam(name = "account"),
+            @ApiImplicitParam(name = "oldPassword"),
+            @ApiImplicitParam(name = "oldPassword2"),
+            @ApiImplicitParam(name = "newPassword"),
+            @ApiImplicitParam(name = "newPassword2"),
+    })
     public Result<Boolean> updateMsg(@RequestBody HashMap<String, String> map) {
 
 
@@ -82,8 +97,6 @@ public class UserController {
         String newPassword = map.get("newPassword");
         String newPassword2 = map.get("newPassword2");
 
-        System.out.println("account = " + account);
-        System.out.println("oldPassword = " + oldPassword);
 
         //验证密码是否相同
         if (!oldPassword.equals(oldPassword2)) {

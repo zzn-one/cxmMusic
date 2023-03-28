@@ -29,7 +29,19 @@ spring:
     username: root
     password: rabbitmq
     virtual-host: /music
-    #    mp
+  #mongo
+  data:
+    mongodb:
+      host: 1.12.54.183
+      port: 27017
+      database: cxmMusic
+      username: mongo
+      password: mongo5
+  #swagger接口文档
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+#mp
 mybatis-plus:
   global-config:
     db-config:

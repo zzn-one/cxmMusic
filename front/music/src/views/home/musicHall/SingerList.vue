@@ -4,8 +4,8 @@
         <div class="singer-msg-img-box">
             <div class="singer-msg-box">
                 <div class="singer-msg-item" v-for="singer in singerListWithImg">
-                    <el-button type="text" @click="btn_click(singer)">
-                        <img :src="singer.avatar_url" class="singer-msg-item-img">
+                    <el-button type="text" @click="btn_click(singer)" :key="singer.id">
+                        <img :src="singer.avatarUrl" class="singer-msg-item-img">
                         <div class="singer-msg-item-name">{{ singer.name }}</div>
                     </el-button>
                 </div>
@@ -16,9 +16,19 @@
         <div class="singer-msg-no-img-box">
             <el-button type="text" v-for="singer in singerListNoImg" class="singer-msg-no-img-btn"
                 onmouseover="this.style.color='rgb(240, 99, 18)'" onmouseleave="this.style.color='black'"
-                @click="btn_click(singer)">
+                @click="btn_click(singer)" :key="singer.id">
                 {{ singer.name }}
             </el-button>
+        </div>
+
+        <!-- 显示更多歌手 -->
+        <div class="more-singer">
+
+            <el-button type="text" @click="moreSinger()">
+                显示更多
+            </el-button>
+
+
         </div>
     </div>
 </template>
@@ -36,16 +46,16 @@ export default {
             singerListWithImg: [],
             //无头像的数据
             singerListNoImg: [],
+            currentPage: 0,
+            pageSize: 20
         }
     },
     methods: {
         //歌手信息 被点击
         btn_click(singer) {
-            console.log(singer);
-
             this.$router.push({
                 name: "singerDetail",
-                params: {
+                query: {
                     singer: singer,
                 }
             })
@@ -53,6 +63,8 @@ export default {
         //数据分发
         singerListSeparator() {
             let index = 0
+            this.singerListWithImg = []
+            this.singerListNoImg = []
             this.singerList.forEach(singer => {
                 if (index < this.imgNumber) {
                     this.singerListWithImg.push(singer)
@@ -61,118 +73,29 @@ export default {
                 }
                 index++
             })
+        },
+        //获取歌手列表
+        async getSingerList() {
+            const resp = await this.$axios("/singer/list/" + this.currentPage + "/" + this.pageSize)
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.singerList = resp.data.data.records
+                this.singerListSeparator()
+            }
+        },
+        //更多歌手
+        moreSinger() {
+            this.pageSize += 20
+        }
+    },
+    watch: {
+        pageSize() {
+            this.getSingerList()
         }
     },
     created() {
-        //假数据
-        this.singerList = [
-            {
-                id: 1,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            },
-            {
-                id: 2,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            },
-            {
-                id: 3,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            },
-            {
-                id: 4,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            },
-            {
-                id: 5,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            },
-            {
-                id: 6,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            },
-            {
-                id: 7,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 8,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 9,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            },
-            {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            }, {
-                id: 10,
-                name: "陈奕迅",
-                avatar_url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            },
-        ]
-
-        this.singerListSeparator()
+        this.getSingerList()
     }
 }
 </script>
@@ -210,5 +133,10 @@ export default {
     color: black;
     margin: 20px 0 0 60px;
     font-size: 16px;
+}
+
+.more-singer {
+    margin-top: 20px;
+    text-align: center;
 }
 </style>

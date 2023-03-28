@@ -98,8 +98,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         payload.put("avatarUrl", loginUser.getUser().getAvatarUrl());
 
         String token = JwtUtils.getToken(payload);
+        
+        //2.更新登录时间
+        
+        
+        loginUser.getUser().setLastedLoginTime(new Date());
+        userMapper.updateById(loginUser.getUser());
 
-        //2.登录用户信息存入redis
+        //3.登录用户信息存入redis
         redisUtils.setValue(LoginUser.USER_REDIS_PREFIX + account, loginUser, JwtUtils.EXPIRES, TimeUnit.MINUTES);
 
         return new Result<>(StatusCodeEnum.OK, token);

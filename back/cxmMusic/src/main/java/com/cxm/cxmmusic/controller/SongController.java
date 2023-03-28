@@ -1,6 +1,5 @@
 package com.cxm.cxmmusic.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.cxm.cxmmusic.Exception.StatusCodeEnum;
@@ -14,13 +13,12 @@ import com.cxm.cxmmusic.service.SongService;
 import com.cxm.cxmmusic.service.SongTagService;
 import com.cxm.cxmmusic.vo.Result;
 import com.cxm.cxmmusic.vo.SongAdd;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,6 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/song")
+@Api(tags = "歌曲接口")
 public class SongController {
 
     @Autowired
@@ -40,9 +39,8 @@ public class SongController {
     @Autowired
     private SingerService singerService;
 
-    /*
-     * 新增歌曲
-     * */
+
+    @ApiOperation("新增一首歌曲")
     @PostMapping()
     public Result<Boolean> addOne(@RequestBody SongAdd songAdd) {
 
@@ -102,4 +100,14 @@ public class SongController {
     }
 
 
+    @ApiOperation("获取歌曲列表")
+    @ApiImplicitParam(name = "singerId",value = "歌手id")
+    @GetMapping("/list/{singerId}")
+    public Result<List<Song>> listBySingerId(@PathVariable("singerId")Integer singerId){
+
+        List<Song> songs = songService.listBySingerId(singerId);
+
+        return new Result<>(StatusCodeEnum.OK, songs);
+
+    }
 }

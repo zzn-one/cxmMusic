@@ -54,6 +54,12 @@ public class SecurityConfig {
                 // permitAll() 全部都可以访问  anonymous() 未登录的时候才可以访问
                 .antMatchers("/user/login").anonymous() //放行登录接口
                 .antMatchers("/user/register").anonymous() //放行注册接口
+                .antMatchers("/swagger-ui.html",
+                        "/swagger-ui/*",
+                        "/swagger-resources/**",
+                        "/v2/api-docs",
+                        "/v3/api-docs",
+                        "/webjars/**").permitAll() //放行swagger-ui接口
 
                 .antMatchers("/dict/*").permitAll() // 放行数据字典接口
                 /*todo 放行数据导入接口*/

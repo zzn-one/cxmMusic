@@ -4,7 +4,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cxm.cxmmusic.pojo.Song;
 import com.cxm.cxmmusic.service.SongService;
 import com.cxm.cxmmusic.mapper.SongMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
 * @author zzz06
@@ -15,6 +19,15 @@ import org.springframework.stereotype.Service;
 public class SongServiceImpl extends ServiceImpl<SongMapper, Song>
     implements SongService{
 
+    @Resource
+    private SongMapper songMapper;
+
+    @Override
+    public List<Song> listBySingerId(Integer singerId) {
+
+
+        return songMapper.listBySingerId(singerId);
+    }
 }
 
 

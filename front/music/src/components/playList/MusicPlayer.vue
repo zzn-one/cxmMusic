@@ -35,7 +35,8 @@
                 </div>
                 <!-- 已播放时间/总时间 -->
                 <div class="play-song-msg-time">
-                    {{ $moment(this.playedTime * 1000).format("mm:ss") }} / {{ $moment(this.duration * 1000).format("mm:ss") }}
+                    {{ $moment(this.playedTime * 1000).format("mm:ss") }} / {{ $moment(this.duration * 1000).format("mm:ss")
+                    }}
                 </div>
             </div>
             <!-- 进度条 -->
@@ -54,7 +55,7 @@
             <img src="https://img.icons8.com/ios/20/null/medium-volume--v1.png" style="margin-left:10px ;" />
         </div>
         <!-- 播放控件 -->
-        <audio id="audio">
+        <audio id="audio" @ended="endPlay">
             <source :src="songUrl" type="audio/ogg">
             <source :src="songUrl" type="audio/mpeg">
         </audio>
@@ -88,6 +89,8 @@ export default {
 
             //音量
             volume: 0.3,
+
+
         }
     },
     computed: {
@@ -141,38 +144,14 @@ export default {
 
         },
 
+        //获取播放列表
+        async getSongs() {
+            const resp = await this.$axios("/play/" + this.$token().account)
 
-
-        //假数据
-        testData() {
-            this.songList.push(
-                {
-                    name: "泡沫",
-                    singerName: "邓紫棋",
-                    sourceUrl: "http://music.163.com/song/media/outer/url?id=233931.mp3"
-                },
-                {
-                    name: "关于本人生活状态的报告",
-                    singerName: "天然卷夏祭,Sx",
-                    sourceUrl: "http://music.163.com/song/media/outer/url?id=1447792630.mp3"
-                },
-                {
-                    name: "请吃饭的关系",
-                    singerName: "不靠谱组合",
-                    sourceUrl: "http://ws.stream.qqmusic.qq.com/C400000aZWZr4TuUOi.m4a?guid=878565261&vkey=F128FB7C34D46ECB841B8E2DD23FE06015C8FBDB0C5DF8E60FEE868613EEF896793FB48A1270FDDED989CAF12F5ED1BCAD423B7430CF98AA&uin=&fromtag=120032"
-                },
-                {
-                    name: "差不多姑娘",
-                    singerName: "邓紫棋",
-                    sourceUrl: "http://ws.stream.qqmusic.qq.com/C400004VYbhm18YnBH.m4a?guid=124560908&vkey=7721D4102DA6B179C0EEC02ABE56C991E966604577D9C0335C17E3B3262A5B9D441654766D6996E3294E01D40F704DDB92C8DFF2E386B016&uin=&fromtag=120032"
-                },
-                {
-                    name: "给你一瓶魔法药水",
-                    singerName: "告五人",
-                    sourceUrl: "http://music.163.com/song/media/outer/url?id=1959667345.mp3"
-                },
-
-            )
+            const code = resp.data.code
+            if (code === 200) {
+                this.songList = resp.data.data
+            }
         },
         //歌曲索引变动 改变当前播放器的歌曲信息
         changeSongMsg() {
@@ -194,11 +173,17 @@ export default {
                     } else {
                         this.playedTime = audioDOM.currentTime
                     }
-                } else {
-                    this.nextSong()
                 }
             }, 1000)
         },
+        //歌单播放结束事件
+        endPlay() {
+            let song =this.songList[this.currentIndex]
+
+            //发送请求，修改歌曲的播放量
+            
+            this.nextSong()
+        }
 
     },
     watch: {
@@ -244,7 +229,7 @@ export default {
             }
         })
 
-        await this.testData()
+        await this.getSongs()
         this.changeSongMsg()
 
         //获取歌曲当前播放进度
@@ -270,6 +255,7 @@ export default {
 
 .play-btns-box {
     flex: 3;
+    min-width: 180px;
 }
 
 .play-progress-box {

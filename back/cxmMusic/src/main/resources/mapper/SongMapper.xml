@@ -5,20 +5,44 @@
 <mapper namespace="com.cxm.cxmmusic.mapper.SongMapper">
 
     <resultMap id="BaseResultMap" type="com.cxm.cxmmusic.pojo.Song">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="img_url" column="img_url" jdbcType="VARCHAR"/>
-            <result property="duration" column="duration" jdbcType="BIGINT"/>
-            <result property="source_url" column="source_url" jdbcType="VARCHAR"/>
-            <result property="play_number" column="play_number" jdbcType="BIGINT"/>
-            <result property="star_number" column="star_number" jdbcType="BIGINT"/>
-            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
-            <result property="version" column="version" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="imgUrl" column="img_url" jdbcType="VARCHAR"/>
+        <result property="duration" column="duration" jdbcType="BIGINT"/>
+        <result property="sourceUrl" column="source_url" jdbcType="VARCHAR"/>
+        <result property="playNumber" column="play_number" jdbcType="BIGINT"/>
+        <result property="starNumber" column="star_number" jdbcType="BIGINT"/>
+        <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name,img_url,
+        id
+        ,name,img_url,
         duration,source_url,play_number,
         star_number,deleted,version
     </sql>
+    <select id="listBySingerId" resultType="com.cxm.cxmmusic.pojo.Song">
+        SELECT id,
+               `name`,
+               duration
+        FROM song so
+                 INNER JOIN singer_own_song ss ON ss.singerId = #{singerId}
+            AND ss.songId = so.id
+
+    </select>
+    <select id="getBySongId" resultType="com.cxm.cxmmusic.vo.PlaySong">
+        SELECT so.id,
+               so.duration,
+               si.`name` singer_name,
+               so.`name`,
+               so.source_url
+        FROM song so
+                 INNER JOIN singer si
+                 INNER JOIN singer_own_song ss
+        WHERE ss.singerId = si.id
+          AND so.id = ss.songId
+          AND ss.songId = #{songId}
+
+    </select>
 </mapper>

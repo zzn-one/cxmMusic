@@ -5,20 +5,21 @@
             <!-- 头部 -->
             <div class="header-box">
                 <div class="header-logo">
-                    <a href="/" style="color: rgba(3, 3, 3, 0.616)" @mouseover="$event.target.style.color = 'rgb(156, 193, 224)'"
+                    <a href="/" style="color: rgba(3, 3, 3, 0.616)"
+                        @mouseover="$event.target.style.color = 'rgb(156, 193, 224)'"
                         @mouseout="$event.target.style.color = 'black'" target="_blank">
                         {{ logo }}
                     </a>
                 </div>
                 <div class="header-avatar">
-                    <a href="/#/home/userMusic/userSong">
+                    <a href="/#/home/userMusic/userSong" target="_blank">
 
                         <div class="header-name-box">
-                            疯原万叶
+                            {{ $token().name }}
                         </div>
 
                         <div class="header-img-box">
-                            <img src="@/assets/avatar1.jpg" class="header-img-body">
+                            <img :src="$token().avatarUrl" class="header-img-body">
                         </div>
                     </a>
                 </div>
@@ -33,8 +34,8 @@
                         <div class="song-btns-box">
                             <el-button icon="el-icon-star-off" class="song-btn">收藏</el-button>
                             <el-button icon="el-icon-plus" class="song-btn">添加到</el-button>
-                            <el-button icon="el-icon-close" class="song-btn">删除</el-button>
-                            <el-button icon="el-icon-delete" class="song-btn">清空列表</el-button>
+                            <el-button icon="el-icon-close" class="song-btn" @click="deleteSongs">删除</el-button>
+                            <el-button icon="el-icon-delete" class="song-btn" @click="deleteAll">清空列表</el-button>
                         </div>
                         <div class="song-table-box">
                             <el-table ref="multipleTable" :data="songsTableData" tooltip-effect="dark" style="width: 100%;"
@@ -51,7 +52,7 @@
                                         <RouterLink :to='{
                                             name: "singerDetail", params: { id: 1 }
                                         }'>
-                                            {{ scope.row.songerName }}
+                                            {{ scope.row.singerName }}
                                         </RouterLink>
                                     </template>
                                 </el-table-column>
@@ -110,17 +111,52 @@ export default {
         //选择变动事件  val 被选中的对象
         handleSelectionChange(val) {
             this.multipleSelection = val;
+        },
+        //获取播放列表
+        async getSongs() {
+            const resp = await this.$axios("/play/" + this.$token().account)
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.songsTableData = resp.data.data
+            }
+        },
+        //删除部分歌曲
+        async deleteSongs() {
+            if (this.multipleSelection.length === 0) {
+                this.$message({
+                    message: "请先选择歌曲！",
+                    type: "error"
+                })
+            }
+            const resp = await this.$axios({
+                method: "delete",
+                data: this.multipleSelection,
+                url: "/play/" + this.$token().account
+            })
+
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.getSongs()
+            }
+
+        },
+        async deleteAll(){
+            const resp = await this.$axios({
+                method: "delete",
+                url: "/play/all/" + this.$token().account
+            })
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.getSongs()
+            }
         }
 
     },
     created() {
-        for (let i = 0; i < 20; i++) {
-            this.songsTableData.push({
-                name: "泡沫",
-                songerName: "凳子齐",
-                duration: 279000,
-            })
-        }
+        this.getSongs()
     }
 }
 </script>
@@ -260,5 +296,6 @@ export default {
 
 .play-box {
     margin-top: 50px;
+    min-width: 1200px;
 }
 </style>
