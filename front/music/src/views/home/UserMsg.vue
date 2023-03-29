@@ -5,7 +5,7 @@
             <ul class="nav-ul">
                 <li v-for="nav in navList" class="nav-li">
                     <i :class="nav.icon"></i>
-                    <RouterLink :to="nav.router">
+                    <RouterLink :to="nav.router" active-class="active">
                         {{ nav.name }}
                     </RouterLink>
                 </li>
@@ -81,5 +81,8 @@ export default {
     height: 800px;
     background-color: #fff;
 
+}
+.active {
+    color: rgb(240, 99, 18);
 }
 </style>

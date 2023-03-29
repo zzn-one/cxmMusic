@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cxm.cxmmusic.mapper.UserStarSonglistMapper">
 
-    <resultMap id="BaseResultMap" type="com.cxm.cxmmusic.pojo.UserStarSonglist">
+    <resultMap id="BaseResultMap" type="com.cxm.cxmmusic.vo.mongo.UserStarSonglist">
             <result property="userId" column="userId" jdbcType="INTEGER"/>
             <result property="songlistId" column="songlistId" jdbcType="INTEGER"/>
             <result property="deleted" column="deleted" jdbcType="TINYINT"/>

@@ -1,14 +1,20 @@
 package com.cxm.cxmmusic;
 
-import com.cxm.cxmmusic.vo.PlayList;
+import com.cxm.cxmmusic.vo.mongo.PlaySong;
+import com.cxm.cxmmusic.vo.mongo.UserPlaySong;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 
 @SpringBootTest
 class CxmMusicApplicationTests {
@@ -31,21 +37,26 @@ class CxmMusicApplicationTests {
 
     @Test
     void  testMongo(){
-        PlayList byId = mongoTemplate.findById("1000002", PlayList.class);
-        System.out.println("byId = " + byId);
+        Criteria criteria = Criteria.where("account").is("1000001").and("songId").is(68);
+        UserPlaySong userPlaySongDb = mongoTemplate.findOne(Query.query(criteria), UserPlaySong.class);
+
+        System.out.println("userPlaySongDb = " + userPlaySongDb);
     }
 
     @Test
     void  dskd(){
-        ArrayList<Integer> integers = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            integers.add(i);
-        }
-        System.out.println("integers1 = " + integers);
-        integers.removeIf(integer -> {
-            return integer % 5 == 0;
-        });
-        System.out.println("integers2 = " + integers);
+        HashMap<Integer, PlaySong> map = new HashMap<>();
+
+        map.putIfAbsent(1, new PlaySong());
+        map.putIfAbsent(2, new PlaySong());
+        map.putIfAbsent(3, new PlaySong());
+        map.putIfAbsent(4, new PlaySong());
+        map.putIfAbsent(5, new PlaySong());
+        map.putIfAbsent(1, new PlaySong());
+
+        Collection<PlaySong> values = map.values();
+
+        System.out.println("values = " + values);
 
 
     }

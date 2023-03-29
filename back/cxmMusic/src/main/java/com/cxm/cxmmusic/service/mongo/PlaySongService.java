@@ -1,6 +1,6 @@
-package com.cxm.cxmmusic.service;
+package com.cxm.cxmmusic.service.mongo;
 
-import com.cxm.cxmmusic.vo.PlaySong;
+import com.cxm.cxmmusic.vo.mongo.PlaySong;
 
 /**
  * @author

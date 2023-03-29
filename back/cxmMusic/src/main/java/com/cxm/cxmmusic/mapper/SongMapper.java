@@ -2,7 +2,7 @@ package com.cxm.cxmmusic.mapper;
 
 import com.cxm.cxmmusic.pojo.Song;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cxm.cxmmusic.vo.PlaySong;
+import com.cxm.cxmmusic.vo.mongo.PlaySong;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.cxm.cxmmusic.pojo;
+package com.cxm.cxmmusic.vo.mongo;
 
 import com.baomidou.mybatisplus.annotation.*;
 
@@ -7,11 +7,11 @@ import lombok.Data;
 
 /**
  * 
- * @TableName user_play_songlist
+ * @TableName user_star_song
  */
-@TableName(value ="user_play_songlist")
+@TableName(value ="user_star_song")
 @Data
-public class UserPlaySonglist implements Serializable {
+public class UserStarSong implements Serializable {
     /**
      * 用户id
      */
@@ -19,16 +19,10 @@ public class UserPlaySonglist implements Serializable {
     private Integer userId;
 
     /**
-     * 歌单id
+     * 歌曲id
      */
-    @TableField(value = "songlistId")
-    private Integer songlistId;
-
-    /**
-     * 用户播放该歌单的次数
-     */
-    @TableField(value = "times")
-    private Long times;
+    @TableField(value = "songId")
+    private Integer songId;
 
     /**
      * 
@@ -58,10 +52,9 @@ public class UserPlaySonglist implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        UserPlaySonglist other = (UserPlaySonglist) that;
+        UserStarSong other = (UserStarSong) that;
         return (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getSonglistId() == null ? other.getSonglistId() == null : this.getSonglistId().equals(other.getSonglistId()))
-            && (this.getTimes() == null ? other.getTimes() == null : this.getTimes().equals(other.getTimes()))
+            && (this.getSongId() == null ? other.getSongId() == null : this.getSongId().equals(other.getSongId()))
             && (this.getDeleted() == null ? other.getDeleted() == null : this.getDeleted().equals(other.getDeleted()))
             && (this.getVersion() == null ? other.getVersion() == null : this.getVersion().equals(other.getVersion()));
     }
@@ -71,8 +64,7 @@ public class UserPlaySonglist implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        result = prime * result + ((getSonglistId() == null) ? 0 : getSonglistId().hashCode());
-        result = prime * result + ((getTimes() == null) ? 0 : getTimes().hashCode());
+        result = prime * result + ((getSongId() == null) ? 0 : getSongId().hashCode());
         result = prime * result + ((getDeleted() == null) ? 0 : getDeleted().hashCode());
         result = prime * result + ((getVersion() == null) ? 0 : getVersion().hashCode());
         return result;
@@ -85,8 +77,7 @@ public class UserPlaySonglist implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", userId=").append(userId);
-        sb.append(", songlistId=").append(songlistId);
-        sb.append(", times=").append(times);
+        sb.append(", songId=").append(songId);
         sb.append(", deleted=").append(deleted);
         sb.append(", version=").append(version);
         sb.append(", serialVersionUID=").append(serialVersionUID);

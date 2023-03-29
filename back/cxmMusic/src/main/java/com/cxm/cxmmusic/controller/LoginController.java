@@ -1,5 +1,6 @@
 package com.cxm.cxmmusic.controller;
 
+import com.cxm.cxmmusic.Exception.StatusCodeEnum;
 import com.cxm.cxmmusic.vo.Result;
 import com.cxm.cxmmusic.pojo.User;
 import com.cxm.cxmmusic.service.UserService;
@@ -29,14 +30,16 @@ public class LoginController {
     @ApiOperation("登录")
     @PostMapping("/login")
     public Result<String> login(@RequestBody User user) {
+        String token = userService.login(user);
+        return new Result<>(StatusCodeEnum.OK, token);
 
-        return userService.login(user);
     }
 
     @ApiOperation("登出")
     @PostMapping("/logout")
     public Result<Boolean> logout(@RequestBody User user) {
-        return userService.logout(user);
+        Boolean logout = userService.logout(user);
+        return new Result<>(StatusCodeEnum.OK, logout);
     }
 
     @ApiOperation("注册")
@@ -51,7 +54,8 @@ public class LoginController {
         String password = registerForm.get("password");
         String password2 = registerForm.get("password2");
 
-        return userService.register(name, password, password2);
+        String account = userService.register(name, password, password2);
+        return new Result<>(StatusCodeEnum.OK, account);
     }
 
 

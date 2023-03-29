@@ -15,16 +15,16 @@ public interface UserService extends IService<User> {
      * 注册
      * @return 账号 字符串
      * */
-    Result<String> register(String name, String password, String password2);
+    String register(String name, String password, String password2);
 
     /*
      * 登录
      * @return jwt 字符串
      * */
-    Result<String> login(User user);
+    String login(User user);
 
     /*
      * 登出
      * */
-    Result<Boolean> logout(User user);
+    Boolean logout(User user);
 }

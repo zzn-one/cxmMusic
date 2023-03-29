@@ -30,12 +30,23 @@ public enum StatusCodeEnum {
     DIFFERENT_PASSWORD(10011, "两次输入的密码不一致"),
     REGISTER_ERROR(10012, "注册失败"),
 
+
     //用户模块
     NO_USER(10021, "系统无该用户的信息"),
     DIFFERENT_OLD_PASSWORD(10022, "两次输入的旧密码不一致"),
     DIFFERENT_NEW_PASSWORD(10023, "两次输入的新密码不一致"),
     SAME_NEW_OLD_PASSWORD(10024, "新旧密码不能相同"),
-    PASSWORD_ERROR(10025, "旧密码错误");
+    PASSWORD_ERROR(10025, "旧密码错误"),
+
+    //歌曲播放量模块
+    ERROR_UPDATE_SONG_PLAY_NUMBER(10031, "歌曲的播放量修改出错！"),
+    ERROR_UPDATE_USER_PLAY_SONG_TIMES(10032, "用户的歌曲播放次数修改出错！"),
+
+    //播放列表模块
+    ERROR_UPDATE_PLAY_INDEX(10041, "播放索引更新出错"),
+    ERROR_CLEAR_SONG(10042, "播放列表歌曲删除失败！"),
+    ERROR_GET_PLAYLIST(10043, "获取播放列表失败");
+
 
     private final Integer code;
     private final String message;

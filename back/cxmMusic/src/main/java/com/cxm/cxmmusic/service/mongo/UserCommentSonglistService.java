@@ -1,6 +1,6 @@
-package com.cxm.cxmmusic.service;
+package com.cxm.cxmmusic.service.mongo;
 
-import com.cxm.cxmmusic.pojo.UserCommentSonglist;
+import com.cxm.cxmmusic.vo.mongo.UserCommentSonglist;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

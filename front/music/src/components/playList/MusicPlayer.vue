@@ -150,7 +150,7 @@ export default {
 
             const code = resp.data.code
             if (code === 200) {
-                this.songList = resp.data.data
+                this.songList = resp.data.data.reverse()
             }
         },
         //歌曲索引变动 改变当前播放器的歌曲信息
@@ -178,13 +178,33 @@ export default {
         },
         //歌单播放结束事件
         endPlay() {
-            let song =this.songList[this.currentIndex]
+            let song = this.songList[this.currentIndex]
+
+            let songId = song.id
 
             //发送请求，修改歌曲的播放量
-            
-            this.nextSong()
-        }
+            this.updatePlayNumber(songId)
 
+            //下一首
+            this.nextSong()
+        },
+        //发送请求，修改歌曲的播放量
+        async updatePlayNumber(songId) {
+            let account = this.$token().account
+            const resp = await this.$axios({
+                method: "put",
+                url: "/playNumber/" + account + "/" + songId,
+
+            })
+        },
+        //修改播放索引
+        async updatePlayIndex() {
+            let account = this.$token().account
+            const resp = await this.$axios({
+                method: "put",
+                url: "/play/playIndex/" + account + "/" + this.currentIndex,
+            })
+        },
     },
     watch: {
         songUrl(n) {
@@ -211,6 +231,8 @@ export default {
         },
         currentIndex() {
             this.changeSongMsg()
+            //修改播放索引
+            this.updatePlayIndex()
         },
         //音量
         volume(newValue) {

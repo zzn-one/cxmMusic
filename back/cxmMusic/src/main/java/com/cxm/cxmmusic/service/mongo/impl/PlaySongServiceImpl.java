@@ -1,9 +1,8 @@
-package com.cxm.cxmmusic.service.impl;
+package com.cxm.cxmmusic.service.mongo.impl;
 
 import com.cxm.cxmmusic.mapper.SongMapper;
-import com.cxm.cxmmusic.service.PlaySongService;
-import com.cxm.cxmmusic.service.SongService;
-import com.cxm.cxmmusic.vo.PlaySong;
+import com.cxm.cxmmusic.service.mongo.PlaySongService;
+import com.cxm.cxmmusic.vo.mongo.PlaySong;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

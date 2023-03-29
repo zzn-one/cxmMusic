@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class JwtUtils {
     private static final String TOKEN = "token!Q@W3e4r";
-    public static final Integer EXPIRES = 120;
+    public static final Integer EXPIRES = 1440;
     /**
      * 生成token
      * @param map  //传入payload

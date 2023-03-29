@@ -118,7 +118,7 @@ export default {
 
             const code = resp.data.code
             if (code === 200) {
-                this.songsTableData = resp.data.data
+                this.songsTableData = resp.data.data.reverse()
             }
         },
         //删除部分歌曲
@@ -167,6 +167,8 @@ export default {
     height: 969px;
     background: url('@/assets/2.jpg');
     background-size: 200%;
+
+
     color: rgb(77, 76, 76);
 }
 

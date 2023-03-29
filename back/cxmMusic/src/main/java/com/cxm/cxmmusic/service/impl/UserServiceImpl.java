@@ -46,7 +46,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 
     @Override
-    public Result<String> register(String name, String password, String password2) {
+    public String register(String name, String password, String password2) {
         if (!password.equals(password2)) {
             //两次密码不一致 异常
             throw new GlobalException(StatusCodeEnum.DIFFERENT_PASSWORD);
@@ -71,11 +71,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new GlobalException(StatusCodeEnum.REGISTER_ERROR);
         }
 
-        return new Result<>(StatusCodeEnum.OK, account);
+        return account;
     }
 
     @Override
-    public Result<String> login(User user) {
+    public String login(User user) {
         //账号认证
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getAccount(), user.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
@@ -108,17 +108,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //3.登录用户信息存入redis
         redisUtils.setValue(LoginUser.USER_REDIS_PREFIX + account, loginUser, JwtUtils.EXPIRES, TimeUnit.MINUTES);
 
-        return new Result<>(StatusCodeEnum.OK, token);
+        return token;
     }
 
     @Override
-    public Result<Boolean> logout(User user) {
+    public Boolean logout(User user) {
         //删除redis中的用户信息
         String account = user.getAccount();
 
-        Boolean delete = redisUtils.deleteValue(LoginUser.USER_REDIS_PREFIX + account);
-
-        return new Result<>(StatusCodeEnum.OK,delete);
+        return redisUtils.deleteValue(LoginUser.USER_REDIS_PREFIX + account);
     }
 
 

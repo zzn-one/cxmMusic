@@ -1,4 +1,4 @@
-package com.cxm.cxmmusic.pojo;
+package com.cxm.cxmmusic.vo.mongo;
 
 import com.baomidou.mybatisplus.annotation.*;
 
@@ -7,11 +7,11 @@ import lombok.Data;
 
 /**
  * 
- * @TableName user_comment_songlist
+ * @TableName user_comment_song
  */
-@TableName(value ="user_comment_songlist")
+@TableName(value ="user_comment_song")
 @Data
-public class UserCommentSonglist implements Serializable {
+public class UserCommentSong implements Serializable {
     /**
      * 用户id
      */
@@ -19,13 +19,13 @@ public class UserCommentSonglist implements Serializable {
     private Integer userId;
 
     /**
-     * 歌单id
+     * 歌曲id
      */
-    @TableField(value = "songlistId")
-    private Integer songlistId;
+    @TableField(value = "songId")
+    private Integer songId;
 
     /**
-     * 评论内容
+     * 用户对歌曲的评论内容
      */
     @TableField(value = "text")
     private String text;
@@ -58,9 +58,9 @@ public class UserCommentSonglist implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        UserCommentSonglist other = (UserCommentSonglist) that;
+        UserCommentSong other = (UserCommentSong) that;
         return (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getSonglistId() == null ? other.getSonglistId() == null : this.getSonglistId().equals(other.getSonglistId()))
+            && (this.getSongId() == null ? other.getSongId() == null : this.getSongId().equals(other.getSongId()))
             && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
             && (this.getDeleted() == null ? other.getDeleted() == null : this.getDeleted().equals(other.getDeleted()))
             && (this.getVersion() == null ? other.getVersion() == null : this.getVersion().equals(other.getVersion()));
@@ -71,7 +71,7 @@ public class UserCommentSonglist implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        result = prime * result + ((getSonglistId() == null) ? 0 : getSonglistId().hashCode());
+        result = prime * result + ((getSongId() == null) ? 0 : getSongId().hashCode());
         result = prime * result + ((getText() == null) ? 0 : getText().hashCode());
         result = prime * result + ((getDeleted() == null) ? 0 : getDeleted().hashCode());
         result = prime * result + ((getVersion() == null) ? 0 : getVersion().hashCode());
@@ -85,7 +85,7 @@ public class UserCommentSonglist implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", userId=").append(userId);
-        sb.append(", songlistId=").append(songlistId);
+        sb.append(", songId=").append(songId);
         sb.append(", text=").append(text);
         sb.append(", deleted=").append(deleted);
         sb.append(", version=").append(version);

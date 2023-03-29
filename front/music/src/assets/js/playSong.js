@@ -14,9 +14,11 @@ async function play(songs, account) {
 
     if (resp.data.code === 200) {
         //跳转到播放页
-        router.push({
+        const { href } = router.resolve({
             name: "playList"
         })
+
+        window.open(href,href)
     }
 
     return resp

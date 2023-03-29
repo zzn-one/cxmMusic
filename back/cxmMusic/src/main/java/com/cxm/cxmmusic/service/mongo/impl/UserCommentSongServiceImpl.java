@@ -1,8 +1,8 @@
-package com.cxm.cxmmusic.service.impl;
+package com.cxm.cxmmusic.service.mongo.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cxm.cxmmusic.pojo.UserCommentSong;
-import com.cxm.cxmmusic.service.UserCommentSongService;
+import com.cxm.cxmmusic.vo.mongo.UserCommentSong;
+import com.cxm.cxmmusic.service.mongo.UserCommentSongService;
 import com.cxm.cxmmusic.mapper.UserCommentSongMapper;
 import org.springframework.stereotype.Service;
 

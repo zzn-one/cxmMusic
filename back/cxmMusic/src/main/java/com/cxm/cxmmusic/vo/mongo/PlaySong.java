@@ -1,4 +1,4 @@
-package com.cxm.cxmmusic.vo;
+package com.cxm.cxmmusic.vo.mongo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -31,7 +31,7 @@
             AND ss.songId = so.id
 
     </select>
-    <select id="getBySongId" resultType="com.cxm.cxmmusic.vo.PlaySong">
+    <select id="getBySongId" resultType="com.cxm.cxmmusic.vo.mongo.PlaySong">
         SELECT so.id,
                so.duration,
                si.`name` singer_name,

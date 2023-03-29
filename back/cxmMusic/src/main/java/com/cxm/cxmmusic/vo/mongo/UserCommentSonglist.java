@@ -1,4 +1,4 @@
-package com.cxm.cxmmusic.pojo;
+package com.cxm.cxmmusic.vo.mongo;
 
 import com.baomidou.mybatisplus.annotation.*;
 
@@ -7,11 +7,11 @@ import lombok.Data;
 
 /**
  * 
- * @TableName user_star_songlist
+ * @TableName user_comment_songlist
  */
-@TableName(value ="user_star_songlist")
+@TableName(value ="user_comment_songlist")
 @Data
-public class UserStarSonglist implements Serializable {
+public class UserCommentSonglist implements Serializable {
     /**
      * 用户id
      */
@@ -23,6 +23,12 @@ public class UserStarSonglist implements Serializable {
      */
     @TableField(value = "songlistId")
     private Integer songlistId;
+
+    /**
+     * 评论内容
+     */
+    @TableField(value = "text")
+    private String text;
 
     /**
      * 
@@ -52,9 +58,10 @@ public class UserStarSonglist implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        UserStarSonglist other = (UserStarSonglist) that;
+        UserCommentSonglist other = (UserCommentSonglist) that;
         return (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
             && (this.getSonglistId() == null ? other.getSonglistId() == null : this.getSonglistId().equals(other.getSonglistId()))
+            && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
             && (this.getDeleted() == null ? other.getDeleted() == null : this.getDeleted().equals(other.getDeleted()))
             && (this.getVersion() == null ? other.getVersion() == null : this.getVersion().equals(other.getVersion()));
     }
@@ -65,6 +72,7 @@ public class UserStarSonglist implements Serializable {
         int result = 1;
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
         result = prime * result + ((getSonglistId() == null) ? 0 : getSonglistId().hashCode());
+        result = prime * result + ((getText() == null) ? 0 : getText().hashCode());
         result = prime * result + ((getDeleted() == null) ? 0 : getDeleted().hashCode());
         result = prime * result + ((getVersion() == null) ? 0 : getVersion().hashCode());
         return result;
@@ -78,6 +86,7 @@ public class UserStarSonglist implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", userId=").append(userId);
         sb.append(", songlistId=").append(songlistId);
+        sb.append(", text=").append(text);
         sb.append(", deleted=").append(deleted);
         sb.append(", version=").append(version);
         sb.append(", serialVersionUID=").append(serialVersionUID);
