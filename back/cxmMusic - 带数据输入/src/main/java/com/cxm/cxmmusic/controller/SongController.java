@@ -52,14 +52,14 @@ public class SongController {
         String imgUrl = songAdd.getImgUrl();
         Long duration = songAdd.getDuration();
         String sourceUrl = songAdd.getSourceUrl();
-        Integer singerId = songAdd.getSingerId();
+        List<Integer> singerIds = songAdd.getSingerId();
         List<Integer> tagIdList = songAdd.getTagIdList();
 
 
         Song song = new Song();
 
         song.setName(name);
-        song.setDuration(duration);
+        song.setDuration(duration*1000);
         song.setImgUrl(imgUrl);
         song.setSourceUrl(sourceUrl);
 
@@ -74,16 +74,20 @@ public class SongController {
             Integer songDbId = songDb.getId();
 
             //设置歌手
-            SingerOwnSong singerOwnSong = new SingerOwnSong();
-            singerOwnSong.setSongId(songDbId);
-            singerOwnSong.setSingerId(singerId);
+            boolean save1 = false;
+            for (Integer singerId : singerIds) {
+                SingerOwnSong singerOwnSong = new SingerOwnSong();
+                singerOwnSong.setSongId(songDbId);
+                singerOwnSong.setSingerId(singerId);
 
-            boolean save1 = singerOwnSongService.save(singerOwnSong);
-            if (save1) {
-                LambdaUpdateWrapper<Singer> updateWrapper = new LambdaUpdateWrapper<>();
-                updateWrapper.setSql("song_number = song_number+1").eq(Singer::getId,singerId);
-                singerService.update(updateWrapper);
+                save1 = singerOwnSongService.save(singerOwnSong);
+                if (save1) {
+                    LambdaUpdateWrapper<Singer> updateWrapper = new LambdaUpdateWrapper<>();
+                    updateWrapper.setSql("song_number = song_number+1").eq(Singer::getId, singerId);
+                    singerService.update(updateWrapper);
+                }
             }
+
 
             //设置标签
             SongTag songTag = new SongTag();

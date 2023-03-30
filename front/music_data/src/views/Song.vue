@@ -20,9 +20,9 @@
             </el-form-item>
 
             <el-form-item label="歌手">
-
-                <el-radio v-for="singer in singerList" v-model="form.singerId" :label="singer.id" :key="singer.id">{{
-                    singer.name }}</el-radio>
+                <el-checkbox-group v-model="form.singerId">
+                    <el-checkbox v-for="singer in singerList" :label="singer.id"  :key="singer.id">{{ singer.name }}</el-checkbox>
+                </el-checkbox-group>
 
             </el-form-item>
 
@@ -44,7 +44,7 @@ export default {
                 duration: '',
                 sourceUrl: "",
                 tagIdList: [],
-                singerId: '',
+                singerId: [],
             },
             tagList: [],
             singerList: []

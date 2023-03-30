@@ -1,13 +1,18 @@
 package com.cxm.cxmmusic.service.mongo;
 
-import com.cxm.cxmmusic.vo.mongo.UserPlaySong;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.cxm.cxmmusic.vo.Page;
+import com.cxm.cxmmusic.vo.mongo.HistorySong;
+
+import java.util.List;
 
 /**
-* @author zzz06
-* @description 针对表【user_play_song】的数据库操作Service
-* @createDate 2023-03-18 15:13:34
+* 用户的歌曲播放记录服务
 */
-public interface UserPlaySongService extends IService<UserPlaySong> {
+public interface UserPlaySongService  {
 
+    /*
+    * 获取用户的歌曲播放记录
+    * */
+
+    Page< List<HistorySong>> getSong(String account, Long currentPage, Integer pageSize);
 }

@@ -29,7 +29,7 @@ public class SongPlayNumberTask {
     * 每隔一分钟 就 把歌曲的播放量写入mysql
     * */
     @Scheduled(cron = "0 */1 * * * ?")
-    public void WriteToMySql(){
+    public void writeToMySql(){
 
         List<SongPlayNumber> playNumberList = mongoTemplate.findAll(SongPlayNumber.class);
 

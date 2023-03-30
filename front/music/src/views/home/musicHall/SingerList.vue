@@ -1,5 +1,5 @@
 <template>
-    <div class="singerList-box">
+    <div class="singerList-box" v-infinite-scroll="load">
         <!-- 带图片的歌手信息 -->
         <div class="singer-msg-img-box">
             <div class="singer-msg-box">
@@ -21,15 +21,10 @@
             </el-button>
         </div>
 
-        <!-- 显示更多歌手 -->
-        <div class="more-singer">
-
-            <el-button type="text" @click="moreSinger()">
-                显示更多
-            </el-button>
+        <div v-show="tipVisible" class="bottom-tip-box">已经到底啦~</div>
+        <div v-show="!tipVisible" class="bottom-tip-box">下滑加载更多内容~</div>
 
 
-        </div>
     </div>
 </template>
   
@@ -46,8 +41,10 @@ export default {
             singerListWithImg: [],
             //无头像的数据
             singerListNoImg: [],
-            currentPage: 0,
-            pageSize: 20
+            tipVisible: false,
+            currentPage: 1,
+            pageSize: 20,
+            maxPage: 0,
         }
     },
     methods: {
@@ -80,18 +77,26 @@ export default {
 
             const code = resp.data.code
             if (code === 200) {
-                this.singerList = resp.data.data.records
+                this.maxPage = resp.data.data.pages
+                this.singerList = this.singerList.concat(resp.data.data.records)
                 this.singerListSeparator()
+
             }
         },
-        //更多歌手
-        moreSinger() {
-            this.pageSize += 20
-        }
+        //下滑加载
+        load() {
+            if (this.currentPage < this.maxPage) {
+                this.currentPage += 1
+            }
+        },
+
     },
     watch: {
-        pageSize() {
+        currentPage(val) {
             this.getSingerList()
+            if (val === this.maxPage) {
+                this.tipVisible = true
+            }
         }
     },
     created() {
@@ -102,6 +107,20 @@ export default {
   
   
 <style lang="less" scoped>
+.singerList-box {
+    overflow: auto;
+    height: 720px;
+}
+.singerList-box::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.singerList-box::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #b9b1b1;
+}
+
 .singer-msg-no-img-btn {
     margin: 0;
     width: 240px;
@@ -138,5 +157,11 @@ export default {
 .more-singer {
     margin-top: 20px;
     text-align: center;
+}
+
+.bottom-tip-box {
+    margin-top: 20px;
+    text-align: center;
+    color: rgb(126, 124, 124);
 }
 </style>

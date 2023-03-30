@@ -5,20 +5,31 @@
 <mapper namespace="com.cxm.cxmmusic.mapper.SingerMapper">
 
     <resultMap id="BaseResultMap" type="com.cxm.cxmmusic.pojo.Singer">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="gender" column="gender" jdbcType="VARCHAR"/>
-            <result property="type" column="type" jdbcType="VARCHAR"/>
-            <result property="avatar_url" column="avatar_url" jdbcType="VARCHAR"/>
-            <result property="song_number" column="song_number" jdbcType="INTEGER"/>
-            <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
-            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
-            <result property="version" column="version" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="gender" column="gender" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="avatarUrl" column="avatar_url" jdbcType="VARCHAR"/>
+        <result property="songNumber" column="song_number" jdbcType="INTEGER"/>
+        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name,gender,
+        id
+        ,name,gender,
         type,avatar_url,song_number,
         introduction,deleted,version
     </sql>
+    <select id="getSingerNameBySongId" resultType="java.lang.String">
+        SELECT si.`name`
+        FROM singer si
+                 INNER JOIN song so
+                 INNER JOIN singer_own_song ss
+                            ON ss.singerId = si.id
+                                AND ss.songId = so.id
+                                AND so.id = #{songId}
+
+    </select>
 </mapper>

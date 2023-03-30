@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
 * @author zzz06
@@ -23,6 +24,10 @@ public class SingerServiceImpl extends ServiceImpl<SingerMapper, Singer>
     private SingerMapper singerMapper;
 
 
+    @Override
+    public List<String> getSingerNameBySongId(Integer songId) {
+        return singerMapper.getSingerNameBySongId(songId);
+    }
 }
 
 

@@ -3,6 +3,8 @@ package com.cxm.cxmmusic.mapper;
 import com.cxm.cxmmusic.pojo.Singer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
 * @author zzz06
 * @description 针对表【singer】的数据库操作Mapper
@@ -10,6 +12,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.cxm.cxmmusic.pojo.Singer
 */
 public interface SingerMapper extends BaseMapper<Singer> {
+
+    /*
+     * 查询歌手名称 列表  根据songId
+     * */
+
+    List<String> getSingerNameBySongId(Integer songId);
 
 }
 

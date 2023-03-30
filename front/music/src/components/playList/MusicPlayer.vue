@@ -178,13 +178,6 @@ export default {
         },
         //歌单播放结束事件
         endPlay() {
-            let song = this.songList[this.currentIndex]
-
-            let songId = song.id
-
-            //发送请求，修改歌曲的播放量
-            this.updatePlayNumber(songId)
-
             //下一首
             this.nextSong()
         },
@@ -233,6 +226,11 @@ export default {
             this.changeSongMsg()
             //修改播放索引
             this.updatePlayIndex()
+
+            let song = this.songList[this.currentIndex]
+            let songId = song.id
+            //发送请求，修改歌曲的播放量
+            this.updatePlayNumber(songId)
         },
         //音量
         volume(newValue) {
@@ -253,6 +251,10 @@ export default {
 
         await this.getSongs()
         this.changeSongMsg()
+        let song = this.songList[this.currentIndex]
+        let songId = song.id
+        //发送请求，修改歌曲的播放量
+        this.updatePlayNumber(songId)
 
         //获取歌曲当前播放进度
         this.getCurrentTime()

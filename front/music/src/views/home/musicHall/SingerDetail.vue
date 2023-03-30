@@ -33,7 +33,7 @@
                 <el-button class="btns-item" icon="el-icon-video-play" @click="addToPlayList">
                     播放
                 </el-button>
-                <el-button class="btns-item" icon="el-icon-star-off">
+                <el-button class="btns-item" icon="el-icon-star-off" @click="starBtn">
                     收藏
                 </el-button>
                 <el-button class="btns-item" icon="el-icon-plus">
@@ -61,11 +61,16 @@
                 </el-table>
             </div>
         </div>
+        <!-- 占位 -->
+        <div style="height: 50px;">
+
+        </div>
     </div>
 </template>
 <script>
 import play from '@/assets/js/playSong';
-import token from '@/assets/js/token';
+import star from '@/assets/js/starSong';
+
 export default {
     name: "SingerDetail",
     data() {
@@ -95,16 +100,36 @@ export default {
         },
         //播放按钮
         addToPlayList() {
-            const account = token().account
+            const account = this.$token().account
             if (this.multipleSelection.length > 0) {
                 play(this.multipleSelection, account)
             } else {
                 this.$message({
-                    message: "请先选择歌曲！",
-                    type: "error"
+                    message: "需要先选择歌曲哟~",
+                    type: "warning"
                 })
             }
+        },
+        //收藏按钮
+        async starBtn() {
+            const account = this.$token().account
+            if (this.multipleSelection.length > 0) {
+                const resp = await star(this.multipleSelection, account)
 
+                const code = resp.data.code
+                if (code === 200) {
+                    this.$message({
+                    message: "已添加到收藏列表",
+                    type: "success"
+                })
+                }
+
+            } else {
+                this.$message({
+                    message: "需要先选择歌曲哟~",
+                    type: "warning"
+                })
+            }
         }
 
     },
