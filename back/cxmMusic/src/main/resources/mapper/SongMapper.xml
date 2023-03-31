@@ -32,11 +32,10 @@
 
     </select>
     <select id="getBySongId" resultType="com.cxm.cxmmusic.vo.mongo.PlaySong">
-        SELECT so.id,
-               so.duration,
-               si.`name` singer_name,
-               so.`name`,
-               so.source_url
+        SELECT DISTINCT so.id,
+                        so.duration,
+                        so.`name`,
+                        so.source_url
         FROM song so
                  INNER JOIN singer si
                  INNER JOIN singer_own_song ss

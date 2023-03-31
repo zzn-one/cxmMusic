@@ -9,7 +9,13 @@
             <el-card class="box-card" shadow="hover" v-for="record in historySongs" :body-style="{ padding: '10px' }">
                 <div class="msg-box">
                     <div class="msg-item-box song-name-box">{{ record.song.name }}</div>
-                    <div class="msg-item-box singer-name-box">{{ singerNameFormat(record.singerNames) }}</div>
+                    <div class="msg-item-box singer-name-box">
+
+                        <span v-for="singer in record.singerList" :key="singer.id">
+                            {{ singer.name }}
+                        </span>
+
+                    </div>
                     <div class="msg-item-box song-play-time-box">{{ timeFormat(new Date(record.time)) }}</div>
                 </div>
 
@@ -53,15 +59,7 @@ export default {
             }
 
         },
-        //歌手名称显示歌手
-        singerNameFormat(singerNames) {
-            let singerName = ''
-            singerNames.forEach(element => {
-                singerName += element + " "
-            });
-            return singerName
 
-        },
         //获取用户的歌曲播放记录
         async getHistorySongs() {
             const resp = await this.$axios("/userPlay/song/" + this.$token().account + "/" + this.currentPage + "/" + this.pageSize)

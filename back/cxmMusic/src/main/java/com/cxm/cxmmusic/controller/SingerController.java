@@ -8,6 +8,7 @@ import com.cxm.cxmmusic.pojo.Singer;
 import com.cxm.cxmmusic.service.SingerService;
 import com.cxm.cxmmusic.vo.Result;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +67,22 @@ public class SingerController {
         IPage<Singer> result = singerService.page(page,queryWrapper);
 
         return new Result<>(StatusCodeEnum.OK, result);
+    }
+
+
+    @ApiOperation("获取一个歌手  根据singerId")
+    @ApiImplicitParam(name = "singerId", value = "歌手id")
+    @GetMapping("/{singerId}")
+    public Result<Singer> getBySingerId(@PathVariable("singerId") Integer id) {
+
+        Result<Singer> result;
+        Singer singer = singerService.getById(id);
+        if (singer == null) {
+            result = new Result<>(StatusCodeEnum.ERROR_GET_SINGER, null);
+        } else {
+            result = new Result<>(StatusCodeEnum.OK, singer);
+        }
+        return result;
     }
 
 }

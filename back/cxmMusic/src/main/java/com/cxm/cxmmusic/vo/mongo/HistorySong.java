@@ -1,5 +1,6 @@
 package com.cxm.cxmmusic.vo.mongo;
 
+import com.cxm.cxmmusic.pojo.Singer;
 import com.cxm.cxmmusic.pojo.Song;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,5 +20,5 @@ import java.util.List;
 public class HistorySong {
     private Song song;
     private Date time;
-    private List<String> singerNames;
+    private List<Singer> singerList;
 }

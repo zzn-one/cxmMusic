@@ -1,8 +1,7 @@
 package com.cxm.cxmmusic.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cxm.cxmmusic.pojo.Singer;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cxm.cxmmusic.pojo.Singer;
 
 import java.util.List;
 
@@ -18,4 +17,8 @@ public interface SingerService extends IService<Singer> {
     * */
 
     List<String> getSingerNameBySongId(Integer songId);
+    /*
+     * 查询歌手 列表  根据songId
+     * */
+    List<Singer> listBySongId(Integer songId);
 }

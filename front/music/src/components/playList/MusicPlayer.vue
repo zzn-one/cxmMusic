@@ -31,7 +31,10 @@
             <div class="play-song-msg-box">
                 <!-- 歌曲名-歌手 -->
                 <div class="play-song-msg-name">
-                    {{ songName }} - {{ singerName }}
+                    {{ songName }} - 
+                    <span v-for="singer in singers " :key="singer.id">
+                        {{ singer.name  }} 
+                    </span>
                 </div>
                 <!-- 已播放时间/总时间 -->
                 <div class="play-song-msg-time">
@@ -73,7 +76,7 @@ export default {
             currentIndex: 0,
 
             songName: '',
-            singerName: '',
+            singers: [],
 
             // 当前已播放时长
             playedTime: 0,
@@ -150,14 +153,14 @@ export default {
 
             const code = resp.data.code
             if (code === 200) {
-                this.songList = resp.data.data.reverse()
+                this.songList = resp.data.data
             }
         },
         //歌曲索引变动 改变当前播放器的歌曲信息
         changeSongMsg() {
             this.songUrl = this.songList[this.currentIndex].sourceUrl
             this.songName = this.songList[this.currentIndex].name
-            this.singerName = this.songList[this.currentIndex].singerName
+            this.singers = this.songList[this.currentIndex].singerList
             //重新加载
             document.getElementById("audio").load()
 

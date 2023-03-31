@@ -1,6 +1,7 @@
 package com.cxm.cxmmusic.service.mongo.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.cxm.cxmmusic.pojo.Singer;
 import com.cxm.cxmmusic.pojo.Song;
 import com.cxm.cxmmusic.service.SingerService;
 import com.cxm.cxmmusic.service.SongService;
@@ -67,9 +68,9 @@ public class UserStarSongServiceImpl implements UserStarSongService{
         for (UserStarSong starSong : starSongs) {
             Integer songId = starSong.getSongId();
             Song song = songService.getById(songId);
-            List<String> singerNames = singerService.getSingerNameBySongId(songId);
+            List<Singer> singerList = singerService.listBySongId(songId);
 
-            HistorySong historySong = new HistorySong(song, null, singerNames);
+            HistorySong historySong = new HistorySong(song, null, singerList);
             songs.add(historySong);
         }
 

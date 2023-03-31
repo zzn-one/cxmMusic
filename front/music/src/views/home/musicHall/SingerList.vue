@@ -53,7 +53,7 @@ export default {
             this.$router.push({
                 name: "singerDetail",
                 query: {
-                    singer: singer,
+                    singerId: singer.id,
                 }
             })
         },

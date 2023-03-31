@@ -27,11 +27,11 @@ public class PlayListServiceImpl implements PlayListService {
     public Collection<PlaySong> get(String account) {
         PlayList playList = mongoTemplate.findById(account, PlayList.class);
 
+
         Collection<PlaySong> songs = null;
         if (playList != null) {
-            songs = playList.getPlaySongMap().values();
+            songs = playList.getSongList();
         }
-
         return songs;
     }
 
@@ -42,14 +42,17 @@ public class PlayListServiceImpl implements PlayListService {
         //查询该用户是否已经创建了播放列表
         PlayList playListDB = mongoTemplate.findById(account, PlayList.class);
 
-        Map<Integer, PlaySong> map;
+        //存待播放的歌曲
+        List<PlaySong> songList;
 
         if (playListDB == null) {
-            //  创建一个新的 歌曲列表map
-            map = new HashMap<>();
+            //  创建一个新的 歌曲列表
+            songList = new ArrayList<>();
+
         } else {
-            // 使用旧的歌曲列表map
-            map = playListDB.getPlaySongMap();
+            // 使用旧的歌曲列表
+            songList = playListDB.getSongList();
+
         }
 
         //新增歌曲
@@ -57,9 +60,11 @@ public class PlayListServiceImpl implements PlayListService {
             Integer songId = song.getId();
             PlaySong playSong = playSongService.getBySongId(songId);
             //待播放的歌曲添加到 播放列表
-            map.putIfAbsent(songId, playSong);
+            songList.removeIf(item -> songId.equals(item.getId()));
+            songList.add(0, playSong);
         }
-        PlayList playList = new PlayList(account, map);
+
+        PlayList playList = new PlayList(account, songList);
 
         mongoTemplate.save(playList);
 
@@ -72,13 +77,12 @@ public class PlayListServiceImpl implements PlayListService {
         PlayList playListDB = mongoTemplate.findById(account, PlayList.class);
 
         if (playListDB != null) {
-            Map<Integer, PlaySong> songMap = playListDB.getPlaySongMap();
-
+            List<PlaySong> songList = playListDB.getSongList();
 
             for (Song song : songs) {
-                songMap.remove(song.getId());
+                songList.removeIf(item -> item.getId().equals(song.getId()));
             }
-            playListDB.setPlaySongMap(songMap);
+            playListDB.setSongList(songList);
 
             mongoTemplate.save(playListDB);
             result = true;
@@ -95,7 +99,7 @@ public class PlayListServiceImpl implements PlayListService {
 
         if (playListDB != null) {
             //清空歌曲列表
-            playListDB.setPlaySongMap(new HashMap<>());
+            playListDB.setSongList(new ArrayList<>());
             mongoTemplate.save(playListDB);
 
             result = true;

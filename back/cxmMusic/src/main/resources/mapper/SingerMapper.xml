@@ -32,4 +32,14 @@
                                 AND so.id = #{songId}
 
     </select>
+    <select id="listBySongId" resultType="com.cxm.cxmmusic.pojo.Singer">
+        SELECT *
+        FROM `singer` si
+                 INNER JOIN song so
+                 INNER JOIN singer_own_song ss
+                            ON si.id = ss.singerId
+                                AND so.id = ss.songId
+                                AND so.id = #{songId}
+
+    </select>
 </mapper>

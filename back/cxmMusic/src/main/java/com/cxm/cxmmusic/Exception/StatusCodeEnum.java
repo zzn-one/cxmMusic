@@ -45,8 +45,10 @@ public enum StatusCodeEnum {
     //播放列表模块
     ERROR_UPDATE_PLAY_INDEX(10041, "播放索引更新出错"),
     ERROR_CLEAR_SONG(10042, "播放列表歌曲删除失败！"),
-    ERROR_GET_PLAYLIST(10043, "获取播放列表失败");
+    ERROR_GET_PLAYLIST(10043, "获取播放列表失败"),
 
+    //歌手模块
+    ERROR_GET_SINGER(10051,"获取歌手信息失败");
 
     private final Integer code;
     private final String message;

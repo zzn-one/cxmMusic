@@ -30,16 +30,15 @@ public class PlayList {
     @ApiModelProperty("播放索引")
     private Integer currentIndex;
 
-
-
     @Field
     @ApiModelProperty("歌曲列表")
-    private Map<Integer,PlaySong> playSongMap;
+    private List<PlaySong> songList;
 
 
-    public PlayList(String account,Map<Integer,PlaySong> playSongMap){
+
+    public PlayList(String account,List<PlaySong> songList){
         this.account = account;
-        this.playSongMap = playSongMap;
+        this.songList = songList;
         this.currentIndex = 0;
     }
 }

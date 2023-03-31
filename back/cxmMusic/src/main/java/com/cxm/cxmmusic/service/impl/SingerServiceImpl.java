@@ -28,6 +28,11 @@ public class SingerServiceImpl extends ServiceImpl<SingerMapper, Singer>
     public List<String> getSingerNameBySongId(Integer songId) {
         return singerMapper.getSingerNameBySongId(songId);
     }
+
+    @Override
+    public List<Singer> listBySongId(Integer songId) {
+        return singerMapper.listBySongId(songId);
+    }
 }
 
 

@@ -19,6 +19,12 @@ public interface SingerMapper extends BaseMapper<Singer> {
 
     List<String> getSingerNameBySongId(Integer songId);
 
+
+    /*
+     * 查询歌手 列表  根据songId
+     * */
+    List<Singer> listBySongId(Integer songId);
+
 }
 
 

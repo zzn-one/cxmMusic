@@ -1,5 +1,6 @@
 package com.cxm.cxmmusic.service.mongo.impl;
 
+import com.cxm.cxmmusic.pojo.Singer;
 import com.cxm.cxmmusic.pojo.Song;
 import com.cxm.cxmmusic.service.SingerService;
 import com.cxm.cxmmusic.service.SongService;
@@ -36,7 +37,7 @@ public class UserPlaySongServiceImpl implements UserPlaySongService{
     @Override
     public Page<List<HistorySong>> getSong(String account, Long currentPage, Integer pageSize) {
 
-        Long start = (currentPage - 1) * pageSize;
+        long start = (currentPage - 1) * pageSize;
 
         ArrayList<HistorySong> historySongArrayList = new ArrayList<>();
 
@@ -50,8 +51,8 @@ public class UserPlaySongServiceImpl implements UserPlaySongService{
             Integer songId = userPlaySong.getSongId();
 
             Song song = songService.getById(songId);
-            List<String> singerNames = singerService.getSingerNameBySongId(songId);
-            HistorySong historySong = new HistorySong(song, userPlaySong.getLastedPlayTime(),singerNames);
+            List<Singer> singerList = singerService.listBySongId(songId);
+            HistorySong historySong = new HistorySong(song, userPlaySong.getLastedPlayTime(),singerList);
 
             historySongArrayList.add(historySong);
         }

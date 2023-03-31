@@ -1,8 +1,11 @@
 package com.cxm.cxmmusic.vo.mongo;
 
+import com.cxm.cxmmusic.pojo.Singer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * @author
@@ -14,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class PlaySong {
     private Integer id;
     private String name;
-    private String singerName;
+    private List<Singer> singerList;
     private Integer duration;
     private String sourceUrl;
 }

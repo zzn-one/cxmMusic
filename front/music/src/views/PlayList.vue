@@ -32,7 +32,7 @@
                     <!-- 歌曲列表 -->
                     <div class="song-list-box">
                         <div class="song-btns-box">
-                            <el-button icon="el-icon-star-off" class="song-btn">收藏</el-button>
+                            <el-button icon="el-icon-star-off" class="song-btn" @click="starSongs">收藏</el-button>
                             <el-button icon="el-icon-plus" class="song-btn">添加到</el-button>
                             <el-button icon="el-icon-close" class="song-btn" @click="deleteSongs">删除</el-button>
                             <el-button icon="el-icon-delete" class="song-btn" @click="deleteAll">清空列表</el-button>
@@ -49,11 +49,18 @@
                                 </el-table-column>
                                 <el-table-column label="歌手" width="300">
                                     <template slot-scope="scope">
-                                        <RouterLink :to='{
-                                            name: "singerDetail", params: { id: 1 }
-                                        }'>
-                                            {{ scope.row.singerName }}
-                                        </RouterLink>
+
+                                        <a 
+                                            :href="'/#/home/musicHall/singerDetail?singerId='+singer.id" 
+                                            v-for="singer in scope.row.singerList" 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            :key="singer.id"
+                                            >
+                                            {{ singer.name }}
+                                        </a>
+
+
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="duration" label="时长" width="80" show-overflow-tooltip>
@@ -95,6 +102,7 @@
   
 <script>
 import MusicPlayer from '@/components/playList/MusicPlayer.vue';
+import star from '@/assets/js/starSong';
 export default {
     name: "PlayList",
     components: {
@@ -118,7 +126,7 @@ export default {
 
             const code = resp.data.code
             if (code === 200) {
-                this.songsTableData = resp.data.data.reverse()
+                this.songsTableData = resp.data.data
             }
         },
         //删除部分歌曲
@@ -142,7 +150,7 @@ export default {
             }
 
         },
-        async deleteAll(){
+        async deleteAll() {
             const resp = await this.$axios({
                 method: "delete",
                 url: "/play/all/" + this.$token().account
@@ -152,7 +160,30 @@ export default {
             if (code === 200) {
                 this.getSongs()
             }
-        }
+        },
+        //收藏按钮
+        async starSongs() {
+            const account = this.$token().account
+            if (this.multipleSelection.length > 0) {
+
+
+                const resp = await star(this.multipleSelection, account)
+
+                const code = resp.data.code
+                if (code === 200) {
+                    this.$message({
+                        message: "已添加到收藏列表",
+                        type: "success"
+                    })
+                }
+
+            } else {
+                this.$message({
+                    message: "需要先选择歌曲哟~",
+                    type: "warning"
+                })
+            }
+        },
 
     },
     created() {

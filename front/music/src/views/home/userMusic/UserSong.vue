@@ -5,7 +5,8 @@
                 播放
             </el-button>
 
-            <el-button icon="el-icon-delete" class="btns" style="margin-left: 10px;" type="danger" plain @click="starCancelBtn">
+            <el-button icon="el-icon-delete" class="btns" style="margin-left: 10px;" type="danger" plain
+                @click="starCancelBtn">
                 取消收藏
             </el-button>
             <el-popover placement="right" width="180" trigger="manual" v-model="popoverVisible">
@@ -31,10 +32,13 @@
                 </el-table-column>
                 <el-table-column label="歌手" width="300">
                     <template slot-scope="scope">
-                        <RouterLink v-for="singerName in scope.row.singerNames"
-                            :to='{ name: "singerDetail", params: { singerName: singerName } }'>
-                            {{ singerName }}
-                        </RouterLink>
+
+                        <a :href="'/#/home/musicHall/singerDetail?singerId=' + singer.id"
+                            v-for="singer in scope.row.singerList" target="_blank" rel="noopener noreferrer"
+                            :key="singer.id">
+                            {{ singer.name }}
+                        </a>
+
                     </template>
                 </el-table-column>
                 <el-table-column prop="duration" label="时长" width="80">

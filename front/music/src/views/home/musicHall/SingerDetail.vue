@@ -88,9 +88,26 @@ export default {
         },
         //页面初始化
         init() {
-            this.singer = this.$route.query.singer
+            const id = this.$route.query.singerId
             const _this = this
-            this.$axios("/song/list/" + this.singer.id).then(resp => {
+
+            //获取歌手信息
+            this.$axios("/singer/" + id).then(resp => {
+                const code = resp.data.code
+
+                if (code === 200) {
+                    this.singer = resp.data.data
+                } else {
+                    this.message({
+                        message: resp.data.msg,
+                        type: "error"
+                    })
+                }
+            })
+
+
+            //获取歌手的歌曲列表
+            this.$axios("/song/list/" + id).then(resp => {
                 const code = resp.data.code
 
                 if (code === 200) {
@@ -119,9 +136,9 @@ export default {
                 const code = resp.data.code
                 if (code === 200) {
                     this.$message({
-                    message: "已添加到收藏列表",
-                    type: "success"
-                })
+                        message: "已添加到收藏列表",
+                        type: "success"
+                    })
                 }
 
             } else {
