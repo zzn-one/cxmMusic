@@ -29,13 +29,15 @@
         FROM song so
                  INNER JOIN singer_own_song ss ON ss.singerId = #{singerId}
             AND ss.songId = so.id
+            AND so.deleted = 1
 
     </select>
     <select id="getBySongId" resultType="com.cxm.cxmmusic.vo.mongo.PlaySong">
         SELECT DISTINCT so.id,
                         so.duration,
                         so.`name`,
-                        so.source_url
+                        so.source_url,
+                        so.img_url
         FROM song so
                  INNER JOIN singer si
                  INNER JOIN singer_own_song ss

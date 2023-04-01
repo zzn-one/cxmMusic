@@ -48,6 +48,7 @@ Vue.prototype.$moment = moment
 import token from '@/assets/js/token';
 Vue.prototype.$token = token
 
+
 new Vue({
   router,
   render: h => h(App)

@@ -1,5 +1,5 @@
 <template>
-    <div class="playList-box">
+    <div class="playList-box" id="bgImg">
         <!-- 透明遮罩 -->
         <div class="playList-mask-box">
             <!-- 头部 -->
@@ -50,13 +50,9 @@
                                 <el-table-column label="歌手" width="300">
                                     <template slot-scope="scope">
 
-                                        <a 
-                                            :href="'/#/home/musicHall/singerDetail?singerId='+singer.id" 
-                                            v-for="singer in scope.row.singerList" 
-                                            target="_blank" 
-                                            rel="noopener noreferrer"
-                                            :key="singer.id"
-                                            >
+                                        <a :href="'/#/home/musicHall/singerDetail?singerId=' + singer.id"
+                                            v-for="singer in scope.row.singerList" target="_blank" rel="noopener noreferrer"
+                                            :key="singer.id">
                                             {{ singer.name }}
                                         </a>
 
@@ -75,12 +71,15 @@
                     <!-- 歌曲信息展示 -->
                     <div class="song-msg-box">
                         <div class="song-info-box">
-                            <img class="song-info-img" src="@/assets/篮球鸡.webp">
+                            <img class="song-info-img" :src="songsTableData[currentIndex].imgUrl">
                             <div class="song-info-item">
-                                歌曲名：只因你太霉
+                                歌曲名：{{ songsTableData[currentIndex].name }}
                             </div>
                             <div class="song-info-item">
-                                歌手：鸡哥
+                                <span v-for="singer in songsTableData[currentIndex].singerList">
+                                    歌手：{{ singer.name }}
+                                </span>
+
                             </div>
 
                         </div>
@@ -103,6 +102,8 @@
 <script>
 import MusicPlayer from '@/components/playList/MusicPlayer.vue';
 import star from '@/assets/js/starSong';
+import io from 'socket.io-client';
+
 export default {
     name: "PlayList",
     components: {
@@ -112,7 +113,9 @@ export default {
         return {
             logo: "MM音乐",
             songsTableData: [],
-            multipleSelection: []
+            multipleSelection: [],
+            currentIndex: 0,
+            socket: ""
         }
     },
     methods: {
@@ -184,10 +187,49 @@ export default {
                 })
             }
         },
+        //socket绑定事件
+        socketInit() {
+            const account = this.$token().account
+            this.socket = io("http://127.0.0.1:9999", {
+                reconnectionDelayMax: 10000,
+                query: {
+                    "account": account
+                }
+            })
+            //监听索引更新事件
+            this.socket.on("index_update", (data) => {
+                this.currentIndex = parseInt(data)
+            })
+
+            //监听播放列表更新事件
+            this.socket.on("play_song_update", (data) => {
+                this.songsTableData = JSON.parse(data)
+            })
+        }
 
     },
-    created() {
-        this.getSongs()
+    async created() {
+
+
+        await this.getSongs()
+
+        await this.socketInit()
+        this.socket.connect()
+
+        //初始化背景图
+        const divNode = document.getElementById("bgImg")
+        let url = "url(" + this.songsTableData[this.currentIndex].imgUrl + ")"
+        divNode.style.backgroundImage = url
+    },
+    beforeDestroy() {
+        this.socket.disconnect()
+    },
+    watch: {
+        currentIndex() {
+            const divNode = document.getElementById("bgImg")
+            let url = "url(" + this.songsTableData[this.currentIndex].imgUrl + ")"
+            divNode.style.backgroundImage = url
+        }
     }
 }
 </script>
@@ -196,10 +238,7 @@ export default {
 .playList-box {
     width: 100%;
     height: 969px;
-    background: url('@/assets/2.jpg');
-    background-size: 200%;
-
-
+    background-size: 300%;
     color: rgb(77, 76, 76);
 }
 

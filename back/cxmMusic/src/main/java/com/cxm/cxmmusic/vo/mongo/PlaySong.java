@@ -15,9 +15,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlaySong {
+    //歌曲id
     private Integer id;
+    //歌名
     private String name;
+    //歌手列表
     private List<Singer> singerList;
+    //歌曲时长
     private Integer duration;
+    //歌曲资源路径
     private String sourceUrl;
+    //歌曲封面路径
+    private String imgUrl;
 }

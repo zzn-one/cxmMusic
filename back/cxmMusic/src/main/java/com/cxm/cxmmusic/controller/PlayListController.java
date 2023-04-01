@@ -1,8 +1,10 @@
 package com.cxm.cxmmusic.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.cxm.cxmmusic.Exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.Song;
 import com.cxm.cxmmusic.service.mongo.PlayListService;
+import com.cxm.cxmmusic.socketIO.SocketIOService;
 import com.cxm.cxmmusic.vo.mongo.UserPlaySong;
 import com.cxm.cxmmusic.service.mongo.PlaySongService;
 import com.cxm.cxmmusic.vo.mongo.PlayList;
@@ -36,6 +38,8 @@ import java.util.List;
 public class PlayListController {
     @Autowired
     private PlayListService playListService;
+    @Autowired
+    private SocketIOService socketIOService;
 
     @ApiOperation("获取用户的播放列表")
     @ApiImplicitParam(name = "account", value = "用户账户")
@@ -63,6 +67,15 @@ public class PlayListController {
     public Result<Boolean> add(@PathVariable("account") String account, @RequestBody List<Song> songs) {
 
         playListService.add(account, songs);
+
+        //通过socket更新页面
+        Collection<PlaySong> songsDb = playListService.get(account);
+        if (songsDb != null) {
+            //更新页面
+            String jsonString = JSON.toJSONString(songsDb);
+            socketIOService.sendPlaySongToUser(account,jsonString);
+        }
+
         return new Result<>(StatusCodeEnum.OK, true);
 
     }
@@ -117,6 +130,10 @@ public class PlayListController {
         Boolean aBoolean = playListService.updatePlayIndex(account, index);
 
         if (aBoolean) {
+            //通过socket更新页面
+            //更新页面的索引
+            socketIOService.sendIndexToUser(account,index.toString());
+
             result = new Result<>(StatusCodeEnum.OK, true);
         } else {
             result = new Result<>(StatusCodeEnum.ERROR_UPDATE_PLAY_INDEX, false);

@@ -31,9 +31,9 @@
             <div class="play-song-msg-box">
                 <!-- 歌曲名-歌手 -->
                 <div class="play-song-msg-name">
-                    {{ songName }} - 
+                    {{ songName }} -
                     <span v-for="singer in singers " :key="singer.id">
-                        {{ singer.name  }} 
+                        {{ singer.name }}
                     </span>
                 </div>
                 <!-- 已播放时间/总时间 -->
@@ -58,7 +58,7 @@
             <img src="https://img.icons8.com/ios/20/null/medium-volume--v1.png" style="margin-left:10px ;" />
         </div>
         <!-- 播放控件 -->
-        <audio id="audio" @ended="endPlay">
+        <audio id="audio" @ended="endPlay" @canplaythrough="canPlay">
             <source :src="songUrl" type="audio/ogg">
             <source :src="songUrl" type="audio/mpeg">
         </audio>
@@ -66,6 +66,7 @@
 </template>
     
 <script>
+import io from 'socket.io-client';
 export default {
     name: "MusicPlayer",
     data() {
@@ -93,6 +94,7 @@ export default {
             //音量
             volume: 0.3,
 
+            socket: ""
 
         }
     },
@@ -138,7 +140,8 @@ export default {
         nextSong() {
             let songNumber = this.songList.length
             if (this.currentIndex < songNumber) {
-                this.currentIndex = (this.currentIndex + 1) % songNumber
+                this.currentIndex = parseInt(1) + parseInt(this.currentIndex) % songNumber
+
             }
             //播放 延迟一秒
             setTimeout(() => {
@@ -163,7 +166,6 @@ export default {
             this.singers = this.songList[this.currentIndex].singerList
             //重新加载
             document.getElementById("audio").load()
-
         },
         //获取歌曲当前播放进度
         getCurrentTime() {
@@ -179,7 +181,7 @@ export default {
                 }
             }, 1000)
         },
-        //歌单播放结束事件
+        //歌曲播放结束事件
         endPlay() {
             //下一首
             this.nextSong()
@@ -201,30 +203,58 @@ export default {
                 url: "/play/playIndex/" + account + "/" + this.currentIndex,
             })
         },
+        //播放器初始化
+        async initPlayer() {
+            //播放引导
+            this.$alert("由于您的浏览器设置，音乐无法自动播放，请手动点击播放。", "MM音乐提醒您", {
+                confirmButtonText: '我知道了',
+                callback: action => {
+                    this.play()
+                }
+            })
+
+            await this.getSongs()
+            this.changeSongMsg()
+            let song = this.songList[this.currentIndex]
+            let songId = song.id
+            //发送请求，修改歌曲的播放量
+            this.updatePlayNumber(songId)
+
+            //获取歌曲当前播放进度
+            this.getCurrentTime()
+
+        },
+
+        //歌曲可以完全播放事件
+        canPlay() {
+            const audioDOM = document.getElementById("audio");
+            //获取歌曲时长
+            this.duration = audioDOM.duration
+            //获取歌曲播放状态
+            this.paused = audioDOM.paused
+        },
+        //socket绑定事件
+        socketInit() {
+            const prefix = "player:"
+            const account = this.$token().account
+            this.socket = io("http://127.0.0.1:9999", {
+                reconnectionDelayMax: 10000,
+                query: {
+                    "account": prefix + account
+                }
+            })
+            //监听索引更新事件
+            this.socket.on("index_update", (data) => {
+                this.currentIndex = parseInt(data)
+            })
+
+            //监听播放列表更新事件
+            this.socket.on("play_song_update", (data) => {
+                this.songList = JSON.parse(data)
+            })
+        }
     },
     watch: {
-        songUrl(n) {
-            const audioDOM = document.getElementById("audio");
-            //更新歌曲信息
-            if (n !== '') {
-                setTimeout(() => {
-                    //获取歌曲时长
-                    if (isNaN(audioDOM.duration)) {
-                        console.log("歌曲未加载1");
-                    } else {
-                        this.duration = audioDOM.duration
-                    }
-
-                    //获取歌曲播放状态
-                    if (isNaN(audioDOM.paused)) {
-                        console.log("歌曲未加载2");
-
-                    } else {
-                        this.paused = audioDOM.paused
-                    }
-                }, 1000)
-            }
-        },
         currentIndex() {
             this.changeSongMsg()
             //修改播放索引
@@ -241,27 +271,19 @@ export default {
             if (!isNaN(audioDOM.volume)) {
                 audioDOM.volume = newValue;
             }
-        }
+        },
     },
     async created() {
-        //播放引导
-        this.$alert("由于您的浏览器设置，音乐无法自动播放，请手动点击播放。", "MM音乐提醒您", {
-            confirmButtonText: '我知道了',
-            callback: action => {
-                this.play()
-            }
-        })
 
-        await this.getSongs()
-        this.changeSongMsg()
-        let song = this.songList[this.currentIndex]
-        let songId = song.id
-        //发送请求，修改歌曲的播放量
-        this.updatePlayNumber(songId)
+        await this.initPlayer()
 
-        //获取歌曲当前播放进度
-        this.getCurrentTime()
-
+        //连接socket服务器
+        await this.socketInit()
+        this.socket.connect()
+    },
+    beforeDestroy() {
+        //关闭socket服务器
+        this.socket.disconnect()
     }
 }
 </script>
