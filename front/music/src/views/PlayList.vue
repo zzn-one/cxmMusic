@@ -45,18 +45,28 @@
                                 <el-table-column type="index" width="50">
                                 </el-table-column>
                                 <el-table-column label="歌曲">
-                                    <template slot-scope="scope">{{ scope.row.name }}</template>
+                                    <template slot-scope="scope">
+                                        <el-button type="text" @click="songNameClick(scope)" style="color: black;">
+                                            <span class="playingSong-span" v-if="currentIndex === scope.$index">
+                                                <img style="display: flex:1;"
+                                                    src="https://img.icons8.com/color/24/null/audio-wave2.png" />
+                                                <div style="display: inline-block;flex:1">
+                                                    &nbsp&nbsp&nbsp{{ scope.row.name }}
+                                                </div>
+
+                                            </span>
+
+                                            <span v-else>{{ scope.row.name }}</span>
+                                        </el-button>
+                                    </template>
                                 </el-table-column>
                                 <el-table-column label="歌手" width="300">
                                     <template slot-scope="scope">
-
                                         <a :href="'/#/home/musicHall/singerDetail?singerId=' + singer.id"
                                             v-for="singer in scope.row.singerList" target="_blank" rel="noopener noreferrer"
                                             :key="singer.id">
                                             {{ singer.name }}
                                         </a>
-
-
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="duration" label="时长" width="80" show-overflow-tooltip>
@@ -76,8 +86,9 @@
                                 歌曲名：{{ songsTableData[currentIndex].name }}
                             </div>
                             <div class="song-info-item">
+                                歌手：
                                 <span v-for="singer in songsTableData[currentIndex].singerList">
-                                    歌手：{{ singer.name }}
+                                    {{ singer.name }}
                                 </span>
 
                             </div>
@@ -112,7 +123,12 @@ export default {
     data() {
         return {
             logo: "MM音乐",
-            songsTableData: [],
+            songsTableData: [{
+                singer: {
+                    imgUrl: "defaultAvatar",
+                    name: "歌名"
+                }
+            }],
             multipleSelection: [],
             currentIndex: 0,
             socket: ""
@@ -133,36 +149,24 @@ export default {
             }
         },
         //删除部分歌曲
-        async deleteSongs() {
+        deleteSongs() {
             if (this.multipleSelection.length === 0) {
                 this.$message({
                     message: "请先选择歌曲！",
                     type: "error"
                 })
             }
-            const resp = await this.$axios({
+            this.$axios({
                 method: "delete",
                 data: this.multipleSelection,
                 url: "/play/" + this.$token().account
             })
-
-            const code = resp.data.code
-
-            if (code === 200) {
-                this.getSongs()
-            }
-
         },
-        async deleteAll() {
-            const resp = await this.$axios({
+        deleteAll() {
+            this.$axios({
                 method: "delete",
                 url: "/play/all/" + this.$token().account
             })
-            const code = resp.data.code
-
-            if (code === 200) {
-                this.getSongs()
-            }
         },
         //收藏按钮
         async starSongs() {
@@ -205,7 +209,26 @@ export default {
             this.socket.on("play_song_update", (data) => {
                 this.songsTableData = JSON.parse(data)
             })
-        }
+        },
+        //背景图更换
+        changeBgImg() {
+            const divNode = document.getElementById("bgImg")
+            let url = "url(" + this.songsTableData[this.currentIndex].imgUrl + ")"
+            divNode.style.backgroundImage = url
+        },
+        //歌名点击事件
+        songNameClick(scope) {
+            //修改播放索引
+            this.updatePlayIndex(scope.$index)
+        },
+        //修改播放索引
+        async updatePlayIndex(index) {
+            let account = this.$token().account
+            const resp = await this.$axios({
+                method: "put",
+                url: "/play/playIndex/" + account + "/" + index,
+            })
+        },
 
     },
     async created() {
@@ -217,18 +240,22 @@ export default {
         this.socket.connect()
 
         //初始化背景图
-        const divNode = document.getElementById("bgImg")
-        let url = "url(" + this.songsTableData[this.currentIndex].imgUrl + ")"
-        divNode.style.backgroundImage = url
+        this.changeBgImg()
     },
     beforeDestroy() {
         this.socket.disconnect()
     },
     watch: {
         currentIndex() {
-            const divNode = document.getElementById("bgImg")
-            let url = "url(" + this.songsTableData[this.currentIndex].imgUrl + ")"
-            divNode.style.backgroundImage = url
+            this.changeBgImg()
+        },
+        "songsTableData.length"(val) {
+            if (val === 0) {
+                this.$message.warning("播放列表已被清空,播放页将在3秒后关闭")
+
+                setTimeout(() => { window.close() }, 3000)
+
+            }
         }
     }
 }
@@ -238,16 +265,25 @@ export default {
 .playList-box {
     width: 100%;
     height: 969px;
-    background-size: 300%;
+    background-size: 100%;
     color: rgb(77, 76, 76);
 }
 
 .playList-mask-box {
     width: 100%;
     height: 969px;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(211, 205, 205, 0.7);
+    backdrop-filter: blur(40px);
 }
 
+.playingSong-span {
+
+    display: flex;
+    color: #ffffff;
+    font-size: 15px;
+    height: 24px;
+    line-height: 24px;
+}
 
 .header-box {
     display: flex;
@@ -369,5 +405,16 @@ export default {
 .play-box {
     margin-top: 50px;
     min-width: 1200px;
+}
+
+
+/deep/.el-table__body-wrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+/deep/.el-table__body-wrapper::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #ffffff;
 }
 </style>

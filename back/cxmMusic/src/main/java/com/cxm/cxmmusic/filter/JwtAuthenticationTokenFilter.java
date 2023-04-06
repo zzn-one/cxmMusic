@@ -1,7 +1,7 @@
 package com.cxm.cxmmusic.filter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.cxm.cxmmusic.Exception.StatusCodeEnum;
+import com.cxm.cxmmusic.exception.StatusCodeEnum;
 import com.cxm.cxmmusic.utils.JwtUtils;
 import com.cxm.cxmmusic.utils.RedisUtils;
 import com.cxm.cxmmusic.vo.LoginUser;

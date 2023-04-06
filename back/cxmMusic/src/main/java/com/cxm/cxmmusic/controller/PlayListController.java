@@ -1,31 +1,20 @@
 package com.cxm.cxmmusic.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.cxm.cxmmusic.Exception.StatusCodeEnum;
+import com.cxm.cxmmusic.exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.Song;
 import com.cxm.cxmmusic.service.mongo.PlayListService;
 import com.cxm.cxmmusic.socketIO.SocketIOService;
-import com.cxm.cxmmusic.vo.mongo.UserPlaySong;
-import com.cxm.cxmmusic.service.mongo.PlaySongService;
-import com.cxm.cxmmusic.vo.mongo.PlayList;
 import com.cxm.cxmmusic.vo.mongo.PlaySong;
 import com.cxm.cxmmusic.vo.Result;
-import com.cxm.cxmmusic.vo.mongo.SongPlayNumber;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,17 +57,13 @@ public class PlayListController {
 
         playListService.add(account, songs);
 
-        //通过socket更新页面
-        Collection<PlaySong> songsDb = playListService.get(account);
-        if (songsDb != null) {
-            //更新页面
-            String jsonString = JSON.toJSONString(songsDb);
-            socketIOService.sendPlaySongToUser(account,jsonString);
-        }
+        updateBySocket(account);
 
         return new Result<>(StatusCodeEnum.OK, true);
 
     }
+
+
 
     @ApiOperation("删除部分歌曲")
     @ApiImplicitParams({
@@ -91,6 +76,9 @@ public class PlayListController {
 
         Boolean aBoolean = playListService.remove(account, songs);
         if (aBoolean) {
+
+            updateBySocket(account);
+
             result = new Result<>(StatusCodeEnum.OK, true);
         } else {
             result = new Result<>(StatusCodeEnum.ERROR_CLEAR_SONG, false);
@@ -109,6 +97,8 @@ public class PlayListController {
         Boolean aBoolean = playListService.remove(account);
 
         if (aBoolean) {
+            updateBySocket(account);
+
             result = new Result<>(StatusCodeEnum.OK, true);
         } else {
             result = new Result<>(StatusCodeEnum.ERROR_CLEAR_SONG, false);
@@ -142,4 +132,16 @@ public class PlayListController {
         return result;
     }
 
+
+
+    //通过socket更新页面
+    private void updateBySocket(String account) {
+        //通过socket更新页面
+        Collection<PlaySong> songsDb = playListService.get(account);
+        if (songsDb != null) {
+            //更新页面
+            String jsonString = JSON.toJSONString(songsDb);
+            socketIOService.sendPlaySongToUser(account,jsonString);
+        }
+    }
 }

@@ -92,7 +92,7 @@ export default {
             songUrl: '',
 
             //音量
-            volume: 0.3,
+            volume: 0.2,
 
             socket: ""
 
@@ -131,23 +131,16 @@ export default {
             } else {
                 this.currentIndex = (songNumber - 1) % songNumber
             }
-            //播放 延迟一秒
-            setTimeout(() => {
-                this.play()
-            }, 1000)
         },
         //下一首
         nextSong() {
             let songNumber = this.songList.length
             if (this.currentIndex < songNumber) {
                 this.currentIndex = parseInt(1) + parseInt(this.currentIndex) % songNumber
-
             }
-            //播放 延迟一秒
-            setTimeout(() => {
-                this.play()
-            }, 1000)
-
+            if (this.currentIndex === songNumber) {
+                this.currentIndex = 0
+            }
         },
 
         //获取播放列表
@@ -165,7 +158,14 @@ export default {
             this.songName = this.songList[this.currentIndex].name
             this.singers = this.songList[this.currentIndex].singerList
             //重新加载
-            document.getElementById("audio").load()
+            const audioDOM = document.getElementById("audio")
+            audioDOM.load()
+
+
+            audioDOM.oncanplay = function () {
+                audioDOM.play()
+            }
+
         },
         //获取歌曲当前播放进度
         getCurrentTime() {
@@ -205,13 +205,7 @@ export default {
         },
         //播放器初始化
         async initPlayer() {
-            //播放引导
-            this.$alert("由于您的浏览器设置，音乐无法自动播放，请手动点击播放。", "MM音乐提醒您", {
-                confirmButtonText: '我知道了',
-                callback: action => {
-                    this.play()
-                }
-            })
+
 
             await this.getSongs()
             this.changeSongMsg()
@@ -256,9 +250,11 @@ export default {
     },
     watch: {
         currentIndex() {
-            this.changeSongMsg()
+
             //修改播放索引
             this.updatePlayIndex()
+
+            this.changeSongMsg()
 
             let song = this.songList[this.currentIndex]
             let songId = song.id
@@ -272,6 +268,9 @@ export default {
                 audioDOM.volume = newValue;
             }
         },
+        "songList.length"() {
+            this.changeSongMsg()
+        }
     },
     async created() {
 

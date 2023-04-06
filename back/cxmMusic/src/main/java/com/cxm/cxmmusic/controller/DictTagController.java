@@ -1,6 +1,6 @@
 package com.cxm.cxmmusic.controller;
 
-import com.cxm.cxmmusic.Exception.StatusCodeEnum;
+import com.cxm.cxmmusic.exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.DictTag;
 import com.cxm.cxmmusic.service.DictTagService;
 import com.cxm.cxmmusic.vo.Result;

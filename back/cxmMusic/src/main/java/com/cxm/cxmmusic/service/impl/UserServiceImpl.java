@@ -1,11 +1,10 @@
 package com.cxm.cxmmusic.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cxm.cxmmusic.Exception.GlobalException;
-import com.cxm.cxmmusic.Exception.StatusCodeEnum;
+import com.cxm.cxmmusic.exception.GlobalException;
+import com.cxm.cxmmusic.exception.StatusCodeEnum;
 import com.cxm.cxmmusic.mapper.UserMapper;
 import com.cxm.cxmmusic.vo.LoginUser;
-import com.cxm.cxmmusic.vo.Result;
 import com.cxm.cxmmusic.pojo.User;
 import com.cxm.cxmmusic.service.UserService;
 import com.cxm.cxmmusic.utils.AccountUtils;

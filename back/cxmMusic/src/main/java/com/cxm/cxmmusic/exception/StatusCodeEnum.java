@@ -1,4 +1,4 @@
-package com.cxm.cxmmusic.Exception;
+package com.cxm.cxmmusic.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,7 +48,10 @@ public enum StatusCodeEnum {
     ERROR_GET_PLAYLIST(10043, "获取播放列表失败"),
 
     //歌手模块
-    ERROR_GET_SINGER(10051,"获取歌手信息失败");
+    ERROR_GET_SINGER(10051,"获取歌手信息失败"),
+
+    //歌单模块
+    ERROR_NEW_SONGLIST(10061,"新增歌单失败");
 
     private final Integer code;
     private final String message;

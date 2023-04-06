@@ -1,4 +1,4 @@
-package com.cxm.cxmmusic.Exception;
+package com.cxm.cxmmusic.exception;
 
 import com.auth0.jwt.exceptions.*;
 

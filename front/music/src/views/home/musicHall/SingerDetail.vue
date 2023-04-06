@@ -36,9 +36,11 @@
                 <el-button class="btns-item" icon="el-icon-star-off" @click="starBtn">
                     收藏
                 </el-button>
-                <el-button class="btns-item" icon="el-icon-plus">
-                    添加到
-                </el-button>
+
+                <el-popover placement="right" width="150" trigger="click">
+                    <AddBtnPopoverContent :selectdSongs="multipleSelection"></AddBtnPopoverContent>
+                    <el-button style="margin-left: 10px;" slot="reference" class="btns-item" icon="el-icon-plus" @click="addSongToBtn">添加到</el-button>
+                </el-popover>
             </div>
             <!-- 歌曲表格 -->
             <div class="songList-table-box">
@@ -62,17 +64,18 @@
             </div>
         </div>
         <!-- 占位 -->
-        <div style="height: 50px;">
-
-        </div>
+        <div style="height: 50px;"></div>
     </div>
 </template>
 <script>
 import play from '@/assets/js/playSong';
 import star from '@/assets/js/starSong';
-
+import AddBtnPopoverContent from '@/components/home/other/AddBtnPopoverContent.vue';
 export default {
     name: "SingerDetail",
+    components:{
+        AddBtnPopoverContent
+    },
     data() {
         return {
             singer: {},
@@ -147,6 +150,9 @@ export default {
                     type: "warning"
                 })
             }
+        },
+        //添加到按钮
+        addSongToBtn() {
         }
 
     },

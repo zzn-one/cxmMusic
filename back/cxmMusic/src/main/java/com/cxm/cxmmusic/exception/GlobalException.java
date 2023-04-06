@@ -1,4 +1,4 @@
-package com.cxm.cxmmusic.Exception;
+package com.cxm.cxmmusic.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { Message } from 'element-ui'
 
 Vue.use(VueRouter)
 
@@ -17,6 +18,12 @@ const routes = [
     component: () => import('@/views/Home.vue'),
     redirect: '/home/musicHall',
     children: [
+      //歌单编辑页面
+      {
+        path: 'songListEdit',
+        name: 'songListEdit',
+        component: () => import('@/views/home/SongListEdit.vue'),
+      },
       // MM音乐
       {
         path: 'mMusic',
@@ -147,6 +154,28 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+//全局前置守卫：初始化时执行、每次路由切换前执行
+router.beforeEach((to, from, next) => {
+
+  //放行首页
+  if (to.fullPath === "/home/musicHall/hallHome") {
+    next()
+  } else {
+    //判断当前是否已经登录
+    if (localStorage.getItem("token") !== null) {
+      next() //放行 
+
+    } else {
+      Message({
+        message: "请先登录您的账号",
+        type: "info"
+      })
+    }
+  }
+
+
 })
 
 export default router

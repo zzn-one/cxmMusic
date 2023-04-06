@@ -2,7 +2,7 @@ package com.cxm.cxmmusic.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.cxm.cxmmusic.Exception.StatusCodeEnum;
+import com.cxm.cxmmusic.exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.Singer;
 import com.cxm.cxmmusic.pojo.SingerOwnSong;
 import com.cxm.cxmmusic.pojo.Song;
