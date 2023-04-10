@@ -51,7 +51,9 @@ public enum StatusCodeEnum {
     ERROR_GET_SINGER(10051,"获取歌手信息失败"),
 
     //歌单模块
-    ERROR_NEW_SONGLIST(10061,"新增歌单失败");
+    ERROR_NEW_SONGLIST(10061,"新增歌单失败"),
+    ERROR_EDIT_SONGLIST(10062,"修改歌单信息失败"),
+    ERROR_DELETE_SONGS(10063,"移除部分歌曲失败");
 
     private final Integer code;
     private final String message;

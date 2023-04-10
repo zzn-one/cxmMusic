@@ -7,11 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
-/**
-* @author zzz06
-* @description 针对表【user_star_song】的数据库操作Service
-* @createDate 2023-03-18 15:13:34
-*/
+
 public interface UserStarSongService  {
 
     /*
@@ -28,4 +24,9 @@ public interface UserStarSongService  {
      * 获取收藏的歌曲列表 根据用户账号
      * */
     List<HistorySong> getSongs(String account);
+
+    /*
+     * 改变歌曲的收藏数量 +1或-1
+     * */
+    void changeSongStarNumber(Integer songId,Long times);
 }

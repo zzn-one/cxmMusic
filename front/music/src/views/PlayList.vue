@@ -32,10 +32,15 @@
                     <!-- 歌曲列表 -->
                     <div class="song-list-box">
                         <div class="song-btns-box">
-                            <el-button icon="el-icon-star-off" class="song-btn" @click="starSongs">收藏</el-button>
-                            <el-button icon="el-icon-plus" class="song-btn">添加到</el-button>
-                            <el-button icon="el-icon-close" class="song-btn" @click="deleteSongs">删除</el-button>
-                            <el-button icon="el-icon-delete" class="song-btn" @click="deleteAll">清空列表</el-button>
+                            <el-button icon="el-icon-star-off" class="song-btn" @click="starSongs" type="warning" plain>收藏</el-button>
+                            <el-button icon="el-icon-close" class="song-btn" @click="deleteSongs" type="danger" plain>删除</el-button>
+                            <el-button icon="el-icon-delete" class="song-btn" @click="deleteAll" type="danger" plain>清空列表</el-button>
+
+                            <el-popover placement="right" width="150" trigger="click">
+                                <AddBtnPopoverContent :selectdSongs="multipleSelection"></AddBtnPopoverContent>
+                                <el-button slot="reference" class="song-btn" type="primary" plain
+                                    icon="el-icon-plus">添加到</el-button>
+                            </el-popover>
                         </div>
                         <div class="song-table-box">
                             <el-table ref="multipleTable" :data="songsTableData" tooltip-effect="dark" style="width: 100%;"
@@ -114,11 +119,14 @@
 import MusicPlayer from '@/components/playList/MusicPlayer.vue';
 import star from '@/assets/js/starSong';
 import io from 'socket.io-client';
+import AddBtnPopoverContent from '@/components/home/other/AddBtnPopoverContent.vue';
+
 
 export default {
     name: "PlayList",
     components: {
         MusicPlayer,
+        AddBtnPopoverContent,
     },
     data() {
         return {

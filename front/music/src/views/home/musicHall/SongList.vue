@@ -8,7 +8,7 @@
                     <div class="tag-btns">
                         <el-button type="text" class="tag-btn" v-for="tagObj in item.tagList" :key="tagObj.id"
                             @click="addTag(tagObj)">
-                            {{ tagObj.tag }}
+                            {{ tagObj.text }}
                         </el-button>
                     </div>
                 </div>
@@ -23,21 +23,22 @@
                 </div>
                 <div v-show="tagIsOpen">
                     <el-tag v-for="tag in dynamicTags" :key="tag.id" closable :disable-transitions="true" @close="tagClose">
-                        {{ tag.tag }}
+                        {{ tag.text }}
                     </el-tag>
                 </div>
 
             </div>
             <div>
-                <el-card class="card-box" :body-style="{ padding: '0px' }" v-for="item in 9" :key="item" shadow="never">
-                    <RouterLink :to="{ name: 'songListDetail', params: { id: item } }">
-                        <img src="@/assets/1.jpg" class="card-img">
+                <el-card class="card-box" :body-style="{ padding: '0px' }" v-for="songList in songlists" :key="songList.id"
+                    shadow="never">
+                    <RouterLink :to="{ name: 'songListDetail', query: { id: songList.id } }">
+                        <img :src="songList.imgUrl" class="card-img">
 
                         <div style="margin-top: 10px; ">
-                            流行粤语歌曲,歌单名称最长限制为15
+                            {{ songList.name }}
                         </div>
 
-                        <div style="color:#adabab">播放量：2299万</div>
+                        <div style="color:#adabab">播放量：{{ numberFormat(songList.playNumber) }}</div>
                     </RouterLink>
                 </el-card>
             </div>
@@ -57,6 +58,8 @@ export default {
             tagIsOpen: false,
             //供选择的标签列表
             tagsList: [],
+            //歌单列表
+            songlists: []
         }
     },
     methods: {
@@ -76,145 +79,73 @@ export default {
             }
             this.tagIsOpen = true
 
-        }
-    },
-    watch: {
-        //监听 tagIsOpen  false->获取推荐歌单  trur->获取标签相应的歌单
-        tagIsOpen(newVal) {
-            if (newVal) {
-                //true
 
-            } else {
-                //false
+        },
+        //获取标签列表
+        async getTagsList() {
+            const resp = await this.$axios("/dict/tag/order")
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.tagsList = resp.data.data
+            }
+        },
+        //获取歌单列表（未选择标签）
+        async getSonglist() {
+            const resp = await this.$axios("/songList/list")
+
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.songlists = resp.data.data
+            }
+        },
+        //数量格式化
+        numberFormat(number) {
+
+            if (number >= 100000000) {
+                let x = (number / 100000000).toFixed(2)
+                number = x + "亿"
+            } else if (number >= 10000) {
+                let x = (number / 10000).toFixed(2)
+                number = x + "万"
+            }
+            return number
+        },
+        //获取歌单列表
+        async getSonglistByTag(tagId) {
+            const resp = await this.$axios({
+                url: "/songList/list/tag/" + tagId,
+            })
+
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.songlists = resp.data.data
 
             }
-        }
+        },
+    },
+    watch: {
+        //监听 dynamicTags数组  
+        dynamicTags: {
+            deep: true,
+            handler(val) {
+                if (val.length === 0) {
+                    //获取默认推荐歌单
+                    this.getSonglist()
+                } else {
+                    const tag = val[0].id
+                    //获取歌单列表  根据标签
+                    this.getSonglistByTag(tag)
+                }
+            }
+        },
     },
     created() {
-        //整点假标签数据
-        this.tagsList = [
-            {
-                title: "热门",
-                tagList: [
-                    {
-                        id: 1,
-                        tag: "官方歌单"
-                    },
-                    {
-                        id: 2,
-                        tag: "AI歌单"
-                    },
-                    {
-                        id: 3,
-                        tag: "免费热歌"
-                    },
-                    {
-                        id: 4,
-                        tag: "私藏"
-                    },
-                ]
-            },
-            {
-                title: "场景",
-                tagList: [
-                    {
-                        id: 5,
-                        tag: "学习工作"
-                    },
-                    {
-                        id: 6,
-                        tag: "运动"
-                    },
-                    {
-                        id: 7,
-                        tag: "睡前"
-                    },
-                    {
-                        id: 8,
-                        tag: "跳舞"
-                    },
-                    {
-                        id: 9,
-                        tag: "旅行"
-                    },
-                    {
-                        id: 10,
-                        tag: "派对"
-                    },
-                    {
-                        id: 11,
-                        tag: "婚礼"
-                    },
-                    {
-                        id: 12,
-                        tag: "约会"
-                    },
-                ]
-            },
-            {
-                title: "心情",
-                tagList: [
-                    {
-                        id: 22,
-                        tag: "伤感"
-                    },
-                    {
-                        id: 212,
-                        tag: "快乐"
-                    },
-                    {
-                        id: 32,
-                        tag: "治愈"
-                    },
-                    {
-                        id: 124,
-                        tag: "思念"
-                    },
-                ]
-            },
-            {
-                title: "年代",
-                tagList: [
-                    {
-                        id: 2112,
-                        tag: "00年代"
-                    },
-                    {
-                        id: 21122,
-                        tag: "90年代"
-                    },
-                    {
-                        id: 3112,
-                        tag: "80年代"
-                    },
-                    {
-                        id: 12324,
-                        tag: "70年代"
-                    },
-                ]
-            },
-            {
-                title: "语种",
-                tagList: [
-                    {
-                        id: 12112,
-                        tag: "国语"
-                    },
-                    {
-                        id: 121122,
-                        tag: "粤语"
-                    },
-                    {
-                        id: 13112,
-                        tag: "英语"
-                    },
-                    {
-                        id: 112324,
-                        tag: "日语"
-                    },
-                ]
-            },
-        ]
+        this.getTagsList()
+
+        this.getSonglist()
     }
 }
 </script>

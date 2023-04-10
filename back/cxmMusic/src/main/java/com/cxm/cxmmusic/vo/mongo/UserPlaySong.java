@@ -1,10 +1,5 @@
 package com.cxm.cxmmusic.vo.mongo;
 
-import com.baomidou.mybatisplus.annotation.*;
-
-import java.io.Serializable;
-import java.util.Date;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -13,10 +8,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-/**
- * 
- * @TableName user_play_song
- */
+import java.io.Serializable;
+import java.util.Date;
+
 @ApiModel("用户与歌曲的播放关系")
 @Document("userPlaySong")
 @Data

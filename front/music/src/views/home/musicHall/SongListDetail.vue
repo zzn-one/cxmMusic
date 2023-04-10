@@ -3,30 +3,28 @@
         <div class="msg_box">
             <!-- 歌单封面 -->
             <div class="img_box">
-                <img src="@/assets/bg.jpg">
+                <img :src="songList.imgUrl">
             </div>
             <!-- 歌单信息的简要说明 -->
             <div class="brief_box">
                 <el-descriptions :title="songList.name" :column="1" class="brief_descriptions">
                     <el-descriptions-item label="作者">{{ songList.authorName }}</el-descriptions-item>
-                    <el-descriptions-item label="标签：">{{ songList.tag }}</el-descriptions-item>
-                    <el-descriptions-item label="播放量：">{{ songList.playNumber }}万</el-descriptions-item>
-                    <el-descriptions-item label="收藏量">{{ songList.favoritesNumber }}万</el-descriptions-item>
+                    <el-descriptions-item label="标签">
+                        <el-tag v-if="songList.tag !== null">
+                            {{ songList.tag }}
+                        </el-tag>
+
+                    </el-descriptions-item>
+                    <el-descriptions-item label="播放量">{{ numberFormat(songList.playNumber) }}</el-descriptions-item>
+                    <el-descriptions-item label="收藏量">{{ numberFormat(songList.starNumber) }}</el-descriptions-item>
                 </el-descriptions>
                 <div class="brief_btns">
-                    <el-button icon="el-icon-video-play" class="btns" type="success">
+                    <el-button icon="el-icon-video-play" class="btns" type="success" @click="playSonglist">
                         播放全部
                     </el-button>
                     <el-button icon="el-icon-star-off" class="btns">
                         收藏
                     </el-button>
-                    <el-popover placement="right" width="180" trigger="manual" v-model="popoverVisible">
-                        <div>
-                            临时内容
-                        </div>
-                        <el-button slot="reference" class="btns" icon="el-icon-circle-plus-outline"
-                            @click="popoverVisible = !popoverVisible" style="margin-left: 10px;">添加到</el-button>
-                    </el-popover>
 
                 </div>
             </div>
@@ -39,17 +37,16 @@
             <div class="list_comment_box">
                 <div class="table_box">
                     <el-table :data="songTable" stripe style="width: 100%" height="528px"
-                        @selection-change="handleSelectionChange">
-                        <el-table-column type="selection" width="55"></el-table-column>
+                        >
                         <el-table-column type="index" width="50"></el-table-column>
-                        <el-table-column prop="name" label="歌曲">
+                        <el-table-column prop="name" :label="'歌曲(' + songList.songNumber + ')'">
                         </el-table-column>
                         <el-table-column label="歌手" width="300">
                             <template slot-scope="scope">
-                                <RouterLink :to='{
-                                    name: "singerDetail", params: { id: 1 }
+                                <RouterLink v-for="singer in scope.row.singerList" :key="singer.id" :to='{
+                                    name: "singerDetail", query: { singerId: singer.id }
                                 }'>
-                                    {{ scope.row.songerName }}
+                                    {{ singer.name }}
                                 </RouterLink>
                             </template>
                         </el-table-column>
@@ -60,8 +57,13 @@
                         </el-table-column>
                     </el-table>
                 </div>
-                <div class="comment_box">
+                <!-- <div class="comment_box">
                     评论区 后面写
+                </div> -->
+
+                <!-- 占位 -->
+                <div style="height: 50px;">
+
                 </div>
             </div>
             <!-- 简介 -->
@@ -69,16 +71,13 @@
                 <div class="introduce_box_header">
                     <b>简介</b>
                 </div>
-                <div class="introduce_box_body">{{ songList.introduce }}</div>
+                <div class="introduce_box_body">{{ songList.introduction }}</div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { RouterLink } from 'vue-router';
-
-
 
 export default {
     name: "SongListDetail",
@@ -86,39 +85,73 @@ export default {
         return {
             id: "",
             songList: {},
-            popoverVisible: false,
             songTable: [],
-            //被选中的数据
-            multipleSelection: []
+
         };
     },
     methods: {
-        //表格选中数据
-        handleSelectionChange(val) {
-            this.multipleSelection = val;
-        }
+
+        //数量格式化
+        numberFormat(number) {
+
+            if (number >= 100000000) {
+                let x = (number / 100000000).toFixed(2)
+                number = x + "亿"
+            } else if (number >= 10000) {
+                let x = (number / 10000).toFixed(2)
+                number = x + "万"
+            }
+            return number
+        },
+        //获取歌单的信息
+        async getSongList() {
+            //获取歌单id
+            this.id = this.$route.query.id;
+            const resp = await this.$axios("/songList/" + this.id)
+
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.songList = resp.data.data
+            }
+        },
+        //获取歌曲列表
+        async getSongTable() {
+            const resp = await this.$axios("/songList/songs/" + this.id)
+
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.songTable = resp.data.data
+            }
+        },
+        //播放歌单
+        async playSonglist() {
+            const account = this.$token().account
+
+            const resp = await this.$axios({
+                url: "/play/" + account + "/" + this.id,
+                method: "put"
+            })
+
+            const code = resp.data.code
+
+            if (code === 200) {
+                //跳转到播放页
+                const { href } = this.$router.resolve({
+                    name: "playList"
+                })
+
+                window.open(href, href)
+            }
+        },
     },
     created() {
-        //获取歌单id
-        this.id = this.$route.params.id;
-        // 假数据
-        this.songList = {
-            name: "流行粤语歌曲,歌单名称最长限制为15",
-            authorName: "疯原万叶",
-            tag: "流行",
-            playNumber: 8392.2,
-            favoritesNumber: 22.3,
-            introduce: "“996”“007”已成当代打工人的日常， 下班了即兴唱两句歌， 对于释放压力缓解疲劳， 有着很好的辅助作用， 快来唱歌吧！ 把烦恼紧张压抑都丢掉， 重新拾起生活的快乐！"
-        };
-        for (let i = 1; i <= 100; i++) {
-            this.songTable.push({
-                name: "半岛铁盒",
-                songerName: "周杰伦",
-                duration: 239000,
-            });
-        }
+
+        this.getSongList()
+        this.getSongTable()
     },
-    components: { RouterLink }
+
 }
 </script>
 

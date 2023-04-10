@@ -1,6 +1,5 @@
 package com.cxm.cxmmusic.service.mongo.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cxm.cxmmusic.mapper.SingerMapper;
 import com.cxm.cxmmusic.mapper.SongMapper;
 import com.cxm.cxmmusic.pojo.Singer;

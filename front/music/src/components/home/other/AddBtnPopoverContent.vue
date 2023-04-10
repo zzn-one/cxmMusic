@@ -60,10 +60,7 @@ export default {
             this.songListForm.authorName = this.$token().name
             this.songListForm.authorAccount = this.$token().account
 
-
             this.songListForm.songs = this.selectdSongs
-
-
 
             if (this.songListForm.name !== null && this.songListForm.name !== '') {
                 const resp = await this.$axios({
@@ -89,7 +86,7 @@ export default {
         //获取用户的歌单列表
         async getSongListNames() {
             const account = this.$token().account
-            const resp = await this.$axios("/songList/" + account)
+            const resp = await this.$axios("/songList/list/" + account)
 
             if (resp.data.code === 200 && resp.data.data !== null) {
                 this.songListNames = resp.data.data

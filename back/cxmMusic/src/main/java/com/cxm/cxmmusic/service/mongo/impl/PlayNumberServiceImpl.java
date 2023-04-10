@@ -2,6 +2,7 @@ package com.cxm.cxmmusic.service.mongo.impl;
 
 import com.cxm.cxmmusic.service.mongo.PlayNumberService;
 import com.cxm.cxmmusic.vo.mongo.SongPlayNumber;
+import com.cxm.cxmmusic.vo.mongo.SonglistPlayNumber;
 import com.cxm.cxmmusic.vo.mongo.UserPlaySong;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -67,5 +68,23 @@ public class PlayNumberServiceImpl implements PlayNumberService {
             mongoTemplate.save(userPlaySong);
         }
 
+    }
+
+    @Override
+    public void addSonglistPlayNumber(Integer songlistId) {
+        /* 歌曲播放量+1 */
+        //查询该歌单是否已在mongoDb有播放量记录
+        SonglistPlayNumber songlistPlayNumber = mongoTemplate.findById(songlistId, SonglistPlayNumber.class);
+        if (songlistPlayNumber != null) {
+            //已有，修改播放量
+            songlistPlayNumber.addTimes();
+
+            mongoTemplate.save(songlistPlayNumber);
+        } else {
+            //未有，新增播放量记录且播放量+1
+            SonglistPlayNumber playNumber = new SonglistPlayNumber(songlistId, 1L);
+
+            mongoTemplate.save(playNumber);
+        }
     }
 }

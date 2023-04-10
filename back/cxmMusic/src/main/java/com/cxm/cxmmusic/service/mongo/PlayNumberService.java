@@ -17,4 +17,10 @@ public interface PlayNumberService {
      * */
     void addUserPlaySongNumber(String account, Integer songId);
 
+
+    /*
+     * 歌单播放量  增加 1
+     * */
+    void addSonglistPlayNumber(Integer songlistId);
+
 }

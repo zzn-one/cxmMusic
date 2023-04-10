@@ -23,6 +23,27 @@ const routes = [
         path: 'songListEdit',
         name: 'songListEdit',
         component: () => import('@/views/home/SongListEdit.vue'),
+        redirect: '/home/songListEdit/songTableEdit',
+        children: [
+          //歌单的歌曲列表
+          {
+            path: "songTableEdit",
+            name: "songTableEdit",
+            component: () => import('@/views/home/songListEdit/SongTableEdit.vue')
+          },
+          //歌单的最近收藏
+          {
+            path: "starEdit",
+            name: "starEdit",
+            component: () => import('@/views/home/songListEdit/StarEdit.vue')
+          },
+          //歌单的评论区
+          {
+            path: "commentEdit",
+            name: "commentEdit",
+            component: () => import('@/views/home/songListEdit/CommentEdit.vue')
+          },
+        ]
       },
       // MM音乐
       {

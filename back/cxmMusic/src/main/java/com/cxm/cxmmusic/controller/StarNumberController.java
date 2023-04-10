@@ -45,6 +45,7 @@ public class StarNumberController {
     @DeleteMapping("/song/cancel/{account}")
     public Result<Boolean> starCancelSong(@PathVariable("account") String account, @RequestBody List<Song> songs){
         userStarSongService.starCancelSong(account, songs);
+
         return new Result<>(StatusCodeEnum.OK, true);
     }
 

@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.cxm.cxmmusic.exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.Song;
 import com.cxm.cxmmusic.service.mongo.PlayListService;
+import com.cxm.cxmmusic.service.mongo.PlayNumberService;
+import com.cxm.cxmmusic.service.mongo.UserPlaySonglistService;
 import com.cxm.cxmmusic.socketIO.SocketIOService;
 import com.cxm.cxmmusic.vo.mongo.PlaySong;
 import com.cxm.cxmmusic.vo.Result;
@@ -29,6 +31,12 @@ public class PlayListController {
     private PlayListService playListService;
     @Autowired
     private SocketIOService socketIOService;
+
+    @Autowired
+    private PlayNumberService playNumberService;
+
+    @Autowired
+    private UserPlaySonglistService userPlaySonglistService;
 
     @ApiOperation("获取用户的播放列表")
     @ApiImplicitParam(name = "account", value = "用户账户")
@@ -63,6 +71,27 @@ public class PlayListController {
 
     }
 
+    @ApiOperation("添加歌曲到播放列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "account", value = "用户账户"),
+            @ApiImplicitParam(name = "songlistId", value = "歌单id"),
+    })
+    @PutMapping("/{account}/{songlistId}")
+    public Result<Boolean> add(@PathVariable("account") String account, @PathVariable("songlistId") Integer songlistId) {
+
+        playListService.add(account, songlistId);
+
+        //歌单播放量+1
+        playNumberService.addSonglistPlayNumber(songlistId);
+
+        //  产生/增加 用户播放歌单 的记录
+        userPlaySonglistService.add(account, songlistId);
+
+        updateBySocket(account);
+
+        return new Result<>(StatusCodeEnum.OK, true);
+
+    }
 
 
     @ApiOperation("删除部分歌曲")

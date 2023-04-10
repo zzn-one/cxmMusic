@@ -11,7 +11,9 @@ import com.cxm.cxmmusic.pojo.SonglistOwnSong;
 import com.cxm.cxmmusic.service.SongService;
 import com.cxm.cxmmusic.service.SonglistService;
 import com.cxm.cxmmusic.mapper.SonglistMapper;
+import com.cxm.cxmmusic.service.mongo.PlaySongService;
 import com.cxm.cxmmusic.vo.SongListWithSongs;
+import com.cxm.cxmmusic.vo.mongo.PlaySong;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -37,6 +39,9 @@ public class SonglistServiceImpl extends ServiceImpl<SonglistMapper, Songlist>
 
     @Resource
     private SongMapper songMapper;
+
+    @Resource
+    private PlaySongService playSongService;
 
     @Override
     public Boolean newSongList(SongListWithSongs songListWithSongs) {
@@ -67,7 +72,7 @@ public class SonglistServiceImpl extends ServiceImpl<SonglistMapper, Songlist>
             Integer songListDbId = songListDb.getId();
 
             //歌单添加歌曲
-            addSong(songListDbId,songListWithSongs.getSongs());
+            addSong(songListDbId, songListWithSongs.getSongs());
             result = true;
         }
 
@@ -104,13 +109,22 @@ public class SonglistServiceImpl extends ServiceImpl<SonglistMapper, Songlist>
             songlistOwnSong.setSongId(songId);
             songlistOwnSong.setSongListId(songListId);
 
-            songlistOwnSongMapper.insert(songlistOwnSong);
+            LambdaQueryWrapper<SonglistOwnSong> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(SonglistOwnSong::getSongListId, songListId);
+            queryWrapper.eq(SonglistOwnSong::getSongId, songId);
 
-            //修改歌单的歌曲数量
-            LambdaUpdateWrapper<Songlist> updateWrapper = new LambdaUpdateWrapper<>();
-            updateWrapper.setSql("song_number = song_number + 1");
-            updateWrapper.eq(Songlist::getId, songListId);
-            songlistMapper.update(null, updateWrapper);
+            SonglistOwnSong one = songlistOwnSongMapper.selectOne(queryWrapper);
+            if (one == null) {
+                songlistOwnSongMapper.insert(songlistOwnSong);
+
+                //修改歌单的歌曲数量
+                LambdaUpdateWrapper<Songlist> updateWrapper = new LambdaUpdateWrapper<>();
+                updateWrapper.setSql("song_number = song_number + 1");
+                updateWrapper.eq(Songlist::getId, songListId);
+                songlistMapper.update(null, updateWrapper);
+            }
+
+
         }
     }
 
@@ -138,6 +152,51 @@ public class SonglistServiceImpl extends ServiceImpl<SonglistMapper, Songlist>
         return songListWithSongs;
     }
 
+    @Override
+    public List<PlaySong> getSongs(Integer songlistId) {
+        ArrayList<PlaySong> list = new ArrayList<>();
+
+        //根据songlistId 获取歌曲id列表
+        LambdaQueryWrapper<SonglistOwnSong> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SonglistOwnSong::getSongListId, songlistId);
+
+        List<SonglistOwnSong> songlistOwnSongs = songlistOwnSongMapper.selectList(queryWrapper);
+        //获取歌曲列表
+        for (SonglistOwnSong songlistOwnSong : songlistOwnSongs) {
+            Integer songId = songlistOwnSong.getSongId();
+            PlaySong playSong = playSongService.getBySongId(songId);
+            list.add(playSong);
+        }
+
+        return list;
+    }
+
+    @Override
+    public Boolean delSongs(Integer songlistId, List<PlaySong> songs) {
+
+        boolean result = true;
+
+        for (PlaySong song : songs) {
+            //删除多对多关系记录
+            LambdaQueryWrapper<SonglistOwnSong> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(SonglistOwnSong::getSongListId, songlistId);
+            Integer songId = song.getId();
+            queryWrapper.eq(SonglistOwnSong::getSongId, songId);
+            int delete = songlistOwnSongMapper.delete(queryWrapper);
+            if (delete == 0) {
+                result = false;
+            }
+            //修改歌单实体的songNumber字段
+            LambdaUpdateWrapper<Songlist> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.eq(Songlist::getId, songlistId);
+            updateWrapper.setSql("song_number=song_number-1");
+
+            songlistMapper.update(null, updateWrapper);
+
+        }
+
+        return result;
+    }
 
 }
 

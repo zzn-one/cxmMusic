@@ -1,6 +1,9 @@
 package com.cxm.cxmmusic.service.mongo.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cxm.cxmmusic.pojo.Song;
+import com.cxm.cxmmusic.pojo.SonglistOwnSong;
+import com.cxm.cxmmusic.service.SonglistOwnSongService;
 import com.cxm.cxmmusic.service.mongo.PlayListService;
 import com.cxm.cxmmusic.service.mongo.PlaySongService;
 import com.cxm.cxmmusic.vo.mongo.PlayList;
@@ -22,6 +25,9 @@ public class PlayListServiceImpl implements PlayListService {
 
     @Resource
     private PlaySongService playSongService;
+
+    @Resource
+    private SonglistOwnSongService songlistOwnSongService;
 
     @Override
     public Collection<PlaySong> get(String account) {
@@ -68,6 +74,43 @@ public class PlayListServiceImpl implements PlayListService {
 
         mongoTemplate.save(playList);
 
+    }
+
+    @Override
+    public void add(String account, Integer songlistId) {
+        //查询该用户是否已经创建了播放列表
+        PlayList playListDB = mongoTemplate.findById(account, PlayList.class);
+
+        //存待播放的歌曲
+        List<PlaySong> songList;
+
+        if (playListDB == null) {
+            //  创建一个新的 歌曲列表
+            songList = new ArrayList<>();
+
+        } else {
+            // 使用旧的歌曲列表
+            songList = playListDB.getSongList();
+
+        }
+
+        //新增歌曲
+        //根据歌单id查询出歌曲列表
+        LambdaQueryWrapper<SonglistOwnSong> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SonglistOwnSong::getSongListId, songlistId);
+        List<SonglistOwnSong> songs = songlistOwnSongService.list(queryWrapper);
+
+        for (SonglistOwnSong song : songs) {
+            Integer songId = song.getSongId();
+            PlaySong playSong = playSongService.getBySongId(songId);
+            //待播放的歌曲添加到 播放列表
+            songList.removeIf(item -> songId.equals(item.getId()));
+            songList.add(0, playSong);
+        }
+
+        PlayList playList = new PlayList(account, songList);
+
+        mongoTemplate.save(playList);
     }
 
     @Override

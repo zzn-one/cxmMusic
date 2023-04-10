@@ -5,10 +5,10 @@
             <div class="title-item-box singer-name-box">歌手</div>
             <div class="title-item-box song-play-time-box">播放时间</div>
         </div>
-        <div class="record-box" v-infinite-scroll="load">
+        <div class="record-box" v-infinite-scroll="load" >
             <el-card class="box-card" shadow="hover" v-for="record in historySongs" :body-style="{ padding: '10px' }">
                 <div class="msg-box">
-                    <div class="msg-item-box song-name-box">{{ record.song.name }}</div>
+                    <div class="msg-item-box song-name-box">{{ Object.assign({},record.song).name }}</div>
                     <div class="msg-item-box singer-name-box">
 
                         <span v-for="singer in record.singerList" :key="singer.id">
@@ -96,6 +96,7 @@ export default {
 }
 </script>
 <style scoped lang="less">
+
 .title-box {
     display: flex;
     margin: 10px 0 20px 0;

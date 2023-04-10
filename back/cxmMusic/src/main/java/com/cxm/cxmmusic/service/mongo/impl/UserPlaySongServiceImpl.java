@@ -19,11 +19,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
-* @author zzz06
-* @description 针对表【user_play_song】的数据库操作Service实现
-* @createDate 2023-03-18 15:13:34
-*/
+
 @Service
 public class UserPlaySongServiceImpl implements UserPlaySongService{
 

@@ -1,96 +1,49 @@
 package com.cxm.cxmmusic.vo.mongo;
 
-import com.baomidou.mybatisplus.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
-import lombok.Data;
+import java.util.Date;
 
-/**
- * 
- * @TableName user_play_songlist
- */
-@TableName(value ="user_play_songlist")
+
+@Document(value ="userPlaySongList")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserPlaySonglist implements Serializable {
     /**
-     * 用户id
+     * 用户账号
      */
-    @TableField(value = "userId")
-    private Integer userId;
+    @Field()
+    @ApiModelProperty("用户账号")
+    private String account;
 
     /**
      * 歌单id
      */
-    @TableField(value = "songlistId")
+    @Field()
+    @ApiModelProperty("歌单id")
     private Integer songlistId;
 
     /**
      * 用户播放该歌单的次数
      */
-    @TableField(value = "times")
+    @Field()
+    @ApiModelProperty("播放次数")
     private Long times;
 
-    /**
-     * 
-     */
-    @TableField(value = "deleted")
-    private Integer deleted;
+    @Field()
+    @ApiModelProperty("最近播放时间")
+    private Date lastedPlayTime;
 
-    /**
-     * 
-     */
-    @TableField(value = "version")
-    @Version
 
-    private Integer version;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
-
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        UserPlaySonglist other = (UserPlaySonglist) that;
-        return (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getSonglistId() == null ? other.getSonglistId() == null : this.getSonglistId().equals(other.getSonglistId()))
-            && (this.getTimes() == null ? other.getTimes() == null : this.getTimes().equals(other.getTimes()))
-            && (this.getDeleted() == null ? other.getDeleted() == null : this.getDeleted().equals(other.getDeleted()))
-            && (this.getVersion() == null ? other.getVersion() == null : this.getVersion().equals(other.getVersion()));
+    public void addTimes(){
+        this.times += 1;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        result = prime * result + ((getSonglistId() == null) ? 0 : getSonglistId().hashCode());
-        result = prime * result + ((getTimes() == null) ? 0 : getTimes().hashCode());
-        result = prime * result + ((getDeleted() == null) ? 0 : getDeleted().hashCode());
-        result = prime * result + ((getVersion() == null) ? 0 : getVersion().hashCode());
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", userId=").append(userId);
-        sb.append(", songlistId=").append(songlistId);
-        sb.append(", times=").append(times);
-        sb.append(", deleted=").append(deleted);
-        sb.append(", version=").append(version);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
 }

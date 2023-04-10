@@ -21,7 +21,7 @@ public interface PlayListService {
     * */
 
     void add(String account, List<Song> songs);
-
+    void add(String account, Integer songlistId);
     /*
     * 删除部分歌曲
     * */

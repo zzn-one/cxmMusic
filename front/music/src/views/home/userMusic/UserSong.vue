@@ -9,12 +9,10 @@
                 @click="starCancelBtn">
                 取消收藏
             </el-button>
-            <el-popover placement="right" width="180" trigger="manual" v-model="popoverVisible">
-                <div>
-                    临时内容 todo
-                </div>
-                <el-button slot="reference" class="btns" icon="el-icon-circle-plus-outline"
-                    @click="popoverVisible = !popoverVisible" style="margin-left: 10px;">添加到</el-button>
+            <el-popover placement="right" width="150" trigger="click">
+                <AddBtnPopoverContent :selectdSongs="multipleSelection"></AddBtnPopoverContent>
+                <el-button style="margin-left: 10px;" slot="reference" class="btns" type="primary" plain
+                    icon="el-icon-plus">添加到</el-button>
             </el-popover>
         </div>
 
@@ -55,9 +53,13 @@
 <script>
 import play from '@/assets/js/playSong';
 import starCancel from '@/assets/js/starCancelSong';
+import AddBtnPopoverContent from '@/components/home/other/AddBtnPopoverContent.vue';
 
 export default {
     name: "UserSong",
+    components: {
+        AddBtnPopoverContent
+    },
     data() {
         return {
             popoverVisible: false,
@@ -69,7 +71,17 @@ export default {
     methods: {
 
         handleSelectionChange(val) {
-            this.multipleSelection = val;
+
+            if (val.length > 0) {
+                //取出歌曲列表
+                let songList = []
+                val.forEach(item => {
+                    songList.push(item.song)
+                })
+
+                this.multipleSelection = songList;
+            }
+
         },
         //获取收藏的歌曲列表
         async getSongTable() {
@@ -83,13 +95,8 @@ export default {
         playBtn() {
             const account = this.$token().account
             if (this.multipleSelection.length > 0) {
-                //取出歌曲列表
-                let songList = []
-                this.multipleSelection.forEach(item => {
-                    songList.push(item.song)
-                })
-
-                play(songList, account)
+                
+                play(this.multipleSelection, account)
             } else {
                 this.$message({
                     message: "请先选择歌曲！",
@@ -101,13 +108,9 @@ export default {
         async starCancelBtn() {
             const account = this.$token().account
             if (this.multipleSelection.length > 0) {
-                //取出歌曲列表
-                let songList = []
-                this.multipleSelection.forEach(item => {
-                    songList.push(item.song)
-                })
+                
 
-                const resp = await starCancel(songList, account)
+                const resp = await starCancel(this.multipleSelection, account)
 
                 if (resp.data.code === 200) {
                     //重新请求收藏的歌曲列表
