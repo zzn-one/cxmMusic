@@ -8,11 +8,7 @@ import com.cxm.cxmmusic.vo.mongo.PlaySong;
 
 import java.util.List;
 
-/**
-* @author zzz06
-* @description 针对表【songlist】的数据库操作Service
-* @createDate 2023-03-18 15:13:34
-*/
+
 public interface SonglistService extends IService<Songlist> {
 
     /*
@@ -44,4 +40,10 @@ public interface SonglistService extends IService<Songlist> {
      * 删除歌单的部分歌曲
      * */
     Boolean delSongs(Integer songlistId, List<PlaySong> songs);
+
+    /*
+    * 删除歌单
+    * */
+
+    void delSonglist(Integer songlistId);
 }

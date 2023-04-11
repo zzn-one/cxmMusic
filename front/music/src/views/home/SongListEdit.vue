@@ -31,7 +31,7 @@
                         编辑
                     </el-button>
 
-                    <el-button class="msg-btns" type="danger" plain>
+                    <el-button class="msg-btns" type="danger" plain @click="deleteBtn">
                         <i class="el-icon-delete"></i>
                         删除
                     </el-button>
@@ -113,6 +113,42 @@ export default {
         }
     },
     methods: {
+        //删除按钮
+        deleteBtn() {
+
+            this.$confirm('歌单及其相关信息将会被永久删除, 是否继续?', '警告', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'error'
+            }).then(() => {
+                this.$axios({
+                    url: "/songList/" + this.songlistId,
+                    method: "delete"
+                }).then(resp => {
+                    const code = resp.data.code
+
+                    if (code === 200) {
+                        this.$message({
+                            type: 'success',
+                            message: '歌单已被永久删除!即将跳转到主页'
+                        });
+
+                        //跳转到主页
+                        setTimeout(() => {
+                            this.$router.push({ "name": "/" })
+                        }, 3000)
+                    }
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+
+
+
+        },
         //获取歌单对象
         async getSonglist() {
             const resp = await this.$axios("/songList/" + this.songlistId)

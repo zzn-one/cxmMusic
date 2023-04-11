@@ -32,13 +32,13 @@
                     <!-- 歌曲列表 -->
                     <div class="song-list-box">
                         <div class="song-btns-box">
-                            <el-button icon="el-icon-star-off" class="song-btn" @click="starSongs" type="warning" plain>收藏</el-button>
-                            <el-button icon="el-icon-close" class="song-btn" @click="deleteSongs" type="danger" plain>删除</el-button>
-                            <el-button icon="el-icon-delete" class="song-btn" @click="deleteAll" type="danger" plain>清空列表</el-button>
+                            <el-button icon="el-icon-star-off" class="song-btn" @click="starSongs" type="warning" >收藏</el-button>
+                            <el-button icon="el-icon-close" class="song-btn" @click="deleteSongs" type="danger" >删除</el-button>
+                            <el-button icon="el-icon-delete" class="song-btn" @click="deleteAll" type="danger" >清空列表</el-button>
 
                             <el-popover placement="right" width="150" trigger="click">
                                 <AddBtnPopoverContent :selectdSongs="multipleSelection"></AddBtnPopoverContent>
-                                <el-button slot="reference" class="song-btn" type="primary" plain
+                                <el-button slot="reference" class="song-btn" type="primary" 
                                     icon="el-icon-plus">添加到</el-button>
                             </el-popover>
                         </div>
@@ -355,7 +355,6 @@ export default {
 .song-btn {
     margin: 10px 10px 10px 0;
     width: 120px;
-    background-color: rgba(255, 255, 255, 0);
 }
 
 /*修改el-table背景色*/

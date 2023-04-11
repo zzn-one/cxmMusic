@@ -36,10 +36,9 @@ public class UserStarSongServiceImpl implements UserStarSongService {
         for (Song song : songs) {
             //查询是否已经收藏
             Integer songId = song.getId();
-            Criteria criteria = Criteria.where("account").is(account).and("songId").is(songId);
-            UserStarSong userStarSong = mongoTemplate.findOne(Query.query(criteria), UserStarSong.class);
 
-            if (userStarSong == null) {
+            Boolean stared = stared(account, songId);
+            if (!stared) {
                 //未收藏 添加收藏记录
                 UserStarSong starSong = new UserStarSong(account, songId);
                 mongoTemplate.save(starSong);
@@ -96,6 +95,14 @@ public class UserStarSongServiceImpl implements UserStarSongService {
         mongoTemplate.save(songStarNumber);
 
 
+    }
+
+    @Override
+    public Boolean stared(String account, Integer songId) {
+        Criteria criteria = Criteria.where("account").is(account).and("songId").is(songId);
+        UserStarSong userStarSong = mongoTemplate.findOne(Query.query(criteria), UserStarSong.class);
+
+        return userStarSong != null;
     }
 }
 

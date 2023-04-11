@@ -1,14 +1,15 @@
 <template>
     <div class="songList-box">
-        <el-card class="card-box" :body-style="{ padding: '0px' }" v-for="item in 9" :key="item" shadow="never">
-            <RouterLink :to="{ name: 'songListDetail', params: { id: item } }">
-                <img src="@/assets/1.jpg" class="card-img">
+        <el-card class="card-box" :body-style="{ padding: '0px' }" v-for="songlist in songlists" :key="songlist.id"
+            shadow="never">
+            <RouterLink :to="{ name: 'songListDetail', query: { id: songlist.id } }">
+                <img :src="songlist.imgUrl" class="card-img">
 
                 <div style="margin-top: 10px; ">
-                    流行粤语歌曲,歌单名称最长限制为15
+                    {{ songlist.name }}
                 </div>
 
-                <div style="color:#adabab">播放量：2299万</div>
+                <div style="color:#adabab">播放量：{{ numberFormat(songlist.playNumber) }}</div>
             </RouterLink>
         </el-card>
     </div>
@@ -19,47 +20,38 @@ export default {
 
     data() {
         return {
-            songTable: []
+            songlists: []
         }
     },
     methods: {
-        // 播放量处理
-        playNumberFormat() {
-            this.songTable.forEach(item => {
-                let result;
-                //亿
-                result = item.playNumber / 100000000
-                if (result > 1) {
-                    item.playNumber = result.toFixed(1) + "亿"
-                    return;
-                }
-                //万
-                result = item.playNumber / 10000
-                if (result > 1) {
-                    item.playNumber = result.toFixed(1) + "万"
-                    return;
-                }
-                //千
-                result = item.playNumber / (1000)
-                if (result > 1) {
-                    item.playNumber = result.toFixed(1) + "千"
-                    return;
-                }
 
+        //数量格式化
+        numberFormat(number) {
 
-            })
+            if (number >= 100000000) {
+                let x = (number / 100000000).toFixed(2)
+                number = x + "亿"
+            } else if (number >= 10000) {
+                let x = (number / 10000).toFixed(2)
+                number = x + "万"
+            }
+            return number
+        },
+        //获取用户收藏的歌单列表
+        async getSonglists() {
+            const account = this.$token().account
+            const resp = await this.$axios("/starNumber/songlist/" + account)
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.songlists = resp.data.data
+            }
+
         }
     },
 
     created() {
-        this.songTable.push({
-            name: '歌单名称几点睡觉导航',
-            songNumber: 28,
-            authorName: '疯原万叶',
-            playNumber: 723323232
-        })
-
-        this.playNumberFormat()
+        this.getSonglists()
     }
 }
 </script>

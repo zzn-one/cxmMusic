@@ -22,8 +22,11 @@
                     <el-button icon="el-icon-video-play" class="btns" type="success" @click="playSonglist">
                         播放全部
                     </el-button>
-                    <el-button icon="el-icon-star-off" class="btns">
+                    <el-button icon="el-icon-star-off" class="btns" v-show="!stared" @click="star">
                         收藏
+                    </el-button>
+                    <el-button icon="el-icon-star-on" class="btns"  type="danger" v-show="stared" @click="cancelStar">
+                        已收藏
                     </el-button>
 
                 </div>
@@ -36,8 +39,7 @@
             <!-- 歌曲列表table与评论区 -->
             <div class="list_comment_box">
                 <div class="table_box">
-                    <el-table :data="songTable" stripe style="width: 100%" height="528px"
-                        >
+                    <el-table :data="songTable" stripe style="width: 100%" height="528px">
                         <el-table-column type="index" width="50"></el-table-column>
                         <el-table-column prop="name" :label="'歌曲(' + songList.songNumber + ')'">
                         </el-table-column>
@@ -86,10 +88,60 @@ export default {
             id: "",
             songList: {},
             songTable: [],
+            stared: false,
 
         };
     },
     methods: {
+        //取消收藏
+        async cancelStar() {
+
+            const account = this.$token().account
+            const resp = await this.$axios({
+                url: "/starNumber/songlist/cancel/" + account + "/" + this.id,
+                method: "delete"
+            })
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.$message.success("歌单已取消收藏")
+
+                //刷新用户对歌单的收藏状态
+                this.starStatus()
+            } else {
+                this.$message.error("歌单取消收藏失败")
+            }
+
+        },
+        //收藏
+        async star() {
+            const account = this.$token().account
+            const resp = await this.$axios({
+                url: "/starNumber/songlist/" + account + "/" + this.id,
+                method: "post"
+            })
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.$message.success("歌单收藏成功")
+                //刷新用户对歌单的收藏状态
+                this.starStatus()
+
+            } else {
+                this.$message.error("歌单收藏失败")
+            }
+
+        },
+        //查询用户是否已经收藏该歌单
+        async starStatus() {
+            const account = this.$token().account
+            const resp = await this.$axios("/starNumber/songlist/stared/" + account + "/" + this.id)
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.stared = resp.data.data
+            }
+        },
 
         //数量格式化
         numberFormat(number) {
@@ -148,8 +200,13 @@ export default {
     },
     created() {
 
+        //获取歌单的信息
         this.getSongList()
+        //获取歌曲列表
         this.getSongTable()
+        //查询用户是否已经收藏该歌单
+        this.starStatus()
+
     },
 
 }

@@ -29,4 +29,9 @@ public interface UserStarSongService  {
      * 改变歌曲的收藏数量 +1或-1
      * */
     void changeSongStarNumber(Integer songId,Long times);
+
+    /*
+     * 是否已经被收藏
+     * */
+    Boolean stared(String account, Integer songId);
 }

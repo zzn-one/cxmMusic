@@ -32,7 +32,7 @@ public class SonglistStarNumber {
     public void addTimes() {
         this.times += 1;
     }
-    public void addTimes(Integer times) {
+    public void addTimes(Long times) {
         this.times += times;
     }
 

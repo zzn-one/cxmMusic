@@ -13,7 +13,10 @@ import com.cxm.cxmmusic.service.SonglistService;
 import com.cxm.cxmmusic.mapper.SonglistMapper;
 import com.cxm.cxmmusic.service.mongo.PlaySongService;
 import com.cxm.cxmmusic.vo.SongListWithSongs;
-import com.cxm.cxmmusic.vo.mongo.PlaySong;
+import com.cxm.cxmmusic.vo.mongo.*;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,7 +26,6 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author zzz06
  * @description 针对表【songlist】的数据库操作Service实现
  * @createDate 2023-03-18 15:13:34
  */
@@ -42,6 +44,9 @@ public class SonglistServiceImpl extends ServiceImpl<SonglistMapper, Songlist>
 
     @Resource
     private PlaySongService playSongService;
+
+    @Resource
+    private MongoTemplate mongoTemplate;
 
     @Override
     public Boolean newSongList(SongListWithSongs songListWithSongs) {
@@ -196,6 +201,26 @@ public class SonglistServiceImpl extends ServiceImpl<SonglistMapper, Songlist>
         }
 
         return result;
+    }
+
+    @Override
+    public void delSonglist(Integer songlistId) {
+
+        //删除歌单的歌曲
+        LambdaQueryWrapper<SonglistOwnSong> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SonglistOwnSong::getSongListId, songlistId);
+        songlistOwnSongMapper.delete(queryWrapper);
+
+        //删除歌单
+        songlistMapper.deleteById(songlistId);
+
+        //删除歌单的 播放量、收藏量、播放记录、收藏记录
+        mongoTemplate.remove(Query.query(Criteria.where("_id").is(songlistId)), SonglistPlayNumber.class);
+        mongoTemplate.remove(Query.query(Criteria.where("_id").is(songlistId)), SonglistStarNumber.class);
+
+        mongoTemplate.remove(Query.query(Criteria.where("songlistId").is(songlistId)), UserPlaySonglist.class);
+        mongoTemplate.remove(Query.query(Criteria.where("songlistId").is(songlistId)), UserStarSonglist.class);
+
     }
 
 }

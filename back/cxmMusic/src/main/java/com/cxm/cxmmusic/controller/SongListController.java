@@ -15,8 +15,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -32,6 +34,7 @@ public class SongListController {
     private SonglistService songlistService;
     @Autowired
     private DictTagService dictTagService;
+
 
     @ApiOperation("新建歌单")
     @ApiImplicitParam(value = "歌单vo", name = "songListWithSongs")
@@ -154,6 +157,17 @@ public class SongListController {
         }
 
         return result;
+    }
+
+
+    @ApiOperation("删除歌单")
+    @ApiImplicitParam(value = "歌单id", name = "songlistId")
+    @DeleteMapping("/{songlistId}")
+    public Result<Boolean> delSonglist(@PathVariable("songlistId")Integer songlistId) {
+
+        songlistService.delSonglist(songlistId);
+
+        return new Result<>(StatusCodeEnum.OK, true);
     }
 
 }
