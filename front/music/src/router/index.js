@@ -180,8 +180,8 @@ const router = new VueRouter({
 //全局前置守卫：初始化时执行、每次路由切换前执行
 router.beforeEach((to, from, next) => {
 
-  //放行首页
-  if (to.fullPath === "/home/musicHall/hallHome") {
+  //放行首页 注册页
+  if (to.fullPath === "/home/musicHall/hallHome"||to.fullPath === "/userRegister") {
     next()
   } else {
     //判断当前是否已经登录

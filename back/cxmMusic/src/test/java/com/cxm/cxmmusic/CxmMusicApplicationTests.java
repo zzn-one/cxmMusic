@@ -27,7 +27,7 @@ class CxmMusicApplicationTests {
     @Test
     void contextLoads() {
 
-        recommendService.createUserTagList("1000001");
+        recommendService.createDefaultTagList();
     }
 
     @Test
