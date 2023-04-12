@@ -25,7 +25,7 @@
         <!-- 歌单轮播 -->
         <div class="playList-box">
             <div class="playlist-body">
-                <el-carousel indicator-position="outside" :autoplay="false" height="400px">
+                <el-carousel indicator-position="outside" :autoplay="false" height="400px" v-if="songList.length > 0">
                     <el-carousel-item v-for="index in carouselItemNumber" :key="index">
                         <!-- 如果刚好 歌单都是满页 -->
                         <div style="display: flex;" v-if="carouselItemRemainingNumber === 0">
@@ -118,8 +118,10 @@ export default {
     data() {
         return {
             title: '歌  单  推  荐',
+            account: "1",
             tagList: [],
             tagCurrentNav: '',
+
             songList: [],
             //一个轮播图页面展示歌单的数量(最大是4)
             carouselItemSize: 4,
@@ -133,13 +135,57 @@ export default {
         tag_btn(e, tag) {
             //被点击的导航标签变色
             this.tagCurrentNav = e.target
-            //发送请求，获取标签对应的歌单
-            console.log(tag);
+            //获取歌单列表
+            this.getSongList(tag)
         },
+
+        //获取标签列表
+        async getTagList() {
+            const resp = await this.$axios("/recommend/" + this.account)
+
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.tagList = resp.data.data.tagList
+            }
+        },
+        //获取歌单列表
+        async getSongList(tag) {
+            const resp = await this.$axios("/songList/list/tag/limit/" + tag.id)
+
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.songList = []
+                this.songList = resp.data.data.records
+            }
+        },
+        //初始化
+        async init() {
+            //获取用户账户
+            const account = this.$token().account
+            if (account !== '', account !== null) {
+                this.account = account
+            }
+
+            // 获取标签列表
+            await this.getTagList()
+
+            //获取歌单列表
+            await this.getSongList(this.tagList[0])
+
+            //计算轮播图页面数量
+            this.carouselItemNumber = Math.ceil(this.songList.length / this.carouselItemSize)
+
+            //计算轮播图最后一页剩下的歌单数量
+            this.carouselItemRemainingNumber = Math.floor(this.songList.length % this.carouselItemSize)
+        }
+
     },
     watch: {
-        //导航标签变色
+
         tagCurrentNav(tag, oldTag) {
+            //导航标签变色
             if (oldTag !== '') {
                 oldTag.style.color = 'black';
             }
@@ -149,49 +195,7 @@ export default {
 
     },
     created() {
-        // 获取标签列表
-        this.tagList = [
-            {
-                id: 1,
-                text: '为你推荐'
-            },
-            {
-                id: 2,
-                text: '官方歌单'
-            },
-            {
-                id: 3,
-                text: '节奏控'
-            },
-            {
-                id: 4,
-                text: '轻音乐'
-            },
-            {
-                id: 5,
-                text: '粤语'
-            },
-            {
-                id: 6,
-                text: '影视'
-            },
-        ]
-        //获取歌单列表
-        for (let index = 0; index < 17; index++) {
-            this.songList.push(
-                {
-                    id: index,
-                    name: "歌单名称" + index,
-                    playNumber: 728793842,
-                    imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-                }
-            )
-        }
-        //计算轮播图页面数量
-        this.carouselItemNumber = Math.ceil(this.songList.length / this.carouselItemSize)
-
-        //计算轮播图最后一页剩下的歌单数量
-        this.carouselItemRemainingNumber = Math.floor(this.songList.length % this.carouselItemSize)
+        this.init()
     }
 }
 </script>

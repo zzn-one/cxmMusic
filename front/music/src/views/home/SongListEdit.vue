@@ -136,7 +136,7 @@ export default {
                         //跳转到主页
                         setTimeout(() => {
                             this.$router.push({ "name": "/" })
-                        }, 3000)
+                        }, 2000)
                     }
                 })
             }).catch(() => {

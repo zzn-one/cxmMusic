@@ -5,26 +5,38 @@
 <mapper namespace="com.cxm.cxmmusic.mapper.SonglistMapper">
 
     <resultMap id="BaseResultMap" type="com.cxm.cxmmusic.pojo.Songlist">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="author_name" column="author_name" jdbcType="VARCHAR"/>
-            <result property="author_account" column="author_account" jdbcType="VARCHAR"/>
-            <result property="tag" column="tag" jdbcType="VARCHAR"/>
-            <result property="img_url" column="img_url" jdbcType="VARCHAR"/>
-            <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
-            <result property="song_number" column="song_number" jdbcType="INTEGER"/>
-            <result property="play_number" column="play_number" jdbcType="BIGINT"/>
-            <result property="star_number" column="star_number" jdbcType="BIGINT"/>
-            <result property="created_time" column="created_time" jdbcType="TIMESTAMP"/>
-            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
-            <result property="version" column="version" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="author_name" column="author_name" jdbcType="VARCHAR"/>
+        <result property="author_account" column="author_account" jdbcType="VARCHAR"/>
+        <result property="tag" column="tag" jdbcType="VARCHAR"/>
+        <result property="img_url" column="img_url" jdbcType="VARCHAR"/>
+        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+        <result property="song_number" column="song_number" jdbcType="INTEGER"/>
+        <result property="play_number" column="play_number" jdbcType="BIGINT"/>
+        <result property="star_number" column="star_number" jdbcType="BIGINT"/>
+        <result property="created_time" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name,author_name,
+        id
+        ,name,author_name,
         author_account,tag,img_url,
         introduction,song_number,play_number,
         star_number,created_time,deleted,
         version
     </sql>
+    <select id="sumByTag" resultType="com.cxm.cxmmusic.vo.recommend.SumStarNumberAndPlayNumber">
+        SELECT tag,
+               SUM(star_number) sum_star,
+               SUM(play_number) sum_play
+        FROM songlist
+        WHERE deleted = 1
+          and tag!=''
+        GROUP BY
+            tag
+
+    </select>
 </mapper>

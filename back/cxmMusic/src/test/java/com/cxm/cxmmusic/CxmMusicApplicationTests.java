@@ -1,5 +1,6 @@
 package com.cxm.cxmmusic;
 
+import com.cxm.cxmmusic.service.RecommendService;
 import com.cxm.cxmmusic.vo.mongo.PlaySong;
 import com.cxm.cxmmusic.vo.mongo.UserPlaySong;
 import org.junit.jupiter.api.Test;
@@ -11,10 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 @SpringBootTest
 class CxmMusicApplicationTests {
@@ -23,8 +21,13 @@ class CxmMusicApplicationTests {
 
     @Resource
     MongoTemplate mongoTemplate;
+
+    @Resource
+    RecommendService recommendService;
     @Test
     void contextLoads() {
+
+        recommendService.createUserTagList("1000001");
     }
 
     @Test

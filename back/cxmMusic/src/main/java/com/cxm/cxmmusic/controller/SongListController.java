@@ -1,6 +1,7 @@
 package com.cxm.cxmmusic.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cxm.cxmmusic.exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.DictTag;
 import com.cxm.cxmmusic.pojo.Song;
@@ -84,7 +85,7 @@ public class SongListController {
         return new Result<>(StatusCodeEnum.OK,songListWithSongs);
     }
 
-    @ApiOperation("获取歌单 多个")
+    @ApiOperation("获取歌单 全部")
     @GetMapping("/list")
     public Result<List<Songlist>> getSongLists() {
 //        根据 播放量排序  降序
@@ -110,6 +111,22 @@ public class SongListController {
 
 
         return new Result<>(StatusCodeEnum.OK,songlists);
+    }
+
+    @ApiOperation("获取歌单 最多16个 根据标签")
+    @GetMapping(value = "/list/tag/limit/{tagId}")
+    public Result<Page<Songlist>> getSongListsLimit16(@PathVariable("tagId")Integer tagId) {
+
+        DictTag dictTag = dictTagService.getById(tagId);
+
+        Page<Songlist> page = Page.of(0, 16);
+        LambdaQueryWrapper<Songlist> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Songlist::getTag, dictTag.getText());
+
+        Page<Songlist> songlistPage = songlistService.page(page, queryWrapper);
+
+
+        return new Result<>(StatusCodeEnum.OK,songlistPage);
     }
 
 

@@ -3,8 +3,11 @@ package com.cxm.cxmmusic.task;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.cxm.cxmmusic.pojo.Song;
 import com.cxm.cxmmusic.pojo.Songlist;
+import com.cxm.cxmmusic.pojo.User;
+import com.cxm.cxmmusic.service.RecommendService;
 import com.cxm.cxmmusic.service.SongService;
 import com.cxm.cxmmusic.service.SonglistService;
+import com.cxm.cxmmusic.service.UserService;
 import com.cxm.cxmmusic.vo.mongo.SongPlayNumber;
 import com.cxm.cxmmusic.vo.mongo.SongStarNumber;
 import com.cxm.cxmmusic.vo.mongo.SonglistPlayNumber;
@@ -33,6 +36,23 @@ public class CronTask {
     @Resource
     private SonglistService songlistService;
 
+    @Resource
+    private RecommendService recommendService;
+
+    @Resource
+    private UserService userService;
+
+    /*
+     *每天的00：00：00执行
+     * */
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void everyOneDay(){
+        /*
+         * 生成新的默认推荐标签列表
+         * */
+        recommendService.createDefaultTagList();
+    }
+
     /*
     * 每隔一分钟 执行
     * */
@@ -49,6 +69,9 @@ public class CronTask {
 
         //把歌单的收藏量写入mysql
         songlistStarNumberWriteToMySql();
+
+        //生成新的用户推荐标签列表
+        newUserTagList();
     }
 
     /*
@@ -124,4 +147,20 @@ public class CronTask {
 
 
     }
+
+    /*
+    * 生成新的用户推荐标签列表
+    * */
+    public void newUserTagList(){
+        List<User> userList = userService.list();
+
+        for (User user : userList) {
+            String account = user.getAccount();
+            recommendService.createUserTagList(account);
+        }
+
+    }
+
+
+
 }
