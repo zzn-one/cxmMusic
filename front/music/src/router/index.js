@@ -79,7 +79,28 @@ const routes = [
 
         path: 'searchResult',
         name: 'searchResult',
-        component: () => import('@/views/home/SearchResult.vue')
+        component: () => import('@/views/home/SearchResult.vue'),
+        redirect: "/home/searchResult/songResult",
+        children: [
+          //歌曲搜索结果
+          {
+            path: 'songResult',
+            name: 'songResult',
+            component: () => import('@/views/home/searchResult/SongResult.vue'),
+          },
+          //歌手搜索结果
+          {
+            path: 'singerResult',
+            name: 'singerResult',
+            component: () => import('@/views/home/searchResult/SingerResult.vue'),
+          },
+          //歌单搜索结果
+          {
+            path: 'songListResult',
+            name: 'songListResult',
+            component: () => import('@/views/home/searchResult/SongListResult.vue'),
+          },
+        ]
       },
       // 音乐馆
       {
@@ -181,7 +202,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
 
   //放行首页 注册页
-  if (to.fullPath === "/home/musicHall/hallHome"||to.fullPath === "/userRegister") {
+  if (to.fullPath === "/home/musicHall/hallHome" || to.fullPath === "/userRegister") {
     next()
   } else {
     //判断当前是否已经登录

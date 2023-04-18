@@ -13,6 +13,7 @@ import com.cxm.cxmmusic.service.SongService;
 import com.cxm.cxmmusic.service.SongTagService;
 import com.cxm.cxmmusic.vo.Result;
 import com.cxm.cxmmusic.vo.SongAdd;
+import com.cxm.cxmmusic.vo.mongo.HistorySong;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -103,11 +104,24 @@ public class SongController {
     @ApiOperation("获取歌曲列表")
     @ApiImplicitParam(name = "singerId",value = "歌手id")
     @GetMapping("/list/{singerId}")
-    public Result<List<Song>> listBySingerId(@PathVariable("singerId")Integer singerId){
+    public Result<List<Song>> listBySingerId(@PathVariable("singerId") Integer singerId){
 
         List<Song> songs = songService.listBySingerId(singerId);
 
         return new Result<>(StatusCodeEnum.OK, songs);
 
     }
+
+
+    @ApiOperation("获取歌曲列表 根据搜索条件")
+    @ApiImplicitParam(name = "key",value = "搜索关键字")
+    @GetMapping("/list/key/{key}")
+    public Result<List<HistorySong>> listBySingerId(@PathVariable("key") String key){
+
+        List<HistorySong> historySongs = songService.listWithSingerListByCondition(key);
+
+        return new Result<>(StatusCodeEnum.OK, historySongs);
+
+    }
+
 }

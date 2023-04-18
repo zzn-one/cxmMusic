@@ -4,11 +4,14 @@
         <el-button class="btns" type="text" @click="addToPlayListBtn">播放列表</el-button>
         <el-divider></el-divider>
         <!-- 用户的歌单 -->
-        <div class="songListName-box" v-for="songList in songListNames" :key="songList.id">
-            <el-button class="btns" type="text" @click="addSong(songList)">
-                {{ songList.name }}
-            </el-button>
+        <div class="songListNames-box">
+            <div class="songListName-box" v-for="songList in songListNames" :key="songList.id">
+                <el-button class="btns" type="text" @click="addSong(songList)">
+                    {{ songList.name }}
+                </el-button>
+            </div>
         </div>
+
 
 
         <el-divider></el-divider>
@@ -158,6 +161,12 @@ export default {
 
 .songListName-box {
     width: 150px;
-    overflow: hidden;
+    
+}
+.songListNames-box{
+
+    height: 200px;
+    overflow: auto;
+    overflow-x: hidden;
 }
 </style>

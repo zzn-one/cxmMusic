@@ -85,4 +85,24 @@ public class SingerController {
         return result;
     }
 
+    @ApiOperation("获取多个歌手  根据name模糊查询")
+    @ApiImplicitParam(name = "name", value = "歌手名称")
+    @GetMapping("/list/{name}")
+    public Result<List<Singer>> getByName(@PathVariable("name") String name) {
+
+        Result<List<Singer>> result;
+
+        LambdaQueryWrapper<Singer> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(name != null, Singer::getName, name);
+
+        List<Singer> list = singerService.list(queryWrapper);
+
+        if (list == null) {
+            result = new Result<>(StatusCodeEnum.ERROR_GET_SINGER, null);
+        } else {
+            result = new Result<>(StatusCodeEnum.OK, list);
+        }
+        return result;
+    }
+
 }

@@ -16,10 +16,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -185,6 +183,25 @@ public class SongListController {
         songlistService.delSonglist(songlistId);
 
         return new Result<>(StatusCodeEnum.OK, true);
+    }
+
+    @ApiOperation("获取歌单 多个 根据搜索关键字")
+    @GetMapping(value = "/list/key/{key}")
+    public Result<List<Songlist>> getSongLists(@PathVariable("key") String key) {
+
+        LambdaQueryWrapper<Songlist> queryWrapper = new LambdaQueryWrapper<>();
+
+
+        queryWrapper
+                .like(key != null, Songlist::getName, key)
+                .or()
+                .like(key != null, Songlist::getIntroduction, key)
+                .or()
+                .eq(key != null, Songlist::getTag, key);
+
+        List<Songlist> songlists = songlistService.list(queryWrapper);
+
+        return new Result<>(StatusCodeEnum.OK,songlists);
     }
 
 }

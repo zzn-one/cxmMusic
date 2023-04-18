@@ -22,6 +22,13 @@ public interface SongMapper extends BaseMapper<Song> {
      * 获取PlaySong  根据歌曲id  多表查询
      * */
     PlaySong getBySongId(Integer songId);
+
+    /*
+     * 获取歌曲列表 根据搜索条件
+     * */
+    List<Song> listByCondition(String key);
+
+
 }
 
 

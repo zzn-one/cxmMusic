@@ -135,7 +135,7 @@ export default {
             //携带搜索关键字 跳转到搜索结果页面
             this.$router.push({
                 name: "searchResult",
-                params: {
+                query: {
                     searchKey: this.searchKey,
                 }
             });
@@ -199,6 +199,14 @@ export default {
                 this.userForm.password = ''
                 //5.关闭登录窗口
                 this.loginDialogVisible = false
+
+
+                this.$router.push({
+                    name: "hallHome",
+                    query: {
+                        isLogin: true
+                    }
+                })
 
 
             }

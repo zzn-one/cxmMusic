@@ -296,6 +296,10 @@ public class RecommendServiceImpl implements RecommendService {
         queryWrapper.eq(Songlist::getId, songlistId);
         Songlist songlist = songlistMapper.selectOne(queryWrapper);
 
+        if (songlist == null) {
+            return;
+        }
+
         String tag = songlist.getTag();
 
         LambdaQueryWrapper<DictTag> queryWrapper1 = new LambdaQueryWrapper<>();

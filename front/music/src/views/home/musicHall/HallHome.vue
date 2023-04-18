@@ -34,7 +34,7 @@
 
                                 <RouterLink :to="{
                                     name: 'songListDetail',
-                                    params: {
+                                    query: {
                                         id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
                                     }
                                 }
@@ -60,7 +60,7 @@
 
                                 <RouterLink :to="{
                                     name: 'songListDetail',
-                                    params: {
+                                    query: {
                                         id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
                                     }
                                 }
@@ -85,7 +85,7 @@
 
                                 <RouterLink :to="{
                                     name: 'songListDetail',
-                                    params: {
+                                    query: {
                                         id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
                                     }
                                 }
@@ -121,6 +121,7 @@ export default {
             account: "1",
             tagList: [],
             tagCurrentNav: '',
+            isLogin: false,
 
             songList: [],
             //一个轮播图页面展示歌单的数量(最大是4)
@@ -158,15 +159,12 @@ export default {
             if (code === 200) {
                 this.songList = []
                 this.songList = resp.data.data.records
+
             }
         },
         //初始化
         async init() {
-            //获取用户账户
-            const account = this.$token().account
-            if (account !== '', account !== null) {
-                this.account = account
-            }
+
 
             // 获取标签列表
             await this.getTagList()
@@ -179,6 +177,10 @@ export default {
 
             //计算轮播图最后一页剩下的歌单数量
             this.carouselItemRemainingNumber = Math.floor(this.songList.length % this.carouselItemSize)
+        },
+        //获取用户登录状态
+        getLoginStatus() {
+            this.isLogin = this.$route.query.isLogin
         }
 
     },
@@ -190,12 +192,57 @@ export default {
                 oldTag.style.color = 'black';
             }
             tag.style.color = 'rgb(240, 99, 18)';
+        },
+        "tagList.length"(val) {
+            if (val === 0) {
+                this.account = "1"
+                this.getTagList()
+            }
+        },
+        isLogin(val) {
+
+            if (val === true) {
+                try {
+
+                    //获取用户账户
+                    const account = this.$token().account
+                    if (account !== '', account !== null) {
+                        this.account = account
+                    }
+                } catch (error) {
+                } finally {
+                    this.init()
+                }
+            }
+        },
+        "songList.length"() {
+            //计算轮播图页面数量
+            this.carouselItemNumber = Math.ceil(this.songList.length / this.carouselItemSize)
+
+            //计算轮播图最后一页剩下的歌单数量
+            this.carouselItemRemainingNumber = Math.floor(this.songList.length % this.carouselItemSize)
         }
 
 
     },
-    created() {
-        this.init()
+    async created() {
+
+        try {
+
+            //获取用户账户
+            const account = this.$token().account
+            if (account !== '', account !== null) {
+                this.account = account
+            }
+        } catch (error) {
+        } finally {
+            this.init()
+        }
+
+        setInterval(() => {
+            this.getLoginStatus()
+        }, 100);
+
     }
 }
 </script>

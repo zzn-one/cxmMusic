@@ -2,6 +2,7 @@ package com.cxm.cxmmusic.service;
 
 import com.cxm.cxmmusic.pojo.Song;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cxm.cxmmusic.vo.mongo.HistorySong;
 
 import java.util.List;
 
@@ -16,4 +17,11 @@ public interface SongService extends IService<Song> {
      * 获取歌曲列表 根据歌手id
      * */
     List<Song> listBySingerId(Integer singerId);
+
+
+
+    /*
+    * 获取歌曲列表（带歌手） 根据搜索条件
+    * */
+    List<HistorySong> listWithSingerListByCondition(String key);
 }

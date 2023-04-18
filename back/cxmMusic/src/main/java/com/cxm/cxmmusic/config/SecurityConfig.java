@@ -61,6 +61,9 @@ public class SecurityConfig {
                         "/v3/api-docs",
                         "/webjars/**").permitAll() //放行swagger-ui接口
 
+                .antMatchers("/recommend/*").permitAll() //放行推荐标签列表接口
+                .antMatchers("/songList/list/tag/limit/*").permitAll() //放行推荐标签列表接口
+
                 .antMatchers("/dict/*").permitAll() // 放行数据字典接口
                 /*todo 放行数据导入接口*/
                 .antMatchers("/singer").permitAll()

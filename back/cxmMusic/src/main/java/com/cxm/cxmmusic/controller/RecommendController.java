@@ -28,6 +28,8 @@ public class RecommendController {
 
     @GetMapping("/{account}")
     public Result<RecommendTagList> getTagList(@PathVariable("account")String account){
+
+
         RecommendTagList tagList = recommendService.getTagList(account);
 
         return new Result<>(StatusCodeEnum.OK, tagList);
