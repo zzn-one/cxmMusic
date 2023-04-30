@@ -56,8 +56,7 @@
 
                                 <div>
                                     <img class="avatar-img" :src="user.avatarUrl" style="display: inline-block;">
-                                    <div
-                                        style="display: inline-block; margin-top:25px;margin-left:10px;position:absolute;font-size:16px">
+                                    <div class="userName-box">
                                         {{ user.name }}
                                     </div>
                                 </div>
@@ -99,7 +98,7 @@
                     </el-row>
                     <el-button class="box-card-item box-card-item-button" @click="login">登 录</el-button>
                     <div class="box-card-item">
-                        <el-button style="float: left;color:black" type="text">找回密码</el-button>
+                        <el-button style="float: left;color:black" type="text" @click="openBackGround">管理后台</el-button>
                         <el-button style="float: right;color:black" type="text" @click="openRegister">注册账号</el-button>
                     </div>
 
@@ -143,6 +142,9 @@ export default {
         //打开登录页面
         openLoginDialog() {
             this.loginDialogVisible = true;
+        },
+        openBackGround() {
+            this.$router.push("/backGround");
         },
         //打开注册页面
         openRegister() {
@@ -259,9 +261,20 @@ export default {
 }
 </script>
 <style scoped lang="less">
+.userName-box {
+    display: inline-block;
+    margin-top: 25px;
+    margin-left: 10px;
+    position: absolute;
+    font-size: 16px;
+    overflow: hidden;
+    height: 20px
+}
+
 .headerNav {
     min-height: 110px;
     height: 110px;
+
 }
 
 .navItem {
@@ -270,7 +283,7 @@ export default {
 }
 
 .active {
-    color: rgb(240, 99, 18);
+    color: #f06312;
 }
 
 .logo {

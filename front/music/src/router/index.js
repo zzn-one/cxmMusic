@@ -190,7 +190,40 @@ const routes = [
     path: '/userRegister',
     name: 'userRegister',
     component: () => import('@/views/UserRegister.vue')
-  }
+  },
+  {
+    //后台页面
+    path: '/backGround',
+    name: 'backGround',
+    component: () => import('@/views/BackGround.vue'),
+    redirect:"/backGround/userManagement",
+    children: [
+      //用户管理
+      {
+        path: 'userManagement',
+        name: 'userManagement',
+        component: () => import('@/views/backGround/UserManagement.vue'),
+      },
+      //歌手管理
+      {
+        path: 'singerManagement',
+        name: 'singerManagement',
+        component: () => import('@/views/backGround/SingerManagement.vue'),
+      },
+      //歌曲管理
+      {
+        path: 'songManagement',
+        name: 'songManagement',
+        component: () => import('@/views/backGround/SongManagement.vue'),
+      },
+      //歌单管理
+      {
+        path: 'songlistManagement',
+        name: 'songlistManagement',
+        component: () => import('@/views/backGround/SonglistManagement.vue'),
+      },
+    ]
+  },
 
 ]
 
@@ -199,25 +232,29 @@ const router = new VueRouter({
 })
 
 //全局前置守卫：初始化时执行、每次路由切换前执行
-router.beforeEach((to, from, next) => {
+// router.beforeEach((to, from, next) => {
 
-  //放行首页 注册页
-  if (to.fullPath === "/home/musicHall/hallHome" || to.fullPath === "/userRegister") {
-    next()
-  } else {
-    //判断当前是否已经登录
-    if (localStorage.getItem("token") !== null) {
-      next() //放行 
+//   //放行首页 注册页
+//   if (to.fullPath === "/home/musicHall/hallHome"
+//     || to.fullPath === "/userRegister" 
+//     || to.fullPath === "/backGround"
+//     || to.fullPath === "/backGround/userManagement"
+//     ) {
+//     next()
+//   } else {
+//     //判断当前是否已经登录
+//     if (localStorage.getItem("token") !== null) {
+//       next() //放行 
 
-    } else {
-      Message({
-        message: "请先登录您的账号",
-        type: "info"
-      })
-    }
-  }
+//     } else {
+//       Message({
+//         message: "请先登录您的账号",
+//         type: "info"
+//       })
+//     }
+//   }
 
 
-})
+// })
 
 export default router
