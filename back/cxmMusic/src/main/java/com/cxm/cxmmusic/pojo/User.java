@@ -71,6 +71,10 @@ public class User implements Serializable {
     @Version
     private Integer version;
 
+    @ApiModelProperty("用户类型")
+    @TableField(value = "type")
+    private Integer type;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 

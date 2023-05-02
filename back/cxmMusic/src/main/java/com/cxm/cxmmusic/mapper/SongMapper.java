@@ -3,6 +3,7 @@ package com.cxm.cxmmusic.mapper;
 import com.cxm.cxmmusic.pojo.Song;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cxm.cxmmusic.vo.mongo.PlaySong;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -28,6 +29,16 @@ public interface SongMapper extends BaseMapper<Song> {
      * */
     List<Song> listByCondition(String key);
 
+
+    /*
+     * 获取歌曲列表 根据搜索条件 分页
+     * */
+    List<Song> pageByCondition(@Param("key") String key, @Param("start") Integer start, @Param("size") Integer size);
+
+    /*
+     * 获取歌曲列表的总数量 根据搜索条件 分页
+     * */
+    Long totalByPageCondition(@Param("key") String key, @Param("start") Integer start, @Param("size") Integer size);
 
 }
 

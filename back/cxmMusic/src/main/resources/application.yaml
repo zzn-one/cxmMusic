@@ -39,10 +39,13 @@ spring:
       database: cxmMusic
       username: mongo
       password: mongo5
-  #swagger接口文档
+
   mvc:
+    #swagger接口文档
     pathmatch:
       matching-strategy: ant_path_matcher
+    #静态资源访问
+    static-path-pattern: /static/**
 #mp
 mybatis-plus:
   global-config:
@@ -53,6 +56,8 @@ mybatis-plus:
       logic-not-delete-value: 1
       # 逻辑删除字面值：删除为0
       logic-delete-value: 0
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 #socket.io
 socketIO:
@@ -72,3 +77,12 @@ socketIO:
   pingTimeout: 6000000
   # Ping消息间隔（毫秒），默认25秒。客户端向服务器发送一条心跳消息间隔
   pingInterval: 25000
+
+#文件上传路径
+file:
+  upload:
+    path: src/main/resources/
+
+
+
+

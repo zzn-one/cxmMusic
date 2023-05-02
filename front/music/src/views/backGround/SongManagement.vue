@@ -6,10 +6,10 @@
             <div class="search-box">
                 <!-- 其他搜索条件 -->
                 <div class="other-key-box">
-                    其他搜索条件
+
                 </div>
                 <div class="search-input-box">
-                    <el-input placeholder="请输入关键字" v-model="searchKey">
+                    <el-input placeholder="搜索歌曲" v-model="searchKey">
                         <el-button slot="append" icon="el-icon-search" @click="searchBtnClick"></el-button>
                     </el-input>
                 </div>
@@ -28,9 +28,41 @@
                 </el-table-column>
                 <el-table-column type="index" width="55" label="序号" :index="indexMethod">
                 </el-table-column>
-                <el-table-column prop="attr1" label="属性1">
+                <el-table-column prop="song.imgUrl" label="图片" width="80">
+                    <template slot-scope="scope">
+                        <img :src="$imgPrefix + scope.row.song.imgUrl" class="img-avatar">
+                    </template>
                 </el-table-column>
-                <el-table-column prop="attr2" label="属性2">
+                <el-table-column prop="song.name" label="歌名">
+                </el-table-column>
+                <el-table-column label="歌手">
+                    <template slot-scope="scope">
+                        <span v-for="singer in scope.row.singerList" :key="singer.id">
+                            {{ singer.name }}
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="标签" width="350px">
+                    <template slot-scope="scope">
+                        <el-tag v-for="tag in scope.row.tagList" :key="tag.id">
+                            {{ tag.text }}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="song.duration" label="时长">
+                    <template slot-scope="scope">
+                        {{ $moment(scope.row.song.duration).format("mm:ss") }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="song.playNumber" label="播放量">
+                    <template slot-scope="scope">
+                        {{ numberFormat(scope.row.song.playNumber) }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="song.starNumber" label="收藏量">
+                    <template slot-scope="scope">
+                        {{ numberFormat(scope.row.song.starNumber) }}
+                    </template>
                 </el-table-column>
 
                 <el-table-column fixed="right" label="操作" width="400">
@@ -47,10 +79,43 @@
             </el-pagination>
         </el-card>
         <!-- 编辑窗口 -->
-        <el-dialog title="编辑窗口" :visible.sync="editFormVisible">
-            <el-form :model="editForm">
-                <el-form-item label="属性1">
+        <el-dialog title="修改歌曲信息" :visible.sync="editFormVisible">
+            <el-form :model="editForm" label-position="left" label-width="100px">
+                <el-form-item label="图片">
+
+                    <el-upload class="avatar-uploader" :action="actionUrl" :auto-upload="false" :show-file-list="false"
+                        ref="editUpload" :on-change="editHandleAvatarChange" :before-upload="editBeforeAvatarUpload"
+                        :data="{ id: editForm.id }" :headers="header">
+
+                        <img v-if="temporaryUrl" :src="temporaryUrl" class="avatar">
+                        <img v-else-if="editForm.imgUrl" :src="$imgPrefix + editForm.imgUrl" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+
+
+                </el-form-item>
+                <el-form-item label="歌名">
                     <el-input v-model="editForm.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="歌手">
+
+                    <el-transfer :titles="['歌手列表', '演唱歌手']" :button-texts="['移除 选中的 歌手', '添加 选中的 歌手']"
+                        v-model="editSingerIdList" :data="singerTransferDataFormat(singerList)">
+                    </el-transfer>
+
+                </el-form-item>
+                <el-form-item label="标签">
+
+                    <el-transfer :titles="['未拥有的标签', '已拥有的标签']" :button-texts="['移除 选中的 标签', '添加 选中的 标签']"
+                        v-model="editTagIdList" :data="transferDataFormat(tagList)">
+                    </el-transfer>
+
+                </el-form-item>
+                <el-form-item label="时长(毫秒)">
+                    <el-input v-model="editForm.duration" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="资源路径">
+                    <el-input v-model="editForm.sourceUrl" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -77,6 +142,9 @@
 export default {
     data() {
         return {
+            tagList: [],
+            singerList: [],
+
             //分页
             currentPage: 1,
             pageSize: 10,
@@ -91,8 +159,14 @@ export default {
             searchKey: "",
 
             //编辑窗口
+            header: {},
             editFormVisible: false,
-            editForm: "",
+            editForm: {},
+            editTagIdList: [],
+            editSingerIdList: [],
+            temporaryUrl: "",
+            //歌手图片上传的url
+            actionUrl: this.$imgPrefix + "song/upload/img",
 
             //编辑窗口
             addFormVisible: false,
@@ -118,7 +192,44 @@ export default {
         handleCurrentChange(val) {
             this.currentPage = val
         },
+        //数量格式化
+        numberFormat(number) {
 
+            if (number >= 100000000) {
+                let x = (number / 100000000).toFixed(2)
+                number = x + "亿"
+            } else if (number >= 10000) {
+                let x = (number / 10000).toFixed(2)
+                number = x + "万"
+            }
+            return number
+        },
+        //标签选择框的数据格式化
+        transferDataFormat(tagList) {
+            let tagListFormat = []
+
+            tagList.forEach(val => {
+                tagListFormat.push({
+                    label: val.text,
+                    key: val.id
+                })
+            })
+
+            return tagListFormat
+        },
+        //歌手选择框的数据格式化
+        singerTransferDataFormat(singerList) {
+            let singerListFormat = []
+
+            singerList.forEach(val => {
+                singerListFormat.push({
+                    label: val.name,
+                    key: val.id
+                })
+            })
+
+            return singerListFormat
+        },
 
         //添加按钮点击
         addBtnClick() {
@@ -126,10 +237,22 @@ export default {
         },
         //搜索按钮点击
         searchBtnClick() {
-
+            this.pageData()
         },
         //编辑按钮点击
         editBtnClick(row) {
+            this.editForm = row.song
+
+            this.editTagIdList = []
+            row.tagList.forEach(val => {
+                this.editTagIdList.push(val.id)
+            })
+
+            this.editSingerIdList = []
+            row.singerList.forEach(val => {
+                this.editSingerIdList.push(val.id)
+            })
+
             this.editFormVisible = true
         },
         //删除按钮点击
@@ -140,7 +263,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 //发送删除请求
-
+                this.delOne(row.song.id)
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -156,7 +279,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 //发送批量删除请求
-
+                this.delBatch()
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -168,7 +291,35 @@ export default {
         //-----------------------------编辑窗口-------------------------
         //确认提交按钮点击
         editSubmitBtnClick() {
+            //上传图片
+            this.$refs.editUpload.submit()
 
+            this.updateSong()
+            this.editFormVisible = false
+        },
+
+        editHandleAvatarChange(file) {
+            this.editForm.avatarUrl = URL.createObjectURL(file.raw);
+            this.temporaryUrl = URL.createObjectURL(file.raw);
+        },
+        editBeforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
+        //设置请求头
+        setHeader() {
+
+            this.header = {
+                Authorization: localStorage.getItem("token")
+            }
         },
 
 
@@ -177,22 +328,129 @@ export default {
         addSubmitBtnClick() {
 
         },
+        //-----------------------------发送请求-------------------------
+        async axios111() {
+            const resp = await this.$axios("")
+
+            const code = resp.data.code
+            if (code === 200) {
+
+            }
+        },
+        //获取歌手列表
+        async getSingerList() {
+            const resp = await this.$axios("/singer/list")
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.singerList = resp.data.data
+            }
+        },
+        //获取标签列表
+        async getTagList() {
+            const resp = await this.$axios("/dict/tag")
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.tagList = resp.data.data
+            }
+        },
+        //修改歌曲信息
+        async updateSong() {
+            const resp = await this.$axios({
+                url: "/song",
+                method: "put",
+                data: {
+                    song: this.editForm,
+                    tagIdList: this.editTagIdList,
+                    singerIdList: this.editSingerIdList
+                }
+            })
+
+            const code = resp.data.code
+            if (code === 200 && resp.data.data === true) {
+                //重新请求数据
+                this.pageData()
+                this.$message.success("歌曲信息已修改")
+            }
+        },
+        //获取歌曲列表
+        async pageData() {
+
+            let url = "/song/page/" + this.currentPage + "/" + this.pageSize
+
+            const resp = await this.$axios({
+                method: "post",
+                url: url,
+                data: { key: this.searchKey }
+            })
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.tableData = resp.data.data.records
+                this.total = resp.data.data.total
+            }
+        },
+        //删除歌曲
+        async delOne(id) {
+            const resp = await this.$axios.delete("/song/" + id)
+
+            const code = resp.data.code
+
+            console.log(resp);
+            if (code === 200) {
+                //重新请求数据
+                this.pageData()
+                this.$message.success("歌曲已删除")
+            }
+        },
+        //删除歌曲 批量
+        async delBatch() {
+
+            let songList = []
+            this.multipleSelection.forEach(val => {
+                songList.push(val.song)
+            })
+
+            const resp = await this.$axios({
+                url: "/song/",
+                method: "delete",
+                data: songList
+            })
+
+            const code = resp.data.code
+            if (code === 200) {
+                //重新请求数据
+                this.pageData()
+                this.$message.success("歌曲已删除")
+            }
+        },
+
+
+        init() {
+            this.setHeader()
+            this.getTagList()
+            this.getSingerList()
+
+            this.pageData()
+        }
 
 
 
     },
     watch: {
-        currentPage(){
+        currentPage() {
             //重新请求数据
+            this.pageData()
         },
-        pageSize(){
+        pageSize() {
             //重新请求数据
+            this.pageData()
         }
     },
     created() {
-        for (let i = 0; i < 100; i++) {
-            this.tableData.push({})
-        }
+
+        this.init()
 
     }
 }
@@ -210,7 +468,7 @@ export default {
 
 .other-key-box {
     display: inline-block;
-    width: 500px;
+    max-width: 500px;
     height: 1px;
 }
 
@@ -225,5 +483,42 @@ export default {
 
 .btn {
     width: 100px;
+}
+
+.img-avatar {
+    width: 50px;
+    height: 50px;
+}
+
+/deep/.el-form .el-select,
+/deep/.el-form .el-input {
+    width: 800px;
+}
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+}
+
+.avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
 }
 </style>

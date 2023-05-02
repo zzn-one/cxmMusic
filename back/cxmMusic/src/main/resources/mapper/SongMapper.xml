@@ -59,4 +59,34 @@
             AND (s.`name` LIKE concat("%", #{key}, "%") OR si.`name` LIKE concat("%", #{key}, "%"))
 
     </select>
+    <select id="pageByCondition" resultType="com.cxm.cxmmusic.pojo.Song">
+        SELECT DISTINCT s.*
+        FROM `song` s
+        INNER JOIN singer_own_song ss
+        INNER JOIN singer si
+        ON ss.singerId = si.id
+        AND ss.songId = s.id
+        AND s.deleted = 1
+        AND ss.deleted = 1
+        AND si.deleted = 1
+        <if test="key!=null">
+            AND (s.`name` LIKE concat("%", #{key}, "%") OR si.`name` LIKE concat("%", #{key}, "%"))
+        </if>
+        limit #{start},#{size}
+    </select>
+    <select id="totalByPageCondition" resultType="java.lang.Long">
+        SELECT count( DISTINCT s.name)
+        FROM `song` s
+        INNER JOIN singer_own_song ss
+        INNER JOIN singer si
+        ON ss.singerId = si.id
+        AND ss.songId = s.id
+        AND s.deleted = 1
+        AND ss.deleted = 1
+        AND si.deleted = 1
+        <if test="key!=null">
+            AND (s.`name` LIKE concat("%", #{key}, "%") OR si.`name` LIKE concat("%", #{key}, "%"))
+        </if>
+
+    </select>
 </mapper>

@@ -3,6 +3,7 @@ package com.cxm.cxmmusic.pojo;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -62,8 +63,11 @@ public class Song implements Serializable {
     @Version
     private Integer version;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+    @ApiModelProperty("创建时间")
+    @TableField(value = "create_time")
+    private Date createTime;
+
+
 
 
 }

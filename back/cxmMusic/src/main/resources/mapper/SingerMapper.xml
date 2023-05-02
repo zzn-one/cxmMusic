@@ -30,6 +30,9 @@
                             ON ss.singerId = si.id
                                 AND ss.songId = so.id
                                 AND so.id = #{songId}
+                                AND so.deleted = 1
+                                AND ss.deleted = 1
+                                AND si.deleted = 1
 
     </select>
     <select id="listBySongId" resultType="com.cxm.cxmmusic.pojo.Singer">
@@ -40,6 +43,8 @@
                             ON si.id = ss.singerId
                                 AND so.id = ss.songId
                                 AND so.id = #{songId}
-
+                                AND so.deleted = 1
+                                AND ss.deleted = 1
+                                AND si.deleted = 1
     </select>
 </mapper>

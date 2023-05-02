@@ -20,6 +20,6 @@ public class SongAdd {
     private String imgUrl;
     private Long duration;
     private String sourceUrl;
-    private Integer singerId;
+    private List<Integer> singerId;
     private List<Integer> tagIdList;
 }

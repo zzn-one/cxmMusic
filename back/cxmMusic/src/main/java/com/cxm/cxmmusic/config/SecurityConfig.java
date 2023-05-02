@@ -60,15 +60,13 @@ public class SecurityConfig {
                         "/v2/api-docs",
                         "/v3/api-docs",
                         "/webjars/**").permitAll() //放行swagger-ui接口
+                .antMatchers("/static/**").permitAll() //放行静态资源
+
 
                 .antMatchers("/recommend/*").permitAll() //放行推荐标签列表接口
                 .antMatchers("/songList/list/tag/limit/*").permitAll() //放行推荐标签列表接口
 
                 .antMatchers("/dict/*").permitAll() // 放行数据字典接口
-                /*todo 放行数据导入接口*/
-                .antMatchers("/singer").permitAll()
-                .antMatchers("/singer/list").permitAll()
-                .antMatchers("/song").permitAll()
 
                 .anyRequest().authenticated(); //其它接口 任意用户认证后可以访问
 

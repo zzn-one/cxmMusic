@@ -1,13 +1,11 @@
 package com.cxm.cxmmusic.task;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.cxm.cxmmusic.pojo.Singer;
 import com.cxm.cxmmusic.pojo.Song;
 import com.cxm.cxmmusic.pojo.Songlist;
 import com.cxm.cxmmusic.pojo.User;
-import com.cxm.cxmmusic.service.RecommendService;
-import com.cxm.cxmmusic.service.SongService;
-import com.cxm.cxmmusic.service.SonglistService;
-import com.cxm.cxmmusic.service.UserService;
+import com.cxm.cxmmusic.service.*;
 import com.cxm.cxmmusic.vo.mongo.SongPlayNumber;
 import com.cxm.cxmmusic.vo.mongo.SongStarNumber;
 import com.cxm.cxmmusic.vo.mongo.SonglistPlayNumber;
@@ -42,6 +40,9 @@ public class CronTask {
     @Resource
     private UserService userService;
 
+    @Resource
+    private SingerService singerService;
+
     /*
      *每天的00：00：00执行
      * */
@@ -72,6 +73,9 @@ public class CronTask {
 
         //生成新的用户推荐标签列表
         newUserTagList();
+
+        //更新歌手的歌曲数量
+        updateSongNumber();
     }
 
     /*
@@ -161,6 +165,18 @@ public class CronTask {
 
     }
 
+    /*
+    * 更新歌手的歌曲数量
+    * */
+    public void updateSongNumber(){
+        List<Singer> singerList = singerService.list();
+
+        for (Singer singer : singerList) {
+            Integer singerId = singer.getId();
+
+            singerService.updateSongNumber(singerId);
+        }
+    }
 
 
 }

@@ -196,7 +196,7 @@ const routes = [
     path: '/backGround',
     name: 'backGround',
     component: () => import('@/views/BackGround.vue'),
-    redirect:"/backGround/userManagement",
+    redirect: "/backGround/userManagement",
     children: [
       //用户管理
       {
@@ -232,29 +232,27 @@ const router = new VueRouter({
 })
 
 //全局前置守卫：初始化时执行、每次路由切换前执行
-// router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
 
-//   //放行首页 注册页
-//   if (to.fullPath === "/home/musicHall/hallHome"
-//     || to.fullPath === "/userRegister" 
-//     || to.fullPath === "/backGround"
-//     || to.fullPath === "/backGround/userManagement"
-//     ) {
-//     next()
-//   } else {
-//     //判断当前是否已经登录
-//     if (localStorage.getItem("token") !== null) {
-//       next() //放行 
+  //放行首页 注册页
+  if (to.fullPath === "/home/musicHall/hallHome"
+    || to.fullPath === "/userRegister"
+  ) {
+    next()
+  } else {
+    //判断当前是否已经登录
+    if (localStorage.getItem("token") !== null) {
+      next() //放行 
 
-//     } else {
-//       Message({
-//         message: "请先登录您的账号",
-//         type: "info"
-//       })
-//     }
-//   }
+    } else {
+      Message({
+        message: "请先登录您的账号",
+        type: "info"
+      })
+    }
+  }
 
 
-// })
+})
 
 export default router

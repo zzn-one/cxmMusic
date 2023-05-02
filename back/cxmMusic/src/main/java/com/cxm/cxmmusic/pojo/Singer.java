@@ -3,6 +3,7 @@ package com.cxm.cxmmusic.pojo;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -50,6 +51,10 @@ public class Singer implements Serializable {
     @ApiModelProperty("歌手简介")
     @TableField(value = "introduction")
     private String introduction;
+
+    @ApiModelProperty("创建时间")
+    @TableField(value = "create_time")
+    private Date createTime;
 
 
     @ApiModelProperty("逻辑删除")

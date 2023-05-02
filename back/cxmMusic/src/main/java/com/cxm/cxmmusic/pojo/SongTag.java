@@ -3,6 +3,8 @@ package com.cxm.cxmmusic.pojo;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**

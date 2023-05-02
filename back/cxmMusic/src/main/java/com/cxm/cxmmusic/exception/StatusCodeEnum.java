@@ -49,6 +49,8 @@ public enum StatusCodeEnum {
 
     //歌手模块
     ERROR_GET_SINGER(10051,"获取歌手信息失败"),
+    ERROR_UPLOAD_AVATAR(10052,"上传歌手图片失败"),
+    ERROR_ADD_SINGER(10053,"新增歌手失败"),
 
     //歌单模块
     ERROR_NEW_SONGLIST(10061,"新增歌单失败"),

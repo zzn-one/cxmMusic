@@ -21,4 +21,10 @@ public interface SingerService extends IService<Singer> {
      * 查询歌手 列表  根据songId
      * */
     List<Singer> listBySongId(Integer songId);
+
+    /*
+    * 更新歌手拥有的歌曲数量
+    * */
+
+    void updateSongNumber(Integer singerId);
 }

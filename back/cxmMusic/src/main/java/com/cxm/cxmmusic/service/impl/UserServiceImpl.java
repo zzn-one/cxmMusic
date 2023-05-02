@@ -95,6 +95,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         payload.put("account", account);
         payload.put("name", loginUser.getUser().getName());
         payload.put("avatarUrl", loginUser.getUser().getAvatarUrl());
+        payload.put("type", loginUser.getUser().getType().toString());
 
         String token = JwtUtils.getToken(payload);
         

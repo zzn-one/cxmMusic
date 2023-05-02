@@ -48,6 +48,8 @@ Vue.prototype.$moment = moment
 import token from '@/assets/js/token';
 Vue.prototype.$token = token
 
+/* 图片资源路径前缀 */
+Vue.prototype.$imgPrefix = "http://localhost:10000/"
 
 new Vue({
   router,
