@@ -3,7 +3,7 @@
         <!-- 背景图与头像 -->
         <div class="user-msg-box">
             <div class="user-msg-body">
-                <img :src="user.avatarUrl" alt="加载失败" class="user-msg-avatar-img">
+                <img :src="$imgPrefix + user.avatarUrl" alt="加载失败" class="user-msg-avatar-img">
                 <div class="user-msg-name">{{ user.name }}</div>
             </div>
         </div>

@@ -19,7 +19,7 @@
                         </div>
 
                         <div class="header-img-box">
-                            <img :src="$token().avatarUrl" class="header-img-body">
+                            <img :src="$imgPrefix + $token().avatarUrl" class="header-img-body">
                         </div>
                     </a>
                 </div>
@@ -32,13 +32,16 @@
                     <!-- 歌曲列表 -->
                     <div class="song-list-box">
                         <div class="song-btns-box">
-                            <el-button icon="el-icon-star-off" class="song-btn" @click="starSongs" type="warning" >收藏</el-button>
-                            <el-button icon="el-icon-close" class="song-btn" @click="deleteSongs" type="danger" >删除</el-button>
-                            <el-button icon="el-icon-delete" class="song-btn" @click="deleteAll" type="danger" >清空列表</el-button>
+                            <el-button icon="el-icon-star-off" class="song-btn" @click="starSongs"
+                                type="warning">收藏</el-button>
+                            <el-button icon="el-icon-close" class="song-btn" @click="deleteSongs"
+                                type="danger">删除</el-button>
+                            <el-button icon="el-icon-delete" class="song-btn" @click="deleteAll"
+                                type="danger">清空列表</el-button>
 
                             <el-popover placement="right" width="150" trigger="click">
                                 <AddBtnPopoverContent :selectdSongs="multipleSelection"></AddBtnPopoverContent>
-                                <el-button slot="reference" class="song-btn" type="primary" 
+                                <el-button slot="reference" class="song-btn" type="primary"
                                     icon="el-icon-plus">添加到</el-button>
                             </el-popover>
                         </div>
@@ -86,7 +89,7 @@
                     <!-- 歌曲信息展示 -->
                     <div class="song-msg-box">
                         <div class="song-info-box">
-                            <img class="song-info-img" :src="songsTableData[currentIndex].imgUrl">
+                            <img class="song-info-img" :src="$imgPrefix + songsTableData[currentIndex].imgUrl">
                             <div class="song-info-item">
                                 歌曲名：{{ songsTableData[currentIndex].name }}
                             </div>
@@ -221,7 +224,7 @@ export default {
         //背景图更换
         changeBgImg() {
             const divNode = document.getElementById("bgImg")
-            let url = "url(" + this.songsTableData[this.currentIndex].imgUrl + ")"
+            let url = "url(" + $imgPrefix + this.songsTableData[this.currentIndex].imgUrl + ")"
             divNode.style.backgroundImage = url
         },
         //歌名点击事件
@@ -423,5 +426,4 @@ export default {
 /deep/.el-table__body-wrapper::-webkit-scrollbar-thumb {
     border-radius: 5px;
     background-color: #ffffff;
-}
-</style>
+}</style>

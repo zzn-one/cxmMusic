@@ -55,7 +55,7 @@
                             <div>
 
                                 <div>
-                                    <img class="avatar-img" :src="user.avatarUrl" style="display: inline-block;">
+                                    <img class="avatar-img" :src="$imgPrefix + user.avatarUrl" style="display: inline-block;">
                                     <div class="userName-box">
                                         {{ user.name }}
                                     </div>
@@ -76,7 +76,7 @@
                             </div>
 
                             <el-button type="text" slot="reference">
-                                <img class="avatar-img" :src="user.avatarUrl">
+                                <img class="avatar-img" :src="$imgPrefix + user.avatarUrl">
                             </el-button>
                         </el-popover>
                     </div>
@@ -98,7 +98,6 @@
                     </el-row>
                     <el-button class="box-card-item box-card-item-button" @click="login">登 录</el-button>
                     <div class="box-card-item">
-                        <el-button style="float: left;color:black" type="text" @click="openBackGround">管理后台</el-button>
                         <el-button style="float: right;color:black" type="text" @click="openRegister">注册账号</el-button>
                     </div>
 
@@ -143,9 +142,7 @@ export default {
         openLoginDialog() {
             this.loginDialogVisible = true;
         },
-        openBackGround() {
-            this.$router.push("/backGround");
-        },
+        
         //打开注册页面
         openRegister() {
             this.$router.push("/userRegister");

@@ -5,7 +5,7 @@
             </el-table-column>
             <el-table-column  width="120">
                 <template slot-scope="scope">
-                    <img class="avatal-img" :src="scope.row.avatarUrl" >
+                    <img class="avatal-img" :src="$imgPrefix + scope.row.avatarUrl" >
                 </template>
             </el-table-column>
             <el-table-column prop="name" label="歌手" width="200">

@@ -4,7 +4,7 @@
         <div class="singer-msg-box">
             <!-- 照片 -->
             <div class="singer-img-box">
-                <img :src="singer.avatarUrl" class="singer-img">
+                <img :src="$imgPrefix + singer.avatarUrl" class="singer-img">
             </div>
             <!-- 文字信息 -->
             <div class="singer-introduce-box">

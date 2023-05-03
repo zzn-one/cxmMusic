@@ -33,14 +33,14 @@
                                 :key="index2" shadow="never">
 
                                 <RouterLink :to="{
-                                    name: 'songListDetail',
-                                    query: {
-                                        id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
+                                        name: 'songListDetail',
+                                        query: {
+                                            id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
+                                        }
                                     }
-                                }
-                                ">
+                                    ">
                                     <!--  -->
-                                    <img :src="songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
+                                    <img :src="$imgPrefix + songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
                                         class="card-img">
 
                                     <div style="margin-top: 10px; ">
@@ -59,13 +59,13 @@
                                 :key="index2" shadow="never">
 
                                 <RouterLink :to="{
-                                    name: 'songListDetail',
-                                    query: {
-                                        id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
+                                        name: 'songListDetail',
+                                        query: {
+                                            id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
+                                        }
                                     }
-                                }
-                                ">
-                                    <img :src="songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
+                                    ">
+                                    <img :src="$imgPrefix + songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
                                         class="card-img">
 
                                     <div style="margin-top: 10px; ">
@@ -84,14 +84,14 @@
                                 v-for="index2 in carouselItemRemainingNumber " :key="index2" shadow="never">
 
                                 <RouterLink :to="{
-                                    name: 'songListDetail',
-                                    query: {
-                                        id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
+                                        name: 'songListDetail',
+                                        query: {
+                                            id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
+                                        }
                                     }
-                                }
-                                ">
+                                    ">
                                     <!--  -->
-                                    <img :src="songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
+                                    <img :src="$imgPrefix + songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
                                         class="card-img">
 
                                     <div style="margin-top: 10px; ">
@@ -152,6 +152,9 @@ export default {
         },
         //获取歌单列表
         async getSongList(tag) {
+            if (!tag) {
+                return;
+            }
             const resp = await this.$axios("/songList/list/tag/limit/" + tag.id)
 
             const code = resp.data.code
@@ -168,6 +171,13 @@ export default {
 
             // 获取标签列表
             await this.getTagList()
+
+            if (this.tagList.length === 0) {
+                this.account = "1"
+                await this.getTagList()
+
+
+            }
 
             //获取歌单列表
             await this.getSongList(this.tagList[0])
@@ -194,6 +204,7 @@ export default {
             tag.style.color = 'rgb(240, 99, 18)';
         },
         "tagList.length"(val) {
+
             if (val === 0) {
                 this.account = "1"
                 this.getTagList()
@@ -225,7 +236,7 @@ export default {
 
 
     },
-    async created() {
+    created() {
 
         try {
 

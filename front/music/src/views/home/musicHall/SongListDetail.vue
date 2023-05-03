@@ -3,7 +3,7 @@
         <div class="msg_box">
             <!-- 歌单封面 -->
             <div class="img_box">
-                <img :src="songList.imgUrl">
+                <img :src="$imgPrefix + songList.imgUrl">
             </div>
             <!-- 歌单信息的简要说明 -->
             <div class="brief_box">

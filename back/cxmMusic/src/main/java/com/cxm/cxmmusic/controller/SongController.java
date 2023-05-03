@@ -60,61 +60,61 @@ public class SongController {
 
     @ApiOperation("新增一首歌曲")
     @PostMapping()
-    public Result<Boolean> addOne(@RequestBody SongAdd songAdd) {
+    public Result<Song> addOne(@RequestBody HashMap<String, Object> map) {
 
-        Result<Boolean> result = new Result<>(StatusCodeEnum.OK, false);
+        Song song = JSON.parseObject(JSON.toJSONString(map.get("song")), Song.class);
 
-        String name = songAdd.getName();
-        String imgUrl = songAdd.getImgUrl();
-        Long duration = songAdd.getDuration();
-        String sourceUrl = songAdd.getSourceUrl();
-        List<Integer> singerIds = songAdd.getSingerId();
-        List<Integer> tagIdList = songAdd.getTagIdList();
+        List<Integer> tagIdList = JSON.parseArray(JSON.toJSONString(map.get("tagIdList")), Integer.class);
 
+        List<Integer> singerIdList = JSON.parseArray(JSON.toJSONString(map.get("singerIdList")), Integer.class);
 
-        Song song = new Song();
+        Result<Song> result = new Result<>(StatusCodeEnum.OK, null);
 
-        song.setName(name);
-        song.setDuration(duration * 1000);
-        song.setImgUrl(imgUrl);
-        song.setSourceUrl(sourceUrl);
 
         boolean save = songService.save(song);
+        //设置多对多关系
         if (save) {
-            //设置多对多关系
+            //获取刚刚保存的歌曲的id
             LambdaQueryWrapper<Song> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(Song::getName, name);
-            queryWrapper.eq(Song::getSourceUrl, sourceUrl);
+            queryWrapper.eq(Song::getName, song.getName());
+            queryWrapper.eq(Song::getSourceUrl, song.getSourceUrl());
+            queryWrapper.eq(Song::getCreateTime, song.getCreateTime());
             Song songDb = songService.getOne(queryWrapper);
 
             Integer songDbId = songDb.getId();
 
             //设置歌手
-            boolean save1 = false;
-            for (Integer singerId : singerIds) {
+            ArrayList<SingerOwnSong> singerOwnSongs = new ArrayList<>();
+
+            for (Integer singerId : singerIdList) {
+
+                singerService.updateSongNumber(singerId);
+
                 SingerOwnSong singerOwnSong = new SingerOwnSong();
                 singerOwnSong.setSongId(songDbId);
                 singerOwnSong.setSingerId(singerId);
 
-                save1 = singerOwnSongService.save(singerOwnSong);
-                if (save1) {
-                    LambdaUpdateWrapper<Singer> updateWrapper = new LambdaUpdateWrapper<>();
-                    updateWrapper.setSql("song_number = song_number+1").eq(Singer::getId, singerId);
-                    singerService.update(updateWrapper);
-                }
+                singerOwnSongs.add(singerOwnSong);
             }
+            boolean save1 = singerOwnSongService.saveBatch(singerOwnSongs);
 
 
             //设置标签
             SongTag songTag = new SongTag();
-            boolean save2 = true;
             songTag.setSongId(songDbId);
+            ArrayList<SongTag> songTags = new ArrayList<>();
+
             for (Integer tagId : tagIdList) {
                 songTag.setTagId(tagId);
-                save2 &= songTagService.save(songTag);
+                songTags.add(songTag);
             }
 
-            result = new Result<>(StatusCodeEnum.OK, save1 & save2);
+            boolean save2 = songTagService.saveBatch(songTags);
+
+            if (save1 && save2) {
+                result = new Result<>(StatusCodeEnum.OK, songDb);
+            }
+
         }
 
         return result;
@@ -203,6 +203,7 @@ public class SongController {
         Song song = JSON.parseObject(JSON.toJSONString(map.get("song")), Song.class);
         Integer songId = song.getId();
 
+
         List<Integer> tagIdList = JSON.parseArray(JSON.toJSONString(map.get("tagIdList")), Integer.class);
 
         List<Integer> singerIdList = JSON.parseArray(JSON.toJSONString(map.get("singerIdList")), Integer.class);
@@ -257,7 +258,7 @@ public class SongController {
         return result;
     }
 
-    @ApiOperation("上传歌手图片")
+    @ApiOperation("上传歌曲图片")
     @PostMapping("/upload/img")
     public Result<String> uploadAvatar(MultipartFile file, HttpServletRequest request) {
 
@@ -265,9 +266,10 @@ public class SongController {
             return new Result<>(StatusCodeEnum.ERROR_UPLOAD_AVATAR, null);
         }
 
-        int singerId = Integer.parseInt(request.getParameter("id"));
+        int id = Integer.parseInt(request.getParameter("id"));
 
         String filename = new Date().getTime() + file.getOriginalFilename();
+        String imgUrl = SONG_IMG_PREFIX + filename;
 
 //        创建存放歌曲图片的文件夹
         File folder = new File(FILE_UPLOAD_PATH + SONG_IMG_PREFIX);
@@ -278,15 +280,18 @@ public class SongController {
 //        保存文件到本地
         try {
             file.transferTo(new File(folder.getAbsolutePath(), filename));
+            //        修改歌曲的图片文件路径
+            LambdaUpdateWrapper<Song> updateWrapper = new LambdaUpdateWrapper<>();
+
+            updateWrapper.set(Song::getImgUrl, imgUrl);
+            updateWrapper.eq(Song::getId, id);
+
+            songService.update(updateWrapper);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        修改歌曲的图片文件路径
-        LambdaUpdateWrapper<Song> updateWrapper = new LambdaUpdateWrapper<>();
-        String imgUrl = SONG_IMG_PREFIX + filename;
-        updateWrapper.set(Song::getImgUrl, imgUrl);
-        updateWrapper.eq(Song::getId, singerId);
-        songService.update(updateWrapper);
+
 
         return new Result<>(StatusCodeEnum.OK, imgUrl);
     }

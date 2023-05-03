@@ -33,16 +33,16 @@
                         <img :src="$imgPrefix + scope.row.song.imgUrl" class="img-avatar">
                     </template>
                 </el-table-column>
-                <el-table-column prop="song.name" label="歌名">
+                <el-table-column prop="song.name" label="歌名" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column label="歌手">
+                <el-table-column label="歌手" show-overflow-tooltip>
                     <template slot-scope="scope">
                         <span v-for="singer in scope.row.singerList" :key="singer.id">
                             {{ singer.name }}
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="标签" width="350px">
+                <el-table-column label="标签" width="350px" show-overflow-tooltip>
                     <template slot-scope="scope">
                         <el-tag v-for="tag in scope.row.tagList" :key="tag.id">
                             {{ tag.text }}
@@ -125,9 +125,41 @@
         </el-dialog>
         <!-- 添加窗口 -->
         <el-dialog title="添加窗口" :visible.sync="addFormVisible">
-            <el-form :model="addForm">
-                <el-form-item label="属性1">
+            <el-form :model="addForm" label-position="left" label-width="100px">
+                <el-form-item label="图片">
+
+                    <el-upload class="avatar-uploader" :action="actionUrl" :auto-upload="false" :show-file-list="false"
+                        ref="addUpload" :on-change="addHandleAvatarChange" :before-upload="addBeforeAvatarUpload"
+                        :data="{ id: addForm.id }" :headers="header">
+
+                        <img v-if="addForm.imgUrl" :src="addForm.imgUrl" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+
+
+                </el-form-item>
+                <el-form-item label="歌名">
                     <el-input v-model="addForm.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="歌手">
+
+                    <el-transfer :titles="['歌手列表', '演唱歌手']" :button-texts="['移除 选中的 歌手', '添加 选中的 歌手']"
+                        v-model="addSingerIdList" :data="singerTransferDataFormat(singerList)">
+                    </el-transfer>
+
+                </el-form-item>
+                <el-form-item label="标签">
+
+                    <el-transfer :titles="['未拥有的标签', '已拥有的标签']" :button-texts="['移除 选中的 标签', '添加 选中的 标签']"
+                        v-model="addTagIdList" :data="transferDataFormat(tagList)">
+                    </el-transfer>
+
+                </el-form-item>
+                <el-form-item label="时长(毫秒)">
+                    <el-input v-model="addForm.duration" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="资源路径">
+                    <el-input v-model="addForm.sourceUrl" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -170,7 +202,13 @@ export default {
 
             //编辑窗口
             addFormVisible: false,
-            addForm: "",
+            addForm: {
+                id: "",
+                imgUrl: "",
+                createTime: "",
+            },
+            addTagIdList: [],
+            addSingerIdList: [],
 
         }
     },
@@ -233,6 +271,13 @@ export default {
 
         //添加按钮点击
         addBtnClick() {
+            this.addForm = {
+                id: "",
+                imgUrl: "",
+                createTime: "",
+            }
+            this.editTagIdList = []
+            this.editSingerIdList = []
             this.addFormVisible = true
         },
         //搜索按钮点击
@@ -290,16 +335,16 @@ export default {
 
         //-----------------------------编辑窗口-------------------------
         //确认提交按钮点击
-        editSubmitBtnClick() {
+        async editSubmitBtnClick() {
+            await this.updateSong()
+
             //上传图片
             this.$refs.editUpload.submit()
-
-            this.updateSong()
             this.editFormVisible = false
         },
 
         editHandleAvatarChange(file) {
-            this.editForm.avatarUrl = URL.createObjectURL(file.raw);
+            this.editForm.imgUrl = URL.createObjectURL(file.raw);
             this.temporaryUrl = URL.createObjectURL(file.raw);
         },
         editBeforeAvatarUpload(file) {
@@ -325,9 +370,27 @@ export default {
 
         //-----------------------------添加窗口-------------------------
         //确认添加按钮点击
-        addSubmitBtnClick() {
-
+        async addSubmitBtnClick() {
+            await this.addSong()
+            //上传图片
+            this.$refs.addUpload.submit()
         },
+        addHandleAvatarChange(file) {
+            this.addForm.imgUrl = URL.createObjectURL(file.raw);
+        },
+        addBeforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
+
         //-----------------------------发送请求-------------------------
         async axios111() {
             const resp = await this.$axios("")
@@ -335,6 +398,33 @@ export default {
             const code = resp.data.code
             if (code === 200) {
 
+            }
+        },
+
+        //新增歌曲信息
+        async addSong() {
+            this.addForm.createTime = new Date()
+            const resp = await this.$axios({
+                url: "/song",
+                method: "post",
+                data: {
+                    song: this.addForm,
+                    tagIdList: this.addTagIdList,
+                    singerIdList: this.addSingerIdList
+                }
+            })
+
+            const code = resp.data.code
+
+            if (code === 200) {
+
+                //给addForm赋值songId
+                this.addForm.id = resp.data.data.id
+                //重新请求数据
+                this.pageData()
+                this.$message.success("新增歌曲成功")
+
+                this.addFormVisible = false
             }
         },
         //获取歌手列表
@@ -386,6 +476,7 @@ export default {
             })
 
             const code = resp.data.code
+
             if (code === 200) {
                 this.tableData = resp.data.data.records
                 this.total = resp.data.data.total

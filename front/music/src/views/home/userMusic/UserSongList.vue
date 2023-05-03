@@ -3,7 +3,7 @@
         <el-card class="card-box" :body-style="{ padding: '0px' }" v-for="songlist in songlists" :key="songlist.id"
             shadow="never">
             <RouterLink :to="{ name: 'songListDetail', query: { id: songlist.id } }">
-                <img :src="songlist.imgUrl" class="card-img">
+                <img :src="$imgPrefix + songlist.imgUrl" class="card-img">
 
                 <div style="margin-top: 10px; ">
                     {{ songlist.name }}

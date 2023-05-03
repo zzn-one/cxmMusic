@@ -85,7 +85,7 @@ export default {
 
 <style scoped lang="less">
 .search-input-box {
-    background-image: url(../../../public/img.jpg);
+    background-image: url(../../assets/1.jpg);
     background-size: cover;
     width: 100%;
     height: 260px;

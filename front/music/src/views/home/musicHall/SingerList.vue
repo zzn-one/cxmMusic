@@ -5,7 +5,7 @@
             <div class="singer-msg-box">
                 <div class="singer-msg-item" v-for="singer in singerListWithImg">
                     <el-button type="text" @click="btn_click(singer)" :key="singer.id">
-                        <img :src="singer.avatarUrl" class="singer-msg-item-img">
+                        <img :src="$imgPrefix + singer.avatarUrl" class="singer-msg-item-img">
                         <div class="singer-msg-item-name">{{ singer.name }}</div>
                     </el-button>
                 </div>

@@ -2,7 +2,7 @@
     <div class="personalMsg-box">
         <!-- 头像区 -->
         <div class="avatar-box">
-            <img :src="user.avatarUrl" class="avatar-img avatar-box-item">
+            <img :src="$imgPrefix + user.avatarUrl" class="avatar-img avatar-box-item">
             <div class="name-box avatar-box-item">
                 <div class="name-text">
                     {{ user.name }}
@@ -22,6 +22,7 @@
                     个人信息
                 </div>
                 <div class="msg-box-title-btns msg-box-title-item">
+                    <el-button v-if="user.type === 1" @click="openBackGround">进入后台</el-button>
                     <el-button @click="msgFormVisible = true">修改信息</el-button>
                     <el-button @click="passwordFormVisible = true">修改密码</el-button>
                 </div>
@@ -282,7 +283,9 @@ export default {
                 }
             });
         },
-
+        openBackGround() {
+            this.$router.push("/backGround");
+        },
         //获得用户个人信息
         async getUserMsg() {
             const account = token().account

@@ -1,21 +1,14 @@
 package com.cxm.cxmmusic.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cxm.cxmmusic.mapper.DictTagMapper;
-import com.cxm.cxmmusic.mapper.SingerMapper;
-import com.cxm.cxmmusic.mapper.SongTagMapper;
-import com.cxm.cxmmusic.pojo.DictTag;
-import com.cxm.cxmmusic.pojo.Singer;
-import com.cxm.cxmmusic.pojo.Song;
-import com.cxm.cxmmusic.pojo.SongTag;
-import com.cxm.cxmmusic.service.DictTagService;
+import com.cxm.cxmmusic.mapper.*;
+import com.cxm.cxmmusic.pojo.*;
 import com.cxm.cxmmusic.service.SongService;
-import com.cxm.cxmmusic.mapper.SongMapper;
-import com.cxm.cxmmusic.vo.Page;
+
 import com.cxm.cxmmusic.vo.SongAllMsg;
 import com.cxm.cxmmusic.vo.mongo.HistorySong;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -42,6 +35,9 @@ public class SongServiceImpl extends ServiceImpl<SongMapper, Song>
 
     @Resource
     private SongTagMapper songTagMapper;
+
+    @Resource
+    private SingerOwnSongMapper singerOwnSongMapper;
 
     @Override
     public List<Song> listBySingerId(Integer singerId) {
@@ -71,21 +67,34 @@ public class SongServiceImpl extends ServiceImpl<SongMapper, Song>
     }
 
     @Override
-    public Page<List<SongAllMsg>> pageWithSingerListByCondition(String key, Integer currentPage, Integer pageSize) {
-
-        Integer start = (currentPage - 1) * pageSize;
-        Integer size = pageSize;
+    public com.cxm.cxmmusic.vo.Page<List<SongAllMsg>> pageWithSingerListByCondition(String key, Integer currentPage, Integer pageSize) {
 
 
-        List<Song> songs = songMapper.pageByCondition(key, start,size);
-        Long total = songMapper.totalByPageCondition(key, start,size);
+//        List<Song> songs = songMapper.pageByCondition(key, start,size);
+//        Long total = songMapper.totalByPageCondition(key, start,size);
+
+        LambdaQueryWrapper<Song> songLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        songLambdaQueryWrapper.like(key != null, Song::getName, key);
+        Page<Song> songPage = new Page<>(currentPage,pageSize);
+
+
+        Page<Song> selectPage = songMapper.selectPage(songPage, songLambdaQueryWrapper);
 
         ArrayList<SongAllMsg> list = new ArrayList<>();
 
-        for (Song song : songs) {
+        for (Song song : selectPage.getRecords()) {
             Integer id = song.getId();
             //获取歌手列表
-            List<Singer> singers = singerMapper.listBySongId(id);
+            LambdaQueryWrapper<SingerOwnSong> singerOwnSongLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            singerOwnSongLambdaQueryWrapper.eq(SingerOwnSong::getSongId, id);
+            List<SingerOwnSong> singerOwnSongs = singerOwnSongMapper.selectList(singerOwnSongLambdaQueryWrapper);
+
+            ArrayList<Singer> singers = new ArrayList<>();
+            for (SingerOwnSong singerOwnSong : singerOwnSongs) {
+                Integer singerId = singerOwnSong.getSingerId();
+                Singer singer = singerMapper.selectById(singerId);
+                singers.add(singer);
+            }
 
             //获取标签列表
             LambdaQueryWrapper<SongTag> queryWrapper = new LambdaQueryWrapper<>();
@@ -103,10 +112,10 @@ public class SongServiceImpl extends ServiceImpl<SongMapper, Song>
             list.add(songAllMsg);
         }
 
-        Page<List<SongAllMsg>> page = new Page<>();
+        com.cxm.cxmmusic.vo.Page<List<SongAllMsg>> page = new com.cxm.cxmmusic.vo.Page<>();
 
         page.setRecords(list);
-        page.setTotal(total);
+        page.setTotal(selectPage.getTotal());
 
         return page;
     }
