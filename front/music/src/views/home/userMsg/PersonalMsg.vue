@@ -2,7 +2,17 @@
     <div class="personalMsg-box">
         <!-- 头像区 -->
         <div class="avatar-box">
-            <img :src="$imgPrefix + user.avatarUrl" class="avatar-img avatar-box-item">
+
+
+            <el-upload class="avatar-uploader avatar-box-item" :action="actionUrl" :auto-upload="true"
+                :show-file-list="false" ref="editUpload" :on-error="errorAvatarUpload" :before-upload="beforeAvatarUpload"
+                :on-success="successAvatarUpload" :data="{ id: user.id }" :headers="header">
+
+                <img v-if="temporaryUrl" :src="temporaryUrl" class="avatar">
+                <img v-else-if="user.avatarUrl" :src="$imgPrefix + user.avatarUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+
             <div class="name-box avatar-box-item">
                 <div class="name-text">
                     {{ user.name }}
@@ -203,6 +213,11 @@ export default {
                     { min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur' }
                 ],
             },
+
+            header: {},
+            temporaryUrl: "",
+            //用户图片上传的url
+            actionUrl: this.$imgPrefix + "user/upload/img",
         }
     },
     methods: {
@@ -286,6 +301,38 @@ export default {
         openBackGround() {
             this.$router.push("/backGround");
         },
+
+        //设置请求头
+        setHeader() {
+
+            this.header = {
+                Authorization: localStorage.getItem("token")
+            }
+        },
+        errorAvatarUpload(err) {
+            this.$message.error("更换头像失败，请稍后再试")
+        },
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
+        successAvatarUpload(response, file, fileList) {
+            this.temporaryUrl = URL.createObjectURL(file.raw);
+
+            if (response.code === 200) {
+                this.$message.success("头像已更换")
+            }
+
+        },
+
         //获得用户个人信息
         async getUserMsg() {
             const account = token().account
@@ -325,7 +372,7 @@ export default {
 
         this.getGenderList()
         this.getUserMsg()
-
+        this.setHeader()
 
 
 
@@ -411,5 +458,34 @@ export default {
 
 /deep/.el-input__inner {
     width: 400px;
+}
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+    border-radius: 50px;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    display: block;
+    border-radius: 50px;
 }
 </style>

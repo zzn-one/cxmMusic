@@ -1,6 +1,7 @@
 package com.cxm.cxmmusic.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cxm.cxmmusic.exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.DictTag;
@@ -16,8 +17,14 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +40,11 @@ public class SongListController {
     private SonglistService songlistService;
     @Autowired
     private DictTagService dictTagService;
+
+    @Value("${file.upload.path}")
+    private String FILE_UPLOAD_PATH;
+
+    private final static String IMG_PREFIX = "songlist/";
 
 
     @ApiOperation("新建歌单")
@@ -58,7 +70,7 @@ public class SongListController {
 
         List<SongListWithSongs> list = songlistService.getByAccount(account);
 
-        return new Result<>(StatusCodeEnum.OK,list);
+        return new Result<>(StatusCodeEnum.OK, list);
     }
 
     @ApiOperation("歌单增加歌曲")
@@ -80,7 +92,7 @@ public class SongListController {
 
         SongListWithSongs songListWithSongs = songlistService.getSongList(songlistId);
 
-        return new Result<>(StatusCodeEnum.OK,songListWithSongs);
+        return new Result<>(StatusCodeEnum.OK, songListWithSongs);
     }
 
     @ApiOperation("获取歌单 全部")
@@ -93,12 +105,12 @@ public class SongListController {
         List<Songlist> songlists = songlistService.list(queryWrapper);
 
 
-        return new Result<>(StatusCodeEnum.OK,songlists);
+        return new Result<>(StatusCodeEnum.OK, songlists);
     }
 
     @ApiOperation("获取歌单 多个 根据标签")
     @GetMapping(value = "/list/tag/{tagId}")
-    public Result<List<Songlist>> getSongLists(@PathVariable("tagId")Integer tagId) {
+    public Result<List<Songlist>> getSongLists(@PathVariable("tagId") Integer tagId) {
 
         DictTag dictTag = dictTagService.getById(tagId);
 
@@ -108,12 +120,12 @@ public class SongListController {
         List<Songlist> songlists = songlistService.list(queryWrapper);
 
 
-        return new Result<>(StatusCodeEnum.OK,songlists);
+        return new Result<>(StatusCodeEnum.OK, songlists);
     }
 
     @ApiOperation("获取歌单 最多16个 根据标签")
     @GetMapping(value = "/list/tag/limit/{tagId}")
-    public Result<Page<Songlist>> getSongListsLimit16(@PathVariable("tagId")Integer tagId) {
+    public Result<Page<Songlist>> getSongListsLimit16(@PathVariable("tagId") Integer tagId) {
 
         DictTag dictTag = dictTagService.getById(tagId);
 
@@ -124,20 +136,20 @@ public class SongListController {
         Page<Songlist> songlistPage = songlistService.page(page, queryWrapper);
 
 
-        return new Result<>(StatusCodeEnum.OK,songlistPage);
+        return new Result<>(StatusCodeEnum.OK, songlistPage);
     }
 
 
     @ApiOperation("修改歌单信息")
     @ApiImplicitParam(value = "歌单实体", name = "songlist")
     @PutMapping("")
-    public Result<Boolean> editSonglistMsg(@RequestBody Songlist songlist){
+    public Result<Boolean> editSonglistMsg(@RequestBody Songlist songlist) {
         Result<Boolean> result;
 
         boolean update = songlistService.updateById(songlist);
         if (update) {
             result = new Result<>(StatusCodeEnum.OK, true);
-        }else {
+        } else {
             result = new Result<>(StatusCodeEnum.ERROR_EDIT_SONGLIST, false);
         }
 
@@ -147,7 +159,7 @@ public class SongListController {
     @ApiOperation("获取歌单的歌曲列表")
     @ApiImplicitParam(value = "歌单id", name = "songlistId")
     @GetMapping("/songs/{songlistId}")
-    public Result<List<PlaySong>> getSongs(@PathVariable("songlistId")Integer songlistId) {
+    public Result<List<PlaySong>> getSongs(@PathVariable("songlistId") Integer songlistId) {
 
         List<PlaySong> songs = songlistService.getSongs(songlistId);
 
@@ -160,7 +172,7 @@ public class SongListController {
     })
 
     @DeleteMapping("/songs/{songlistId}")
-    public Result<Boolean> delSongs(@PathVariable("songlistId")Integer songlistId,@RequestBody List<PlaySong> songs) {
+    public Result<Boolean> delSongs(@PathVariable("songlistId") Integer songlistId, @RequestBody List<PlaySong> songs) {
 
         Result<Boolean> result;
         Boolean aBoolean = songlistService.delSongs(songlistId, songs);
@@ -178,7 +190,7 @@ public class SongListController {
     @ApiOperation("删除歌单")
     @ApiImplicitParam(value = "歌单id", name = "songlistId")
     @DeleteMapping("/{songlistId}")
-    public Result<Boolean> delSonglist(@PathVariable("songlistId")Integer songlistId) {
+    public Result<Boolean> delSonglist(@PathVariable("songlistId") Integer songlistId) {
 
         songlistService.delSonglist(songlistId);
 
@@ -201,7 +213,46 @@ public class SongListController {
 
         List<Songlist> songlists = songlistService.list(queryWrapper);
 
-        return new Result<>(StatusCodeEnum.OK,songlists);
+        return new Result<>(StatusCodeEnum.OK, songlists);
+    }
+
+
+    @ApiOperation("上传歌曲图片")
+    @PostMapping("/upload/img")
+    public Result<String> uploadImg(MultipartFile file, HttpServletRequest request) {
+
+        if (file == null) {
+            return new Result<>(StatusCodeEnum.ERROR_UPLOAD_AVATAR, null);
+        }
+
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        String filename = new Date().getTime() + file.getOriginalFilename();
+        String imgUrl = FILE_UPLOAD_PATH + IMG_PREFIX + filename;
+
+//        创建存放图片的文件夹
+        File folder = new File(FILE_UPLOAD_PATH + IMG_PREFIX);
+
+        if (!folder.isDirectory()) {
+            folder.mkdirs();
+        }
+//        保存文件到本地
+        try {
+            file.transferTo(new File(folder.getAbsolutePath(), filename));
+            //        修改歌单的图片文件路径
+            LambdaUpdateWrapper<Songlist> updateWrapper = new LambdaUpdateWrapper<>();
+
+            updateWrapper.set(Songlist::getImgUrl, imgUrl);
+            updateWrapper.eq(Songlist::getId, id);
+
+            songlistService.update(updateWrapper);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return new Result<>(StatusCodeEnum.OK, imgUrl);
     }
 
 }

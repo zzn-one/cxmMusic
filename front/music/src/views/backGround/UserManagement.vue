@@ -6,7 +6,6 @@
             <div class="search-box">
                 <!-- 其他搜索条件 -->
                 <div class="other-key-box">
-                    其他搜索条件
                 </div>
                 <div class="search-input-box">
                     <el-input placeholder="请输入关键字" v-model="searchKey">
@@ -28,9 +27,37 @@
                 </el-table-column>
                 <el-table-column type="index" width="55" label="序号" :index="indexMethod">
                 </el-table-column>
-                <el-table-column prop="attr1" label="属性1">
+                <el-table-column label="头像" width="122">
+                    <template slot-scope="scope">
+                        <img :src="$imgPrefix + scope.row.avatarUrl" class="img-avatar">
+                    </template>
                 </el-table-column>
-                <el-table-column prop="attr2" label="属性2">
+                <el-table-column prop="account" label="账号">
+                </el-table-column>
+                <el-table-column prop="name" label="昵称" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="gender" label="性别">
+                </el-table-column>
+                <el-table-column prop="signature" label="签名" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column label="类型">
+                    <template slot-scope="scope">
+                        {{ userTypeFormat(scope.row.type) }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="最新登录时间" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.lastedLoginTime">
+                            {{ $moment(scope.row.lastedLoginTime).format("yyyy年M月D日 h:m:s") }}
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="账号注册时间" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.registerTime">
+                            {{ $moment(scope.row.registerTime).format("yyyy年M月D日 h:m:s") }}
+                        </span>
+                    </template>
                 </el-table-column>
 
                 <el-table-column fixed="right" label="操作" width="400">
@@ -126,7 +153,7 @@ export default {
         },
         //搜索按钮点击
         searchBtnClick() {
-
+            this.pageData()
         },
         //编辑按钮点击
         editBtnClick(row) {
@@ -164,6 +191,17 @@ export default {
                 });
             });
         },
+        //用户类型格式转换
+        userTypeFormat(type) {
+            let result = ""
+            if (type == "1") {
+                result = "管理员"
+            } else {
+                result = "普通用户"
+            }
+
+            return result
+        },
 
         //-----------------------------编辑窗口-------------------------
         //确认提交按钮点击
@@ -177,22 +215,50 @@ export default {
         addSubmitBtnClick() {
 
         },
+        //-----------------------------发送请求-------------------------
+        async axios111() {
+            const resp = await this.$axios("")
 
+            const code = resp.data.code
+            if (code === 200) {
+
+            }
+        },
+
+        //获取表格数据
+        async pageData() {
+            const resp = await this.$axios({
+                url: "/user/list/" + this.currentPage + "/" + this.pageSize,
+                method: "post",
+                data: { key: this.searchKey }
+            })
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.tableData = resp.data.data.records
+                this.total = resp.data.data.total
+            }
+        },
+
+
+        init() {
+            this.pageData()
+        }
 
 
     },
     watch: {
-        currentPage(){
+        currentPage() {
             //重新请求数据
+            this.pageData()
         },
-        pageSize(){
+        pageSize() {
             //重新请求数据
+            this.pageData()
         }
     },
     created() {
-        for (let i = 0; i < 100; i++) {
-            this.tableData.push({})
-        }
+        this.init()
 
     }
 }
@@ -204,13 +270,21 @@ export default {
     height: 897px;
 }
 
+.img-avatar {
+
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+
+}
+
 .search-box {
     margin: 10px 0;
 }
 
 .other-key-box {
     display: inline-block;
-    width: 500px;
+    max-width: 500px;
     height: 1px;
 }
 

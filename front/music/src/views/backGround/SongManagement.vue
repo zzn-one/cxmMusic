@@ -286,6 +286,8 @@ export default {
         },
         //编辑按钮点击
         editBtnClick(row) {
+            this.temporaryUrl = ''
+
             this.editForm = row.song
 
             this.editTagIdList = []
@@ -392,14 +394,7 @@ export default {
         },
 
         //-----------------------------发送请求-------------------------
-        async axios111() {
-            const resp = await this.$axios("")
 
-            const code = resp.data.code
-            if (code === 200) {
-
-            }
-        },
 
         //新增歌曲信息
         async addSong() {

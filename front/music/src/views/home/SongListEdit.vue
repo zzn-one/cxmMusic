@@ -2,7 +2,16 @@
     <div class="edit_box">
         <div class="msg-box">
             <div class="img-box msg-box-item">
-                <img src="@/assets/2.jpg" alt="">
+                
+                <el-upload class="avatar-uploader" :action="actionUrl" :auto-upload="true"
+                :show-file-list="false" :on-error="errorAvatarUpload" :before-upload="beforeAvatarUpload"
+                :on-success="successAvatarUpload" :data="{ id: songlist.id }" :headers="header">
+
+                <img v-if="temporaryUrl" :src="temporaryUrl" class="avatar">
+                <img v-else-if="songlist.imgUrl" :src="$imgPrefix + songlist.imgUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+
             </div>
             <div class="text-box msg-box-item">
                 <div class="text-msg-box">
@@ -44,9 +53,9 @@
                 <router-link :to="{ name: 'songTableEdit', query: { id: songlistId } }" active-class="active">
                     歌曲({{ songlist.songNumber }})
                 </router-link>
-                <router-link :to="{ name: 'starEdit', query: { id: songlistId } }" active-class="active">
+                <!-- <router-link :to="{ name: 'starEdit', query: { id: songlistId } }" active-class="active">
                     最近收藏
-                </router-link>
+                </router-link> -->
                 <!-- <router-link :to="{ name: 'commentEdit', query: { id: songlistId } }" active-class="active">
                     评论
                 </router-link> -->
@@ -109,7 +118,11 @@ export default {
             tagList: [],
             songlistId: '',
             msgFormVisible: false,
-            songlistForm: {}
+            songlistForm: {},
+            header: {},
+            temporaryUrl: "",
+            //歌单封面图片上传的url
+            actionUrl: this.$imgPrefix + "songList/upload/img",
         }
     },
     methods: {
@@ -157,6 +170,8 @@ export default {
 
             if (code === 200) {
                 this.songlist = resp.data.data
+
+                console.log(this.songlist );
             }
         },
         //获取标签列表
@@ -212,6 +227,7 @@ export default {
         //初始化
         async init() {
 
+            this.setHeader()
             //获取标签
             this.getTagList()
             //获取歌单信息
@@ -219,11 +235,40 @@ export default {
 
             await this.getSonglist()
             this.songlistForm = structuredClone(this.songlist)
-        }
+        },
+        //设置请求头
+        setHeader() {
+
+            this.header = {
+                Authorization: localStorage.getItem("token")
+            }
+        },
+        errorAvatarUpload(err) {
+            this.$message.error("更换歌单封面失败，请稍后再试")
+        },
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
+        successAvatarUpload(response, file, fileList) {
+            this.temporaryUrl = URL.createObjectURL(file.raw);
+
+            if (response.code === 200) {
+                this.$message.success("歌单封面已更换")
+            }
+
+        },
     },
     created() {
         this.init()
-
     }
 }
 </script>
@@ -303,5 +348,32 @@ export default {
 
 /deep/.el-select {
     width: 600px;
+}
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+}
+
+.avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
 }
 </style>

@@ -55,7 +55,7 @@ public class SongController {
     @Value("${file.upload.path}")
     private String FILE_UPLOAD_PATH;
 
-    private final static String SONG_IMG_PREFIX = "static/img/song/";
+    private final static String SONG_IMG_PREFIX = "song/";
 
 
     @ApiOperation("新增一首歌曲")
@@ -260,7 +260,7 @@ public class SongController {
 
     @ApiOperation("上传歌曲图片")
     @PostMapping("/upload/img")
-    public Result<String> uploadAvatar(MultipartFile file, HttpServletRequest request) {
+    public Result<String> uploadImg(MultipartFile file, HttpServletRequest request) {
 
         if (file == null) {
             return new Result<>(StatusCodeEnum.ERROR_UPLOAD_AVATAR, null);
@@ -269,7 +269,7 @@ public class SongController {
         int id = Integer.parseInt(request.getParameter("id"));
 
         String filename = new Date().getTime() + file.getOriginalFilename();
-        String imgUrl = SONG_IMG_PREFIX + filename;
+        String imgUrl = FILE_UPLOAD_PATH + SONG_IMG_PREFIX + filename;
 
 //        创建存放歌曲图片的文件夹
         File folder = new File(FILE_UPLOAD_PATH + SONG_IMG_PREFIX);

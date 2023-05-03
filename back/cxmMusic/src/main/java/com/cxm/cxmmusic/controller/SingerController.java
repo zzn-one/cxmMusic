@@ -37,7 +37,7 @@ public class SingerController {
     @Value("${file.upload.path}")
     private String FILE_UPLOAD_PATH;
 
-    private final static String SINGER_AVATAR_PREFIX = "static/img/singer/";
+    private final static String SINGER_AVATAR_PREFIX = "singer/";
 
     /*
      * 新增歌手
@@ -195,7 +195,7 @@ public class SingerController {
         }
 //        修改歌手的图片文件路径
         LambdaUpdateWrapper<Singer> updateWrapper = new LambdaUpdateWrapper<>();
-        String avatarUrl = SINGER_AVATAR_PREFIX + filename;
+        String avatarUrl = FILE_UPLOAD_PATH + SINGER_AVATAR_PREFIX + filename;
         updateWrapper.set(Singer::getAvatarUrl, avatarUrl);
         updateWrapper.eq(Singer::getId, singerId);
         singerService.update(updateWrapper);

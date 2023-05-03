@@ -6,10 +6,10 @@
             <div class="search-box">
                 <!-- 其他搜索条件 -->
                 <div class="other-key-box">
-                    
+
                 </div>
                 <div class="search-input-box">
-                    <el-input placeholder="请输入关键字" v-model="searchKey">
+                    <el-input placeholder="搜索歌手" v-model="searchKey">
                         <el-button slot="append" icon="el-icon-search" @click="searchBtnClick"></el-button>
                     </el-input>
                 </div>
@@ -183,7 +183,7 @@ export default {
             editForm: {},
             temporaryUrl: "",
             //歌手图片上传的url
-            actionUrl: this.$imgPrefix +"singer/upload/avatar",
+            actionUrl: this.$imgPrefix + "singer/upload/avatar",
 
             //添加窗口
             addFormVisible: false,
@@ -230,6 +230,7 @@ export default {
         },
         //编辑按钮点击
         editBtnClick(row) {
+            this.temporaryUrl = ''
             this.editForm = Object.assign({}, row)
             this.editFormVisible = true
         },

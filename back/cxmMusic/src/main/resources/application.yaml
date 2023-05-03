@@ -3,7 +3,9 @@ server:
   port: 10000
 
 spring:
-
+  servlet:
+    multipart:
+      max-file-size: 2MB
 
   #mysql
   datasource:
@@ -81,7 +83,7 @@ socketIO:
 #文件上传路径
 file:
   upload:
-    path: src/main/resources/
+    path: upload/static/img/
 
 
 

@@ -6,10 +6,9 @@
             <div class="search-box">
                 <!-- 其他搜索条件 -->
                 <div class="other-key-box">
-                    其他搜索条件
                 </div>
                 <div class="search-input-box">
-                    <el-input placeholder="请输入关键字" v-model="searchKey">
+                    <el-input placeholder="搜索歌单" v-model="searchKey">
                         <el-button slot="append" icon="el-icon-search" @click="searchBtnClick"></el-button>
                     </el-input>
                 </div>
@@ -178,21 +177,49 @@ export default {
 
         },
 
+        //-----------------------------发送请求-------------------------
+        async axios111() {
+            const resp = await this.$axios("")
 
+            const code = resp.data.code
+            if (code === 200) {
+
+            }
+        },
+        //获取表格数据
+        async pageData() {
+            const resp = await this.$axios({
+                url: "/songList/list/" + this.currentPage + "/" + this.pageSize,
+                method: "post",
+                data: { key: this.searchKey }
+            })
+
+            console.log(resp.data.data);
+            const code = resp.data.code
+            if (code === 200) {
+                this.tableData = resp.data.data.records
+                this.total = resp.data.data.total
+            }
+        },
+
+
+        init() {
+            this.pageData()
+        }
 
     },
     watch: {
-        currentPage(){
+        currentPage() {
             //重新请求数据
+            this.pageData()
         },
-        pageSize(){
+        pageSize() {
             //重新请求数据
+            this.pageData()
         }
     },
     created() {
-        for (let i = 0; i < 100; i++) {
-            this.tableData.push({})
-        }
+        this.init()
 
     }
 }
@@ -210,7 +237,7 @@ export default {
 
 .other-key-box {
     display: inline-block;
-    width: 500px;
+    max-width: 500px;
     height: 1px;
 }
 
