@@ -272,12 +272,18 @@ export default {
 
         //-----------------------------编辑窗口-------------------------
         //确认提交按钮点击
-        editSubmitBtnClick() {
-            //上传图片
-            this.$refs.editUpload.submit()
+        async editSubmitBtnClick() {
 
             //提交修改请求
-            this.updateMsg()
+            await this.updateMsg()
+
+            //上传图片
+            await this.$refs.editUpload.submit()
+
+            
+            this.editFormVisible = false
+
+            this.pageSingerList()
         },
 
         editHandleAvatarChange(file) {
@@ -371,8 +377,6 @@ export default {
             if (code === 200) {
 
                 this.$message.success("歌手信息已修改")
-
-                this.editFormVisible = false
             }
         },
         //5.新增歌手

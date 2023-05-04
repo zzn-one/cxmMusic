@@ -343,6 +343,8 @@ export default {
             //上传图片
             this.$refs.editUpload.submit()
             this.editFormVisible = false
+
+            this.pageData()
         },
 
         editHandleAvatarChange(file) {
@@ -454,8 +456,6 @@ export default {
 
             const code = resp.data.code
             if (code === 200 && resp.data.data === true) {
-                //重新请求数据
-                this.pageData()
                 this.$message.success("歌曲信息已修改")
             }
         },

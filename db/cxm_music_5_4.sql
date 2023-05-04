@@ -11,7 +11,7 @@
  Target Server Version : 80030 (8.0.30)
  File Encoding         : 65001
 
- Date: 04/05/2023 02:21:12
+ Date: 04/05/2023 13:00:19
 */
 
 SET NAMES utf8mb4;
@@ -4295,7 +4295,7 @@ CREATE TABLE `songlist`  (
   `author_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '作者名称',
   `author_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '作者的账号  外键',
   `tag` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '标签  外键',
-  `img_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'static/img/sys/img.jpg' COMMENT '歌单封面',
+  `img_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'upload/static/img/sys/img.jpg' COMMENT '歌单封面',
   `introduction` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '简介',
   `song_number` int NOT NULL DEFAULT 0 COMMENT '歌单的歌曲数量',
   `play_number` bigint NOT NULL DEFAULT 0 COMMENT '播放量',
@@ -4313,132 +4313,132 @@ CREATE TABLE `songlist`  (
 -- ----------------------------
 -- Records of songlist
 -- ----------------------------
-INSERT INTO `songlist` VALUES (1, '古风测试歌单01', 'dasd', '1000002', '古风', 'static/img/sys/img.jpg', NULL, 3, 1, 1, '2023-04-11 14:23:24.8970', 1, 2);
-INSERT INTO `songlist` VALUES (2, '古风测试歌单02', 'dasd', '1000002', '古风', 'static/img/sys/img.jpg', NULL, 0, 1, 1, '2023-04-11 14:23:26.0080', 1, 3);
-INSERT INTO `songlist` VALUES (3, '古风测试歌单03', 'dasd', '1000002', '古风', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 19:41:11.1330', 1, 1);
-INSERT INTO `songlist` VALUES (4, '古风测试歌单04', 'dasd', '1000002', '古风', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 19:41:11.7040', 1, 2);
-INSERT INTO `songlist` VALUES (5, '儿童测试歌单01', 'dasd', '1000002', '儿童', 'static/img/sys/img.jpg', NULL, 3, 3, 2, '2023-04-12 19:59:19.4680', 1, 1);
-INSERT INTO `songlist` VALUES (6, '儿童测试歌单02', 'dasd', '1000002', '儿童', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 19:59:19.6180', 1, 2);
-INSERT INTO `songlist` VALUES (7, '儿童测试歌单03', 'dasd', '1000002', '儿童', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 19:59:19.7790', 1, 2);
-INSERT INTO `songlist` VALUES (8, '儿童测试歌单04', 'dasd', '1000002', '儿童', 'static/img/sys/img.jpg', NULL, 3, 1, 0, '2023-04-12 19:59:19.9360', 1, 2);
-INSERT INTO `songlist` VALUES (9, '华语测试歌单01', 'dasd', '1000002', '华语', 'static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 19:59:20.6160', 1, 2);
-INSERT INTO `songlist` VALUES (10, '华语测试歌单02', 'dasd', '1000002', '华语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:03:01.8130', 1, 1);
-INSERT INTO `songlist` VALUES (11, '华语测试歌单03', 'dasd', '1000002', '华语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:03:02.2140', 1, 2);
-INSERT INTO `songlist` VALUES (12, '华语测试歌单04', 'dasd', '1000002', '华语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:03:02.5730', 1, 2);
-INSERT INTO `songlist` VALUES (13, '粤语测试01', 'dasd', '1000002', '粤语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:09:26.8930', 1, 1);
-INSERT INTO `songlist` VALUES (14, '粤语测试02', 'dasd', '1000002', '粤语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:09:27.1940', 1, 2);
-INSERT INTO `songlist` VALUES (15, '粤语测试03', 'dasd', '1000002', '粤语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:09:27.4530', 1, 2);
-INSERT INTO `songlist` VALUES (16, '粤语测试04', 'dasd', '1000002', '粤语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:09:27.6960', 1, 2);
-INSERT INTO `songlist` VALUES (17, '欧美测试歌单01', 'dasd', '1000002', '欧美', 'static/img/sys/img.jpg', NULL, 4, 1, 0, '2023-04-12 20:13:24.6090', 1, 1);
-INSERT INTO `songlist` VALUES (18, '欧美测试歌单02', 'dasd', '1000002', '欧美', 'static/img/sys/img.jpg', NULL, 4, 1, 1, '2023-04-12 20:13:24.9860', 1, 2);
-INSERT INTO `songlist` VALUES (19, '欧美测试歌单03', 'dasd', '1000002', '欧美', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:13:25.2500', 1, 2);
-INSERT INTO `songlist` VALUES (20, '欧美测试歌单04', 'dasd', '1000002', '欧美', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:13:25.5460', 1, 2);
-INSERT INTO `songlist` VALUES (21, '韩语测试歌单01', 'dasd', '1000002', '韩语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:19:55.9360', 1, 1);
-INSERT INTO `songlist` VALUES (22, '韩语测试歌单02', 'dasd', '1000002', '韩语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:19:56.1510', 1, 2);
-INSERT INTO `songlist` VALUES (23, '韩语测试歌单03', 'dasd', '1000002', '韩语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:19:56.3490', 1, 2);
-INSERT INTO `songlist` VALUES (24, '韩语测试歌单04', 'dasd', '1000002', '韩语', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:19:56.5670', 1, 2);
-INSERT INTO `songlist` VALUES (25, '综艺测试01', 'dasd', '1000002', '综艺', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:21:06.0670', 1, 1);
-INSERT INTO `songlist` VALUES (26, '综艺测试02', 'dasd', '1000002', '综艺', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:21:06.3760', 1, 2);
-INSERT INTO `songlist` VALUES (27, '综艺测试03', 'dasd', '1000002', '综艺', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:21:06.6190', 1, 2);
-INSERT INTO `songlist` VALUES (28, '综艺测试04', 'dasd', '1000002', '综艺', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:21:06.8500', 1, 2);
-INSERT INTO `songlist` VALUES (29, '影视原声测试01', 'dasd', '1000002', '影视原声', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:22:26.6150', 1, 1);
-INSERT INTO `songlist` VALUES (30, '影视原声测试02', 'dasd', '1000002', '影视原声', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:22:26.8990', 1, 2);
-INSERT INTO `songlist` VALUES (31, '影视原声测试03', 'dasd', '1000002', '影视原声', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:22:27.1350', 1, 2);
-INSERT INTO `songlist` VALUES (32, '影视原声测试04', 'dasd', '1000002', '影视原声', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:22:41.6560', 1, 1);
-INSERT INTO `songlist` VALUES (33, '校园测试01', '法院玩也', '1000001', '校园', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:28:48.4430', 1, 1);
-INSERT INTO `songlist` VALUES (34, '校园测试02', '法院玩也', '1000001', '校园', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:28:48.6820', 1, 2);
-INSERT INTO `songlist` VALUES (35, '校园测试03', '法院玩也', '1000001', '校园', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:28:48.9330', 1, 2);
-INSERT INTO `songlist` VALUES (36, '校园测试04', '法院玩也', '1000001', '校园', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:28:49.1850', 1, 2);
-INSERT INTO `songlist` VALUES (37, '游戏测试01', '法院玩也', '1000001', '游戏', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:29:52.0840', 1, 1);
-INSERT INTO `songlist` VALUES (38, '游戏测试02', '法院玩也', '1000001', '游戏', 'static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:29:52.3340', 1, 2);
-INSERT INTO `songlist` VALUES (39, '游戏测试03', '法院玩也', '1000001', '游戏', 'static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:29:52.4830', 1, 2);
-INSERT INTO `songlist` VALUES (40, '游戏测试04', '法院玩也', '1000001', '游戏', 'static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:29:52.6830', 1, 2);
-INSERT INTO `songlist` VALUES (41, '乡村测试01', '法院玩也', '1000001', '乡村', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:34:33.2230', 1, 2);
-INSERT INTO `songlist` VALUES (42, '乡村测试02', '法院玩也', '1000001', '乡村', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:34:33.4120', 1, 2);
-INSERT INTO `songlist` VALUES (43, '乡村测试03', '法院玩也', '1000001', '乡村', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:34:33.5630', 1, 2);
-INSERT INTO `songlist` VALUES (44, '乡村测试04', '法院玩也', '1000001', '乡村', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:34:33.7840', 1, 2);
-INSERT INTO `songlist` VALUES (45, '爵士测试01', '法院玩也', '1000001', '爵士', 'static/img/sys/img.jpg', NULL, 1, 2, 0, '2023-04-12 20:35:05.4450', 1, 1);
-INSERT INTO `songlist` VALUES (46, '爵士测试02', '法院玩也', '1000001', '爵士', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:35:05.6630', 1, 2);
-INSERT INTO `songlist` VALUES (47, '爵士测试03', '法院玩也', '1000001', '爵士', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:35:05.8860', 1, 2);
-INSERT INTO `songlist` VALUES (48, '爵士测试04', '法院玩也', '1000001', '爵士', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:35:06.0810', 1, 2);
-INSERT INTO `songlist` VALUES (49, '中国风测试01', '法院玩也', '1000001', '中国风', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:39:17.8100', 1, 1);
-INSERT INTO `songlist` VALUES (50, '中国风测试02', '法院玩也', '1000001', '中国风', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:39:18.0000', 1, 2);
-INSERT INTO `songlist` VALUES (51, '中国风测试03', '法院玩也', '1000001', '中国风', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:39:18.1410', 1, 2);
-INSERT INTO `songlist` VALUES (52, '中国风测试04', '法院玩也', '1000001', '中国风', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:39:29.6020', 1, 1);
-INSERT INTO `songlist` VALUES (53, '金属测试01', '法院玩也', '1000001', '金属', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:03.5640', 1, 1);
-INSERT INTO `songlist` VALUES (54, '金属测试02', '法院玩也', '1000001', '金属', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:03.7620', 1, 2);
-INSERT INTO `songlist` VALUES (55, '金属测试03', '法院玩也', '1000001', '金属', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:03.9210', 1, 2);
-INSERT INTO `songlist` VALUES (56, '金属测试04', '法院玩也', '1000001', '金属', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:04.0860', 1, 2);
-INSERT INTO `songlist` VALUES (57, '古典测试01', '法院玩也', '1000001', '古典', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:34.1410', 1, 1);
-INSERT INTO `songlist` VALUES (58, '古典测试02', '法院玩也', '1000001', '古典', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:34.4230', 1, 2);
-INSERT INTO `songlist` VALUES (59, '古典测试03', '法院玩也', '1000001', '古典', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:34.6100', 1, 2);
-INSERT INTO `songlist` VALUES (60, '古典测试04', '法院玩也', '1000001', '古典', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:34.7680', 1, 2);
-INSERT INTO `songlist` VALUES (61, '民族测试01', '法院玩也', '1000001', '民族', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:41:07.3640', 1, 2);
-INSERT INTO `songlist` VALUES (62, '民族测试02', '法院玩也', '1000001', '民族', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:41:07.5590', 1, 2);
-INSERT INTO `songlist` VALUES (63, '民族测试03', '法院玩也', '1000001', '民族', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:41:07.7590', 1, 2);
-INSERT INTO `songlist` VALUES (64, '民族测试04', '法院玩也', '1000001', '民族', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:41:07.9570', 1, 2);
-INSERT INTO `songlist` VALUES (65, '说唱测试01', '法院玩也', '1000001', '说唱', 'static/img/sys/img.jpg', NULL, 4, 28476234001, 1, '2023-04-12 20:41:44.4760', 1, 1);
-INSERT INTO `songlist` VALUES (66, '说唱测试02', '法院玩也', '1000001', '说唱', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:41:44.7580', 1, 2);
-INSERT INTO `songlist` VALUES (67, '说唱测试03', '法院玩也', '1000001', '说唱', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:41:44.9670', 1, 2);
-INSERT INTO `songlist` VALUES (68, '说唱测试04', '法院玩也', '1000001', '说唱', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:41:45.2380', 1, 2);
-INSERT INTO `songlist` VALUES (69, '民谣测试01', '法院玩也', '1000001', '民谣', 'static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:43:25.4060', 1, 1);
-INSERT INTO `songlist` VALUES (70, '民谣测试02', '法院玩也', '1000001', '民谣', 'static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:43:25.6380', 1, 2);
-INSERT INTO `songlist` VALUES (71, '民谣测试03', '法院玩也', '1000001', '民谣', 'static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:43:25.9270', 1, 2);
-INSERT INTO `songlist` VALUES (72, '民谣测试04', '法院玩也', '1000001', '民谣', 'static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:43:26.1580', 1, 2);
-INSERT INTO `songlist` VALUES (73, '驾车测试1', '法院玩也', '1000001', '驾车', 'static/img/sys/img.jpg', NULL, 23, 10, 3, '2023-04-12 21:14:40.9020', 1, 1);
-INSERT INTO `songlist` VALUES (74, '驾车测试2', '法院玩也', '1000001', '驾车', 'static/img/sys/img.jpg', NULL, 23, 4, 0, '2023-04-12 21:14:44.3010', 1, 1);
-INSERT INTO `songlist` VALUES (75, '驾车测试3', '法院玩也', '1000001', '驾车', 'static/img/sys/img.jpg', NULL, 23, 2, 1, '2023-04-12 21:14:44.9250', 1, 1);
-INSERT INTO `songlist` VALUES (76, '驾车测试4', '法院玩也', '1000001', '驾车', 'static/img/sys/img.jpg', NULL, 23, 0, 0, '2023-04-12 21:14:45.1010', 1, 1);
-INSERT INTO `songlist` VALUES (77, '驾车测试5', '法院玩也', '1000001', '驾车', 'static/img/sys/img.jpg', NULL, 23, 0, 0, '2023-04-12 21:14:45.2640', 1, 1);
-INSERT INTO `songlist` VALUES (78, '舞曲測試01', '1000003', '1000004', '舞曲', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 22:14:56.7910', 1, 1);
-INSERT INTO `songlist` VALUES (79, '舞曲測試02', '1000003', '1000004', '舞曲', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 22:14:57.0510', 1, 1);
-INSERT INTO `songlist` VALUES (80, '舞曲測試03', '1000003', '1000004', '舞曲', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 22:14:57.2780', 1, 2);
-INSERT INTO `songlist` VALUES (81, '舞曲測試04', '1000003', '1000004', '舞曲', 'static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 22:14:57.5110', 1, 2);
-INSERT INTO `songlist` VALUES (82, '摇滚测试01', '1000003', '1000004', '摇滚', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:18:40.1200', 1, 1);
-INSERT INTO `songlist` VALUES (83, '摇滚测试02', '1000003', '1000004', '摇滚', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:18:40.3050', 1, 1);
-INSERT INTO `songlist` VALUES (84, '摇滚测试03', '1000003', '1000004', '摇滚', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:18:40.4810', 1, 1);
-INSERT INTO `songlist` VALUES (85, '摇滚测试04', '1000003', '1000004', '摇滚', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:18:40.6350', 1, 1);
-INSERT INTO `songlist` VALUES (86, '流行测试01', '1000003', '1000004', '流行', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 22:19:36.4650', 1, 1);
-INSERT INTO `songlist` VALUES (87, '流行测试02', '1000003', '1000004', '流行', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 22:19:36.6650', 1, 1);
-INSERT INTO `songlist` VALUES (88, '流行测试03', '1000003', '1000004', '流行', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 22:19:36.8660', 1, 1);
-INSERT INTO `songlist` VALUES (89, '流行测试04', '1000003', '1000004', '流行', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 22:19:37.0780', 1, 1);
-INSERT INTO `songlist` VALUES (90, '怀旧测试01', '1000003', '1000004', '怀旧', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:27:56.3470', 1, 1);
-INSERT INTO `songlist` VALUES (91, '兴奋测试01', '1000003', '1000004', '兴奋', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:28:32.0370', 1, 1);
-INSERT INTO `songlist` VALUES (92, '孤独测试01', '1000003', '1000004', '孤独', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:28:54.6270', 1, 1);
-INSERT INTO `songlist` VALUES (93, '安静测试01', '1000003', '1000004', '安静', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:29:12.1530', 1, 1);
-INSERT INTO `songlist` VALUES (94, '思念测试01', '1000003', '1000004', '思念', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:29:40.1030', 1, 1);
-INSERT INTO `songlist` VALUES (95, '感动测试01', '1000003', '1000004', '感动', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:30:44.8610', 1, 1);
-INSERT INTO `songlist` VALUES (96, '伤感测试01', '1000003', '1000004', '伤感', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:31:15.6850', 1, 1);
-INSERT INTO `songlist` VALUES (97, '快乐测试01', '1000003', '1000004', '快乐', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:32:01.5500', 1, 1);
-INSERT INTO `songlist` VALUES (98, '跳舞测试01', '1000003', '1000004', '跳舞', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:32:23.9110', 1, 1);
-INSERT INTO `songlist` VALUES (99, '约会测试01', '1000003', '1000004', '约会', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:32:44.4050', 1, 1);
-INSERT INTO `songlist` VALUES (100, '旅行测试01', '1000003', '1000004', '旅行', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:33:05.2600', 1, 1);
-INSERT INTO `songlist` VALUES (101, '运动测试01', '1000003', '1000004', '运动', 'static/img/sys/img.jpg', NULL, 2, 0, 1, '2023-04-12 22:33:32.3410', 1, 1);
-INSERT INTO `songlist` VALUES (102, '休闲时间测试01', '1000005', '1000005', '休闲时间', 'static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 22:37:12.9090', 1, 1);
-INSERT INTO `songlist` VALUES (103, '休息测试01', '1000005', '1000005', '休息', 'static/img/sys/img.jpg', '111111111111111111111', 1, 0, 0, '2023-04-12 22:38:31.9750', 0, 2);
-INSERT INTO `songlist` VALUES (104, '工作测试01', '1000005', '1000005', '工作', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:38:55.3990', 1, 1);
-INSERT INTO `songlist` VALUES (105, '学习测试01', '1000005', '1000005', '学习', 'static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 22:40:29.8560', 1, 1);
-INSERT INTO `songlist` VALUES (106, '背景音乐测试01', '1000005', '1000005', '背景音乐', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:41:47.5760', 1, 1);
-INSERT INTO `songlist` VALUES (107, '情歌测试01', '1000005', '1000005', '情歌', 'static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:42:11.0140', 1, 1);
-INSERT INTO `songlist` VALUES (108, '榜单测试01', '1000005', '1000005', '榜单', 'static/img/sys/img.jpg', NULL, 11, 0, 0, '2023-04-12 22:43:11.6670', 1, 1);
-INSERT INTO `songlist` VALUES (109, '休息测试01', '1000005', '1000005', '休息', 'static/img/sys/img.jpg', NULL, 11, 0, 0, '2023-04-12 22:43:13.0640', 1, 1);
-INSERT INTO `songlist` VALUES (110, '翻唱测试01', '1000005', '1000005', '翻唱', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:43:35.8200', 1, 1);
-INSERT INTO `songlist` VALUES (111, '经典老歌测试01', '1000005', '1000005', '经典老歌', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:43:57.2570', 1, 1);
-INSERT INTO `songlist` VALUES (112, 'KYV金曲测试01', '1000005', '1000005', 'KTV金曲', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:44:15.9720', 1, 1);
-INSERT INTO `songlist` VALUES (113, '网络热歌测试01', '1000005', '1000005', '网络热歌', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:44:48.2560', 1, 1);
-INSERT INTO `songlist` VALUES (114, '热榜歌单测试01', '1000005', '1000005', '热榜歌单', 'static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:45:27.8960', 1, 1);
-INSERT INTO `songlist` VALUES (115, '测试111111', '11', '1000005', '华语', 'static/img/sys/img.jpg', NULL, 8, 0, 0, '2023-04-13 02:15:28.1450', 1, 1);
-INSERT INTO `songlist` VALUES (116, 'YYY测试', 'ee', '1000006', NULL, 'static/img/sys/img.jpg', NULL, 3, 1, 0, '2023-04-20 15:19:09.0520', 1, 0);
-INSERT INTO `songlist` VALUES (117, '儿童1', '推荐测试用户1', '1000012', '儿童', 'static/img/sys/img.jpg', NULL, 5, 40, 0, '2023-04-25 16:00:38.0310', 1, 1);
-INSERT INTO `songlist` VALUES (118, '儿童2', '推荐测试用户1', '1000012', '儿童', 'static/img/sys/img.jpg', NULL, 5, 34, 1, '2023-04-25 16:00:59.7800', 1, 1);
-INSERT INTO `songlist` VALUES (119, '儿童3', '推荐测试用户2', '1000013', '儿童', 'static/img/sys/img.jpg', NULL, 5, 54, 0, '2023-04-25 18:35:41.2950', 1, 1);
-INSERT INTO `songlist` VALUES (120, '儿童4', '推荐测试用户2', '1000013', '儿童', 'static/img/sys/img.jpg', NULL, 5, 45, 0, '2023-04-25 18:35:55.8660', 1, 1);
-INSERT INTO `songlist` VALUES (121, '儿童5', '推荐测试用户3', '1000014', '儿童', 'static/img/sys/img.jpg', NULL, 5, 31, 0, '2023-04-25 21:29:24.1590', 1, 1);
-INSERT INTO `songlist` VALUES (122, '儿童6', '推荐测试用户3', '1000014', '儿童', 'static/img/sys/img.jpg', NULL, 5, 27, 0, '2023-04-25 21:29:44.7480', 1, 1);
-INSERT INTO `songlist` VALUES (123, '儿童7', '推荐测试用户4', '1000015', '儿童', 'static/img/sys/img.jpg', NULL, 5, 45, 0, '2023-04-25 22:11:37.5560', 1, 1);
-INSERT INTO `songlist` VALUES (124, '儿童8', '推荐测试用户4', '1000015', '儿童', 'static/img/sys/img.jpg', NULL, 5, 40, 0, '2023-04-25 22:14:46.5080', 1, 1);
-INSERT INTO `songlist` VALUES (125, '儿童9', '推荐测试用户5', '1000016', '儿童', 'static/img/sys/img.jpg', NULL, 5, 38, 0, '2023-04-25 22:33:12.4200', 1, 1);
-INSERT INTO `songlist` VALUES (126, '儿童10', '推荐测试用户5', '1000016', '儿童', 'static/img/sys/img.jpg', NULL, 5, 32, 0, '2023-04-25 22:33:30.8100', 1, 1);
+INSERT INTO `songlist` VALUES (1, '古风测试歌单01', 'dasd', '1000002', '古风', 'upload/static/img/sys/img.jpg', NULL, 3, 1, 1, '2023-04-11 14:23:24.8970', 1, 2);
+INSERT INTO `songlist` VALUES (2, '古风测试歌单02', 'dasd', '1000002', '古风', 'upload/static/img/sys/img.jpg', NULL, 0, 1, 1, '2023-04-11 14:23:26.0080', 1, 3);
+INSERT INTO `songlist` VALUES (3, '古风测试歌单03', 'dasd', '1000002', '古风', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 19:41:11.1330', 1, 1);
+INSERT INTO `songlist` VALUES (4, '古风测试歌单04', 'dasd', '1000002', '古风', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 19:41:11.7040', 1, 2);
+INSERT INTO `songlist` VALUES (5, '儿童测试歌单01', 'dasd', '1000002', '儿童', 'upload/static/img/sys/img.jpg', NULL, 3, 3, 2, '2023-04-12 19:59:19.4680', 1, 1);
+INSERT INTO `songlist` VALUES (6, '儿童测试歌单02', 'dasd', '1000002', '儿童', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 19:59:19.6180', 1, 2);
+INSERT INTO `songlist` VALUES (7, '儿童测试歌单03', 'dasd', '1000002', '儿童', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 19:59:19.7790', 1, 2);
+INSERT INTO `songlist` VALUES (8, '儿童测试歌单04', 'dasd', '1000002', '儿童', 'upload/static/img/sys/img.jpg', NULL, 3, 1, 0, '2023-04-12 19:59:19.9360', 1, 2);
+INSERT INTO `songlist` VALUES (9, '华语测试歌单01', 'dasd', '1000002', '华语', 'upload/static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 19:59:20.6160', 1, 2);
+INSERT INTO `songlist` VALUES (10, '华语测试歌单02', 'dasd', '1000002', '华语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:03:01.8130', 1, 1);
+INSERT INTO `songlist` VALUES (11, '华语测试歌单03', 'dasd', '1000002', '华语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:03:02.2140', 1, 2);
+INSERT INTO `songlist` VALUES (12, '华语测试歌单04', 'dasd', '1000002', '华语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:03:02.5730', 1, 2);
+INSERT INTO `songlist` VALUES (13, '粤语测试01', 'dasd', '1000002', '粤语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:09:26.8930', 1, 1);
+INSERT INTO `songlist` VALUES (14, '粤语测试02', 'dasd', '1000002', '粤语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:09:27.1940', 1, 2);
+INSERT INTO `songlist` VALUES (15, '粤语测试03', 'dasd', '1000002', '粤语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:09:27.4530', 1, 2);
+INSERT INTO `songlist` VALUES (16, '粤语测试04', 'dasd', '1000002', '粤语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:09:27.6960', 1, 2);
+INSERT INTO `songlist` VALUES (17, '欧美测试歌单01', 'dasd', '1000002', '欧美', 'upload/static/img/sys/img.jpg', NULL, 4, 1, 0, '2023-04-12 20:13:24.6090', 1, 1);
+INSERT INTO `songlist` VALUES (18, '欧美测试歌单02', 'dasd', '1000002', '欧美', 'upload/static/img/sys/img.jpg', NULL, 4, 1, 1, '2023-04-12 20:13:24.9860', 1, 2);
+INSERT INTO `songlist` VALUES (19, '欧美测试歌单03', 'dasd', '1000002', '欧美', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:13:25.2500', 1, 2);
+INSERT INTO `songlist` VALUES (20, '欧美测试歌单04', 'dasd', '1000002', '欧美', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:13:25.5460', 1, 2);
+INSERT INTO `songlist` VALUES (21, '韩语测试歌单01', 'dasd', '1000002', '韩语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:19:55.9360', 1, 1);
+INSERT INTO `songlist` VALUES (22, '韩语测试歌单02', 'dasd', '1000002', '韩语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:19:56.1510', 1, 2);
+INSERT INTO `songlist` VALUES (23, '韩语测试歌单03', 'dasd', '1000002', '韩语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:19:56.3490', 1, 2);
+INSERT INTO `songlist` VALUES (24, '韩语测试歌单04', 'dasd', '1000002', '韩语', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:19:56.5670', 1, 2);
+INSERT INTO `songlist` VALUES (25, '综艺测试01', 'dasd', '1000002', '综艺', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:21:06.0670', 1, 1);
+INSERT INTO `songlist` VALUES (26, '综艺测试02', 'dasd', '1000002', '综艺', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:21:06.3760', 1, 2);
+INSERT INTO `songlist` VALUES (27, '综艺测试03', 'dasd', '1000002', '综艺', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:21:06.6190', 1, 2);
+INSERT INTO `songlist` VALUES (28, '综艺测试04', 'dasd', '1000002', '综艺', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:21:06.8500', 1, 2);
+INSERT INTO `songlist` VALUES (29, '影视原声测试01', 'dasd', '1000002', '影视原声', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:22:26.6150', 1, 1);
+INSERT INTO `songlist` VALUES (30, '影视原声测试02', 'dasd', '1000002', '影视原声', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:22:26.8990', 1, 2);
+INSERT INTO `songlist` VALUES (31, '影视原声测试03', 'dasd', '1000002', '影视原声', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:22:27.1350', 1, 2);
+INSERT INTO `songlist` VALUES (32, '影视原声测试04', 'dasd', '1000002', '影视原声', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:22:41.6560', 1, 1);
+INSERT INTO `songlist` VALUES (33, '校园测试01', '法院玩也', '1000001', '校园', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:28:48.4430', 1, 1);
+INSERT INTO `songlist` VALUES (34, '校园测试02', '法院玩也', '1000001', '校园', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:28:48.6820', 1, 2);
+INSERT INTO `songlist` VALUES (35, '校园测试03', '法院玩也', '1000001', '校园', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:28:48.9330', 1, 2);
+INSERT INTO `songlist` VALUES (36, '校园测试04', '法院玩也', '1000001', '校园', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:28:49.1850', 1, 2);
+INSERT INTO `songlist` VALUES (37, '游戏测试01', '法院玩也', '1000001', '游戏', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:29:52.0840', 1, 1);
+INSERT INTO `songlist` VALUES (38, '游戏测试02', '法院玩也', '1000001', '游戏', 'upload/static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:29:52.3340', 1, 2);
+INSERT INTO `songlist` VALUES (39, '游戏测试03', '法院玩也', '1000001', '游戏', 'upload/static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:29:52.4830', 1, 2);
+INSERT INTO `songlist` VALUES (40, '游戏测试04', '法院玩也', '1000001', '游戏', 'upload/static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:29:52.6830', 1, 2);
+INSERT INTO `songlist` VALUES (41, '乡村测试01', '法院玩也', '1000001', '乡村', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:34:33.2230', 1, 2);
+INSERT INTO `songlist` VALUES (42, '乡村测试02', '法院玩也', '1000001', '乡村', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:34:33.4120', 1, 2);
+INSERT INTO `songlist` VALUES (43, '乡村测试03', '法院玩也', '1000001', '乡村', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:34:33.5630', 1, 2);
+INSERT INTO `songlist` VALUES (44, '乡村测试04', '法院玩也', '1000001', '乡村', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 20:34:33.7840', 1, 2);
+INSERT INTO `songlist` VALUES (45, '爵士测试01', '法院玩也', '1000001', '爵士', 'upload/static/img/sys/img.jpg', NULL, 1, 2, 0, '2023-04-12 20:35:05.4450', 1, 1);
+INSERT INTO `songlist` VALUES (46, '爵士测试02', '法院玩也', '1000001', '爵士', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:35:05.6630', 1, 2);
+INSERT INTO `songlist` VALUES (47, '爵士测试03', '法院玩也', '1000001', '爵士', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:35:05.8860', 1, 2);
+INSERT INTO `songlist` VALUES (48, '爵士测试04', '法院玩也', '1000001', '爵士', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:35:06.0810', 1, 2);
+INSERT INTO `songlist` VALUES (49, '中国风测试01', '法院玩也', '1000001', '中国风', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:39:17.8100', 1, 1);
+INSERT INTO `songlist` VALUES (50, '中国风测试02', '法院玩也', '1000001', '中国风', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:39:18.0000', 1, 2);
+INSERT INTO `songlist` VALUES (51, '中国风测试03', '法院玩也', '1000001', '中国风', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:39:18.1410', 1, 2);
+INSERT INTO `songlist` VALUES (52, '中国风测试04', '法院玩也', '1000001', '中国风', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 20:39:29.6020', 1, 1);
+INSERT INTO `songlist` VALUES (53, '金属测试01', '法院玩也', '1000001', '金属', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:03.5640', 1, 1);
+INSERT INTO `songlist` VALUES (54, '金属测试02', '法院玩也', '1000001', '金属', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:03.7620', 1, 2);
+INSERT INTO `songlist` VALUES (55, '金属测试03', '法院玩也', '1000001', '金属', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:03.9210', 1, 2);
+INSERT INTO `songlist` VALUES (56, '金属测试04', '法院玩也', '1000001', '金属', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:04.0860', 1, 2);
+INSERT INTO `songlist` VALUES (57, '古典测试01', '法院玩也', '1000001', '古典', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:34.1410', 1, 1);
+INSERT INTO `songlist` VALUES (58, '古典测试02', '法院玩也', '1000001', '古典', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:34.4230', 1, 2);
+INSERT INTO `songlist` VALUES (59, '古典测试03', '法院玩也', '1000001', '古典', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:34.6100', 1, 2);
+INSERT INTO `songlist` VALUES (60, '古典测试04', '法院玩也', '1000001', '古典', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:40:34.7680', 1, 2);
+INSERT INTO `songlist` VALUES (61, '民族测试01', '法院玩也', '1000001', '民族', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:41:07.3640', 1, 2);
+INSERT INTO `songlist` VALUES (62, '民族测试02', '法院玩也', '1000001', '民族', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:41:07.5590', 1, 2);
+INSERT INTO `songlist` VALUES (63, '民族测试03', '法院玩也', '1000001', '民族', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:41:07.7590', 1, 2);
+INSERT INTO `songlist` VALUES (64, '民族测试04', '法院玩也', '1000001', '民族', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 20:41:07.9570', 1, 2);
+INSERT INTO `songlist` VALUES (65, '说唱测试01', '法院玩也', '1000001', '说唱', 'upload/static/img/sys/img.jpg', NULL, 4, 28476234001, 1, '2023-04-12 20:41:44.4760', 1, 1);
+INSERT INTO `songlist` VALUES (66, '说唱测试02', '法院玩也', '1000001', '说唱', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:41:44.7580', 1, 2);
+INSERT INTO `songlist` VALUES (67, '说唱测试03', '法院玩也', '1000001', '说唱', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:41:44.9670', 1, 2);
+INSERT INTO `songlist` VALUES (68, '说唱测试04', '法院玩也', '1000001', '说唱', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 20:41:45.2380', 1, 2);
+INSERT INTO `songlist` VALUES (69, '民谣测试01', '法院玩也', '1000001', '民谣', 'upload/static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:43:25.4060', 1, 1);
+INSERT INTO `songlist` VALUES (70, '民谣测试02', '法院玩也', '1000001', '民谣', 'upload/static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:43:25.6380', 1, 2);
+INSERT INTO `songlist` VALUES (71, '民谣测试03', '法院玩也', '1000001', '民谣', 'upload/static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:43:25.9270', 1, 2);
+INSERT INTO `songlist` VALUES (72, '民谣测试04', '法院玩也', '1000001', '民谣', 'upload/static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 20:43:26.1580', 1, 2);
+INSERT INTO `songlist` VALUES (73, '驾车测试1', '法院玩也', '1000001', '驾车', 'upload/static/img/sys/img.jpg', NULL, 23, 10, 3, '2023-04-12 21:14:40.9020', 1, 1);
+INSERT INTO `songlist` VALUES (74, '驾车测试2', '法院玩也', '1000001', '驾车', 'upload/static/img/sys/img.jpg', NULL, 23, 4, 0, '2023-04-12 21:14:44.3010', 1, 1);
+INSERT INTO `songlist` VALUES (75, '驾车测试3', '法院玩也', '1000001', '驾车', 'upload/static/img/sys/img.jpg', NULL, 23, 2, 1, '2023-04-12 21:14:44.9250', 1, 1);
+INSERT INTO `songlist` VALUES (76, '驾车测试4', '法院玩也', '1000001', '驾车', 'upload/static/img/sys/img.jpg', NULL, 23, 0, 0, '2023-04-12 21:14:45.1010', 1, 1);
+INSERT INTO `songlist` VALUES (77, '驾车测试5', '法院玩也', '1000001', '驾车', 'upload/static/img/sys/img.jpg', NULL, 23, 0, 0, '2023-04-12 21:14:45.2640', 1, 1);
+INSERT INTO `songlist` VALUES (78, '舞曲測試01', '1000003', '1000004', '舞曲', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 22:14:56.7910', 1, 1);
+INSERT INTO `songlist` VALUES (79, '舞曲測試02', '1000003', '1000004', '舞曲', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 22:14:57.0510', 1, 1);
+INSERT INTO `songlist` VALUES (80, '舞曲測試03', '1000003', '1000004', '舞曲', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 22:14:57.2780', 1, 2);
+INSERT INTO `songlist` VALUES (81, '舞曲測試04', '1000003', '1000004', '舞曲', 'upload/static/img/sys/img.jpg', NULL, 4, 0, 0, '2023-04-12 22:14:57.5110', 1, 2);
+INSERT INTO `songlist` VALUES (82, '摇滚测试01', '1000003', '1000004', '摇滚', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:18:40.1200', 1, 1);
+INSERT INTO `songlist` VALUES (83, '摇滚测试02', '1000003', '1000004', '摇滚', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:18:40.3050', 1, 1);
+INSERT INTO `songlist` VALUES (84, '摇滚测试03', '1000003', '1000004', '摇滚', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:18:40.4810', 1, 1);
+INSERT INTO `songlist` VALUES (85, '摇滚测试04', '1000003', '1000004', '摇滚', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:18:40.6350', 1, 1);
+INSERT INTO `songlist` VALUES (86, '流行测试01', '1000003', '1000004', '流行', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 22:19:36.4650', 1, 1);
+INSERT INTO `songlist` VALUES (87, '流行测试02', '1000003', '1000004', '流行', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 22:19:36.6650', 1, 1);
+INSERT INTO `songlist` VALUES (88, '流行测试03', '1000003', '1000004', '流行', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 22:19:36.8660', 1, 1);
+INSERT INTO `songlist` VALUES (89, '流行测试04', '1000003', '1000004', '流行', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 22:19:37.0780', 1, 1);
+INSERT INTO `songlist` VALUES (90, '怀旧测试01', '1000003', '1000004', '怀旧', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:27:56.3470', 1, 1);
+INSERT INTO `songlist` VALUES (91, '兴奋测试01', '1000003', '1000004', '兴奋', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:28:32.0370', 1, 1);
+INSERT INTO `songlist` VALUES (92, '孤独测试01', '1000003', '1000004', '孤独', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:28:54.6270', 1, 1);
+INSERT INTO `songlist` VALUES (93, '安静测试01', '1000003', '1000004', '安静', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:29:12.1530', 1, 1);
+INSERT INTO `songlist` VALUES (94, '思念测试01', '1000003', '1000004', '思念', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:29:40.1030', 1, 1);
+INSERT INTO `songlist` VALUES (95, '感动测试01', '1000003', '1000004', '感动', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:30:44.8610', 1, 1);
+INSERT INTO `songlist` VALUES (96, '伤感测试01', '1000003', '1000004', '伤感', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:31:15.6850', 1, 1);
+INSERT INTO `songlist` VALUES (97, '快乐测试01', '1000003', '1000004', '快乐', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:32:01.5500', 1, 1);
+INSERT INTO `songlist` VALUES (98, '跳舞测试01', '1000003', '1000004', '跳舞', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:32:23.9110', 1, 1);
+INSERT INTO `songlist` VALUES (99, '约会测试01', '1000003', '1000004', '约会', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:32:44.4050', 1, 1);
+INSERT INTO `songlist` VALUES (100, '旅行测试01', '1000003', '1000004', '旅行', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:33:05.2600', 1, 1);
+INSERT INTO `songlist` VALUES (101, '运动测试01', '1000003', '1000004', '运动', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 1, '2023-04-12 22:33:32.3410', 1, 1);
+INSERT INTO `songlist` VALUES (102, '休闲时间测试01', '1000005', '1000005', '休闲时间', 'upload/static/img/sys/img.jpg', NULL, 5, 0, 0, '2023-04-12 22:37:12.9090', 1, 1);
+INSERT INTO `songlist` VALUES (103, '休息测试01', '1000005', '1000005', '休息', 'upload/static/img/sys/img.jpg', '111111111111111111111', 1, 0, 0, '2023-04-12 22:38:31.9750', 0, 2);
+INSERT INTO `songlist` VALUES (104, '工作测试01', '1000005', '1000005', '工作', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:38:55.3990', 1, 1);
+INSERT INTO `songlist` VALUES (105, '学习测试01', '1000005', '1000005', '学习', 'upload/static/img/sys/img.jpg', NULL, 2, 0, 0, '2023-04-12 22:40:29.8560', 1, 1);
+INSERT INTO `songlist` VALUES (106, '背景音乐测试01', '1000005', '1000005', '背景音乐', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:41:47.5760', 1, 1);
+INSERT INTO `songlist` VALUES (107, '情歌测试01', '1000005', '1000005', '情歌', 'upload/static/img/sys/img.jpg', NULL, 3, 0, 0, '2023-04-12 22:42:11.0140', 1, 1);
+INSERT INTO `songlist` VALUES (108, '榜单测试01', '1000005', '1000005', '榜单', 'upload/static/img/sys/img.jpg', NULL, 11, 0, 0, '2023-04-12 22:43:11.6670', 1, 1);
+INSERT INTO `songlist` VALUES (109, '休息测试01', '1000005', '1000005', '休息', 'upload/static/img/sys/img.jpg', NULL, 11, 0, 0, '2023-04-12 22:43:13.0640', 1, 1);
+INSERT INTO `songlist` VALUES (110, '翻唱测试01', '1000005', '1000005', '翻唱', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:43:35.8200', 1, 1);
+INSERT INTO `songlist` VALUES (111, '经典老歌测试01', '1000005', '1000005', '经典老歌', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:43:57.2570', 1, 1);
+INSERT INTO `songlist` VALUES (112, 'KYV金曲测试01', '1000005', '1000005', 'KTV金曲', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:44:15.9720', 1, 1);
+INSERT INTO `songlist` VALUES (113, '网络热歌测试01', '1000005', '1000005', '网络热歌', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:44:48.2560', 1, 1);
+INSERT INTO `songlist` VALUES (114, '热榜歌单测试01', '1000005', '1000005', '热榜歌单', 'upload/static/img/sys/img.jpg', NULL, 1, 0, 0, '2023-04-12 22:45:27.8960', 1, 1);
+INSERT INTO `songlist` VALUES (115, '测试111111', '11', '1000005', '华语', 'upload/static/img/sys/img.jpg', NULL, 8, 0, 0, '2023-04-13 02:15:28.1450', 1, 1);
+INSERT INTO `songlist` VALUES (116, 'YYY测试', 'ee', '1000006', NULL, 'upload/static/img/sys/img.jpg', NULL, 3, 1, 0, '2023-04-20 15:19:09.0520', 1, 0);
+INSERT INTO `songlist` VALUES (117, '儿童1', '推荐测试用户1', '1000012', '儿童', 'upload/static/img/sys/img.jpg', NULL, 5, 40, 0, '2023-04-25 16:00:38.0310', 1, 1);
+INSERT INTO `songlist` VALUES (118, '儿童2', '推荐测试用户1', '1000012', '儿童', 'upload/static/img/sys/img.jpg', NULL, 5, 34, 1, '2023-04-25 16:00:59.7800', 1, 1);
+INSERT INTO `songlist` VALUES (119, '儿童3', '推荐测试用户2', '1000013', '儿童', 'upload/static/img/sys/img.jpg', NULL, 5, 54, 0, '2023-04-25 18:35:41.2950', 1, 1);
+INSERT INTO `songlist` VALUES (120, '儿童4', '推荐测试用户2', '1000013', '儿童', 'upload/static/img/sys/img.jpg', NULL, 5, 45, 0, '2023-04-25 18:35:55.8660', 1, 1);
+INSERT INTO `songlist` VALUES (121, '儿童5', '推荐测试用户3', '1000014', '儿童', 'upload/static/img/sys/img.jpg', NULL, 5, 31, 0, '2023-04-25 21:29:24.1590', 1, 1);
+INSERT INTO `songlist` VALUES (122, '儿童6', '推荐测试用户3', '1000014', '儿童', 'upload/static/img/sys/img.jpg', NULL, 5, 27, 0, '2023-04-25 21:29:44.7480', 1, 1);
+INSERT INTO `songlist` VALUES (123, '儿童7', '推荐测试用户4', '1000015', '儿童', 'upload/static/img/sys/img.jpg', NULL, 5, 45, 0, '2023-04-25 22:11:37.5560', 1, 1);
+INSERT INTO `songlist` VALUES (124, '儿童8', '推荐测试用户4', '1000015', '儿童', 'upload/static/img/sys/img.jpg', NULL, 5, 40, 0, '2023-04-25 22:14:46.5080', 1, 1);
+INSERT INTO `songlist` VALUES (125, '儿童9', '推荐测试用户5', '1000016', '儿童', 'upload/static/img/sys/img.jpg', NULL, 5, 38, 0, '2023-04-25 22:33:12.4200', 1, 1);
+INSERT INTO `songlist` VALUES (126, '儿童10', '推荐测试用户5', '1000016', '儿童', 'upload/static/img/sys/img.jpg', NULL, 5, 32, 0, '2023-04-25 22:33:30.8100', 1, 1);
 
 -- ----------------------------
 -- Table structure for songlist_own_song
@@ -4951,7 +4951,7 @@ CREATE TABLE `user`  (
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '账号昵称',
   `account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '账号',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码',
-  `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'static/img/sys/defaultAvatar.jpg' COMMENT '头像的url',
+  `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'upload/static/img/sys/defaultAvatar.jpg' COMMENT '头像的url',
   `gender` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '保密' COMMENT '性别  外键',
   `signature` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '个性签名',
   `register_time` datetime NOT NULL COMMENT '注册时间',
@@ -4968,17 +4968,17 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (47, '管理员', '1000001', '$2a$10$NXDmbn6xi7hIK2kJOsF2EOsa3rQV71E5RVYvZ9I8fFX99hVw7S4jW', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-03-19 15:15:45', '2023-04-20 22:45:19', 1, 13, 1);
-INSERT INTO `user` VALUES (48, 'dasd', '1000002', '$2a$10$t91f97.7IElVV2SWlH6CfOxck6qWcHmxPVsW0bgejIGIVOW/Kq.OG', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-03-19 15:23:05', '2023-04-13 02:17:06', 1, 5, 0);
-INSERT INTO `user` VALUES (49, 'cc', '1000004', '$2a$10$Bx2VPlvBKj6GfJq3dizkJes6abMjsgysqXxBBpap7ygS.pfnKBuMS', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-12 21:44:58', '2023-04-13 01:37:45', 1, 3, 0);
-INSERT INTO `user` VALUES (51, '22', '1000005', '$2a$10$eCbY0KbR0EyYMiYKvaJl.OnL2VyC.wiQG/AJNE97/LR.C.VTxcu4O', 'static/img/sys/defaultAvatar.jpg', '女', '22', '2023-04-12 22:36:25', '2023-04-13 14:23:57', 1, 10, 0);
-INSERT INTO `user` VALUES (52, 'ee', '1000006', '$2a$10$FLWYxpRMsj.UPQVFPnRduu2Jfwn5tZM59OorItwd0KnXsw.C6CwT6', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-12 23:23:02', '2023-04-20 23:36:50', 1, 5, 0);
-INSERT INTO `user` VALUES (56, 'ff', '1000010', '$2a$10$DZvDZlhW.PrDwAkAvswlvONzYSKSSY/qeCYZ09O8QXHBUsI1WsU8i', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-13 01:50:53', NULL, 1, 0, 0);
-INSERT INTO `user` VALUES (57, 'eee', '1000011', '$2a$10$pb13o.taar7Xg3OitRG8nur3rxlt5jN3cSnqg0g/1Sn.eJRNkfr8W', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-13 02:03:34', NULL, 1, 0, 0);
-INSERT INTO `user` VALUES (58, '推荐测试用户1', '1000012', '$2a$10$icGnM7vofa3H0/xl7/qwNeovbdUHv7lq2KKS/L3MzP3Rt8UEVqJQ6', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-25 15:57:02', '2023-04-25 15:57:47', 1, 1, 0);
-INSERT INTO `user` VALUES (59, '推荐测试用户2', '1000013', '$2a$10$EdLuEduP8GPBpYd14mq7nuizSmKlvyit7sOC0lglEMDEEY/VdCjIy', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-25 17:22:54', '2023-04-25 17:23:19', 1, 1, 0);
-INSERT INTO `user` VALUES (60, '推荐测试用户3', '1000014', '$2a$10$Vk1DzPa4.uEjeseuvnGUqO.Vq5.RZnsGkGWJuboXv18qWwa2gzsRa', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-25 21:28:18', '2023-04-25 22:42:36', 1, 4, 0);
-INSERT INTO `user` VALUES (61, '推荐测试用户4', '1000015', '$2a$10$Sf8emksp/r0AgUFKNbeitu96SIpfHo25/2o501/.BskXI5YFR2h1u', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-25 21:40:12', '2023-04-25 21:41:29', 1, 1, 0);
-INSERT INTO `user` VALUES (62, '推荐测试用户5', '1000016', '$2a$10$3WFhy6bdYh/mUKtKu4oQQudRZLc5yCwvl6qAho6fX5x3y3NWcxhSy', 'static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-25 22:31:18', '2023-04-25 22:31:51', 1, 2, 0);
+INSERT INTO `user` VALUES (47, '管理员', '1000001', '$2a$10$NXDmbn6xi7hIK2kJOsF2EOsa3rQV71E5RVYvZ9I8fFX99hVw7S4jW', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-03-19 15:15:45', '2023-04-20 22:45:19', 1, 13, 1);
+INSERT INTO `user` VALUES (48, 'dasd', '1000002', '$2a$10$t91f97.7IElVV2SWlH6CfOxck6qWcHmxPVsW0bgejIGIVOW/Kq.OG', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-03-19 15:23:05', '2023-04-13 02:17:06', 1, 5, 0);
+INSERT INTO `user` VALUES (49, 'cc', '1000004', '$2a$10$Bx2VPlvBKj6GfJq3dizkJes6abMjsgysqXxBBpap7ygS.pfnKBuMS', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-12 21:44:58', '2023-04-13 01:37:45', 1, 3, 0);
+INSERT INTO `user` VALUES (51, '22', '1000005', '$2a$10$eCbY0KbR0EyYMiYKvaJl.OnL2VyC.wiQG/AJNE97/LR.C.VTxcu4O', 'upload/static/img/sys/defaultAvatar.jpg', '女', '22', '2023-04-12 22:36:25', '2023-04-13 14:23:57', 1, 10, 0);
+INSERT INTO `user` VALUES (52, 'ee', '1000006', '$2a$10$FLWYxpRMsj.UPQVFPnRduu2Jfwn5tZM59OorItwd0KnXsw.C6CwT6', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-12 23:23:02', '2023-04-20 23:36:50', 1, 5, 0);
+INSERT INTO `user` VALUES (56, 'ff', '1000010', '$2a$10$DZvDZlhW.PrDwAkAvswlvONzYSKSSY/qeCYZ09O8QXHBUsI1WsU8i', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-13 01:50:53', NULL, 1, 0, 0);
+INSERT INTO `user` VALUES (57, 'eee', '1000011', '$2a$10$pb13o.taar7Xg3OitRG8nur3rxlt5jN3cSnqg0g/1Sn.eJRNkfr8W', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-13 02:03:34', NULL, 1, 0, 0);
+INSERT INTO `user` VALUES (58, '推荐测试用户1', '1000012', '$2a$10$icGnM7vofa3H0/xl7/qwNeovbdUHv7lq2KKS/L3MzP3Rt8UEVqJQ6', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-25 15:57:02', '2023-04-25 15:57:47', 1, 1, 0);
+INSERT INTO `user` VALUES (59, '推荐测试用户2', '1000013', '$2a$10$EdLuEduP8GPBpYd14mq7nuizSmKlvyit7sOC0lglEMDEEY/VdCjIy', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-25 17:22:54', '2023-04-25 17:23:19', 1, 1, 0);
+INSERT INTO `user` VALUES (60, '推荐测试用户3', '1000014', '$2a$10$Vk1DzPa4.uEjeseuvnGUqO.Vq5.RZnsGkGWJuboXv18qWwa2gzsRa', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-25 21:28:18', '2023-04-25 22:42:36', 1, 4, 0);
+INSERT INTO `user` VALUES (61, '推荐测试用户4', '1000015', '$2a$10$Sf8emksp/r0AgUFKNbeitu96SIpfHo25/2o501/.BskXI5YFR2h1u', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-25 21:40:12', '2023-04-25 21:41:29', 1, 1, 0);
+INSERT INTO `user` VALUES (62, '推荐测试用户5', '1000016', '$2a$10$3WFhy6bdYh/mUKtKu4oQQudRZLc5yCwvl6qAho6fX5x3y3NWcxhSy', 'upload/static/img/sys/defaultAvatar.jpg', '保密', NULL, '2023-04-25 22:31:18', '2023-04-25 22:31:51', 1, 2, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -24,7 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -197,6 +199,27 @@ public class SongListController {
         return new Result<>(StatusCodeEnum.OK, true);
     }
 
+    @ApiOperation("删除歌单 批量")
+    @DeleteMapping()
+    public Result<Boolean> delBatch(@RequestBody List<Songlist> list) {
+        Result<Boolean> result = new Result<>(StatusCodeEnum.OK, false);
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (Songlist songlist : list) {
+            Integer songlistId = songlist.getId();
+
+            ids.add(songlistId);
+        }
+
+        boolean batch = songlistService.removeBatchByIds(ids);
+
+        if (batch) {
+            result = new Result<>(StatusCodeEnum.OK, true);
+        }
+
+        return result;
+    }
+
+
     @ApiOperation("获取歌单 多个 根据搜索关键字")
     @GetMapping(value = "/list/key/{key}")
     public Result<List<Songlist>> getSongLists(@PathVariable("key") String key) {
@@ -216,6 +239,35 @@ public class SongListController {
         return new Result<>(StatusCodeEnum.OK, songlists);
     }
 
+    @ApiOperation("获取歌单 分页条件 ")
+    @PostMapping("/page/{currentPage}/{pageSize}")
+    public Result<Page<Songlist>> pageCondition(@PathVariable Integer currentPage, @PathVariable Integer pageSize, @RequestBody HashMap<String, String> map) {
+        Result<Page<Songlist>> result = new Result<>(StatusCodeEnum.OK, null);
+        String key = map.get("key");
+
+        Page<Songlist> page = new Page<>(currentPage, pageSize);
+
+        LambdaQueryWrapper<Songlist> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper
+                .like(key != null, Songlist::getName, key)
+                .or()
+                .like(key != null, Songlist::getAuthorName, key)
+                .or()
+                .like(key != null, Songlist::getAuthorAccount, key)
+                .or()
+                .like(key != null, Songlist::getTag, key)
+                .or()
+                .like(key != null, Songlist::getAuthorName, key);
+
+        Page<Songlist> songlistPage = songlistService.page(page, queryWrapper);
+
+        if (songlistPage != null) {
+            result = new Result<>(StatusCodeEnum.OK, songlistPage);
+        }
+
+        return result;
+    }
 
     @ApiOperation("上传歌曲图片")
     @PostMapping("/upload/img")

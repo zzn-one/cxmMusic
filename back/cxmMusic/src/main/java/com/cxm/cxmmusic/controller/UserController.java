@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cxm.cxmmusic.exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.Song;
+import com.cxm.cxmmusic.pojo.Songlist;
 import com.cxm.cxmmusic.pojo.User;
+import com.cxm.cxmmusic.service.SonglistService;
 import com.cxm.cxmmusic.service.UserService;
 import com.cxm.cxmmusic.vo.Result;
 import io.swagger.annotations.Api;
@@ -22,8 +24,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author
@@ -36,6 +40,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SonglistService songlistService;
 
     @Resource
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -107,6 +114,16 @@ public class UserController {
         boolean update = userService.updateById(user);
 
         if (update) {
+
+            String name = user.getName();
+            String account = user.getAccount();
+            //更新该用户的歌单作者名
+            LambdaUpdateWrapper<Songlist> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.eq(Songlist::getAuthorAccount, account);
+            updateWrapper.set(Songlist::getAuthorName, name);
+
+            songlistService.update(updateWrapper);
+
             result = new Result<>(StatusCodeEnum.OK, true);
         } else {
             result = new Result<>(StatusCodeEnum.EXCEPTION, false);
@@ -184,6 +201,42 @@ public class UserController {
 
 
     }
+
+    @ApiOperation("删除用户")
+    @DeleteMapping("/{id}")
+    public Result<Boolean> delOne(@PathVariable("id")Integer id){
+        Result<Boolean> result = new Result<>(StatusCodeEnum.OK,false);
+
+        boolean remove = userService.removeById(id);
+
+        if (remove){
+            result = new Result<>(StatusCodeEnum.OK,true);
+        }
+
+        return result;
+
+    }
+    @ApiOperation("删除用户 批量")
+    @DeleteMapping()
+    public Result<Boolean> delOne(@RequestBody List<User> userList){
+        Result<Boolean> result = new Result<>(StatusCodeEnum.OK,false);
+
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (User user : userList) {
+            Integer userId = user.getId();
+            ids.add(userId);
+        }
+
+        boolean remove = userService.removeBatchByIds(ids);
+
+        if (remove){
+            result = new Result<>(StatusCodeEnum.OK,true);
+        }
+
+        return result;
+
+    }
+
 
 
     @ApiOperation("上传用户头像图片")

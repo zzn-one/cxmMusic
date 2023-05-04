@@ -18,7 +18,7 @@
             <!-- 按钮 -->
             <div class="btns-box">
                 <el-button type="danger" class="btn" @click="batchDelBtnClick">批量删除</el-button>
-                <el-button type="warning" class="btn" @click="addBtnClick">添加</el-button>
+                <!-- <el-button type="warning" class="btn" @click="addBtnClick">添加</el-button> -->
             </div>
 
             <!-- 表格 -->
@@ -74,10 +74,29 @@
             </el-pagination>
         </el-card>
         <!-- 编辑窗口 -->
-        <el-dialog title="编辑窗口" :visible.sync="editFormVisible">
-            <el-form :model="editForm">
-                <el-form-item label="属性1">
+        <el-dialog title="修改用户信息" :visible.sync="editFormVisible">
+            <el-form :model="editForm" label-position="left" label-width="100px">
+                <el-form-item label="账号">
+                    <el-input v-model="editForm.account" autocomplete="off" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="昵称">
                     <el-input v-model="editForm.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="用户类型">
+                    <el-select v-model="editForm.type" placeholder="请选择用户类型">
+                        <el-option v-for="type in typeList" :key="type.value" :label="type.key" :value="type.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="性别">
+                    <el-select v-model="editForm.gender" placeholder="请选择用户类型">
+                        <el-option v-for="gender in genderList" :key="gender.text" :label="gender.text"
+                            :value="gender.text">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="签名">
+                    <el-input v-model="editForm.signature" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -86,7 +105,7 @@
             </div>
         </el-dialog>
         <!-- 添加窗口 -->
-        <el-dialog title="添加窗口" :visible.sync="addFormVisible">
+        <!-- <el-dialog title="添加窗口" :visible.sync="addFormVisible">
             <el-form :model="addForm">
                 <el-form-item label="属性1">
                     <el-input v-model="addForm.name" autocomplete="off"></el-input>
@@ -96,7 +115,7 @@
                 <el-button @click="addFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="addSubmitBtnClick">确认添加</el-button>
             </div>
-        </el-dialog>
+        </el-dialog> -->
 
     </div>
 </template>
@@ -104,6 +123,8 @@
 export default {
     data() {
         return {
+            genderList: [],
+            typeList: [],
             //分页
             currentPage: 1,
             pageSize: 10,
@@ -121,9 +142,9 @@ export default {
             editFormVisible: false,
             editForm: "",
 
-            //编辑窗口
-            addFormVisible: false,
-            addForm: "",
+            //添加窗口
+            // addFormVisible: false,
+            // addForm: "",
 
         }
     },
@@ -147,16 +168,17 @@ export default {
         },
 
 
-        //添加按钮点击
-        addBtnClick() {
-            this.addFormVisible = true
-        },
+        // //添加按钮点击
+        // addBtnClick() {
+        //     this.addFormVisible = true
+        // },
         //搜索按钮点击
         searchBtnClick() {
             this.pageData()
         },
         //编辑按钮点击
         editBtnClick(row) {
+            this.editForm = row
             this.editFormVisible = true
         },
         //删除按钮点击
@@ -167,7 +189,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 //发送删除请求
-
+                this.delOne(row.id)
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -183,7 +205,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 //发送批量删除请求
-
+                this.delBatch()
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -206,15 +228,16 @@ export default {
         //-----------------------------编辑窗口-------------------------
         //确认提交按钮点击
         editSubmitBtnClick() {
-
+            this.updateMsg()
+            this.editFormVisible = false
         },
 
 
         //-----------------------------添加窗口-------------------------
         //确认添加按钮点击
-        addSubmitBtnClick() {
+        // addSubmitBtnClick() {
 
-        },
+        // },
         //-----------------------------发送请求-------------------------
         async axios111() {
             const resp = await this.$axios("")
@@ -222,6 +245,51 @@ export default {
             const code = resp.data.code
             if (code === 200) {
 
+            }
+        },
+        //修改用户信息
+        async updateMsg() {
+            const resp = await this.$axios({
+                url: "user/update/msg",
+                method: 'put',
+                data: this.editForm
+            })
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.pageData()
+                this.$message.success("用户信息已修改")
+            }
+        },
+        async getGenderList() {
+            const resp = await this.$axios("dict/gender")
+
+            const code = resp.data.code
+            if (code === 200) {
+                this.genderList = resp.data.data
+            }
+        },
+        async delOne(id) {
+            const resp = await this.$axios.delete("user/" + id)
+
+            const code = resp.data.code
+
+            if (code === 200 && resp.data.data === true) {
+                this.pageData()
+                this.$message.success("账号已删除")
+            }
+        },
+        async delBatch() {
+            const resp = await this.$axios({
+                url: "user",
+                data: this.multipleSelection,
+                method: "delete"
+            })
+
+            const code = resp.data.code
+            if (code === 200 && resp.data.data === true) {
+                this.pageData()
+                this.$message.success("账号已删除")
             }
         },
 
@@ -243,6 +311,19 @@ export default {
 
         init() {
             this.pageData()
+
+            this.getGenderList()
+
+            this.typeList.push(
+                {
+                    key: "管理员",
+                    value: 1
+                },
+                {
+                    key: "普通用户",
+                    value: 0
+                }
+            )
         }
 
 
@@ -299,5 +380,42 @@ export default {
 
 .btn {
     width: 100px;
+}
+
+.img-avatar {
+    width: 50px;
+    height: 50px;
+}
+
+/deep/.el-form .el-select,
+/deep/.el-form .el-input {
+    width: 800px;
+}
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+}
+
+.avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
 }
 </style>
