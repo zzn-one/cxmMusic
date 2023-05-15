@@ -13,6 +13,11 @@
         <div class="tag-box">
             <div class="tag-body">
                 <ul class="tag-ul">
+                    <li class="tag-li" v-if="isLogin && this.recommengSongListSize !== 0">
+                        <el-button type="text" class="tag-li-button" :key="0" @click="userBaseRecommend($event)">
+                            为你推荐
+                        </el-button>
+                    </li>
                     <li v-for="tag of tagList" class="tag-li" :key="tag.id">
                         <el-button type="text" class="tag-li-button" @click="tag_btn($event, tag)">
                             {{ tag.text }}
@@ -33,11 +38,11 @@
                                 :key="index2" shadow="never">
 
                                 <RouterLink :to="{
-                                        name: 'songListDetail',
-                                        query: {
-                                            id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
-                                        }
+                                    name: 'songListDetail',
+                                    query: {
+                                        id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
                                     }
+                                }
                                     ">
                                     <!--  -->
                                     <img :src="$imgPrefix + songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
@@ -59,11 +64,11 @@
                                 :key="index2" shadow="never">
 
                                 <RouterLink :to="{
-                                        name: 'songListDetail',
-                                        query: {
-                                            id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
-                                        }
+                                    name: 'songListDetail',
+                                    query: {
+                                        id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
                                     }
+                                }
                                     ">
                                     <img :src="$imgPrefix + songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
                                         class="card-img">
@@ -84,11 +89,11 @@
                                 v-for="index2 in carouselItemRemainingNumber " :key="index2" shadow="never">
 
                                 <RouterLink :to="{
-                                        name: 'songListDetail',
-                                        query: {
-                                            id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
-                                        }
+                                    name: 'songListDetail',
+                                    query: {
+                                        id: songList[(index - 1) * carouselItemSize + (index2 - 1)].id
                                     }
+                                }
                                     ">
                                     <!--  -->
                                     <img :src="$imgPrefix + songList[(index - 1) * carouselItemSize + (index2 - 1)].imgUrl"
@@ -112,6 +117,7 @@
 </template>
 
 <script>
+import token from '@/assets/js/token';
 export default {
     name: 'HallHome',
 
@@ -122,6 +128,8 @@ export default {
             tagList: [],
             tagCurrentNav: '',
             isLogin: false,
+
+            recommengSongListSize: 0,
 
             songList: [],
             //一个轮播图页面展示歌单的数量(最大是4)
@@ -168,6 +176,7 @@ export default {
         //初始化
         async init() {
 
+            this.getRecommengSongList()
 
             // 获取标签列表
             await this.getTagList()
@@ -180,7 +189,10 @@ export default {
             }
 
             //获取歌单列表
-            await this.getSongList(this.tagList[0])
+            if (this.songList.length === 0) {
+                await this.getSongList(this.tagList[0])
+            }
+
 
             //计算轮播图页面数量
             this.carouselItemNumber = Math.ceil(this.songList.length / this.carouselItemSize)
@@ -190,8 +202,31 @@ export default {
         },
         //获取用户登录状态
         getLoginStatus() {
-            this.isLogin = this.$route.query.isLogin
-        }
+            if (token().account) {
+                this.isLogin = true
+            }
+
+        },
+        //获取推荐的歌曲
+        userBaseRecommend(e) {
+            //被点击的导航标签变色
+            this.tagCurrentNav = e.target
+            this.getRecommengSongList()
+
+        },
+        //获取推荐歌单列表
+        async getRecommengSongList() {
+
+            const resp = await this.$axios("/songList/list/recommend/" + this.account)
+
+            const code = resp.data.code
+
+            if (code === 200) {
+                this.songList = []
+                this.songList = resp.data.data.records
+                this.recommengSongListSize = resp.data.data.total
+            }
+        },
 
     },
     watch: {

@@ -141,6 +141,22 @@ public class SongListController {
         return new Result<>(StatusCodeEnum.OK, songlistPage);
     }
 
+    @ApiOperation("获取推荐歌单 最多1个 根据账号")
+    @GetMapping(value = "/list/recommend/{account}")
+    public Result<Page<Songlist>> getSongListsLimit1(@PathVariable("account") String account) {
+
+        Page<Songlist> page = Page.of(0, 1);
+        LambdaQueryWrapper<Songlist> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Songlist::getTag, "猜你喜欢");
+
+        queryWrapper.like(Songlist::getIntroduction, account);
+        queryWrapper.orderByDesc(Songlist::getCreatedTime);
+
+        Page<Songlist> songlistPage = songlistService.page(page, queryWrapper);
+
+
+        return new Result<>(StatusCodeEnum.OK, songlistPage);
+    }
 
     @ApiOperation("修改歌单信息")
     @ApiImplicitParam(value = "歌单实体", name = "songlist")

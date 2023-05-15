@@ -84,6 +84,9 @@ socketIO:
 file:
   upload:
     path: upload/static/img/
+#官方指定账号
+account: 1000001
+
 
 
 

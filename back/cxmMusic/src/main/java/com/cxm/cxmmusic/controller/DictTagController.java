@@ -1,5 +1,6 @@
 package com.cxm.cxmmusic.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cxm.cxmmusic.exception.StatusCodeEnum;
 import com.cxm.cxmmusic.pojo.DictTag;
 import com.cxm.cxmmusic.service.DictTagService;
@@ -30,6 +31,18 @@ public class DictTagController {
     @GetMapping()
     @ApiOperation("获取标签列表")
     public Result<List<DictTag>> all() {
+        LambdaQueryWrapper<DictTag> tagLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        tagLambdaQueryWrapper.gt(DictTag::getId, 300).or().lt(DictTag::getId, 200);
+
+
+        List<DictTag> list = dictTagService.list(tagLambdaQueryWrapper);
+
+        return new Result<>(StatusCodeEnum.OK, list);
+    }
+
+    @GetMapping("/all")
+    @ApiOperation("获取标签列表")
+    public Result<List<DictTag>> allTag() {
         List<DictTag> list = dictTagService.list();
 
         return new Result<>(StatusCodeEnum.OK, list);
@@ -41,14 +54,14 @@ public class DictTagController {
         ArrayList<TagOrder> result = new ArrayList<>();
 
         TagOrder tagOrder = new TagOrder("语种", null);
-        TagOrder tagOrder1 = new TagOrder("热门", null);
+        //TagOrder tagOrder1 = new TagOrder("热门", null);
         TagOrder tagOrder2 = new TagOrder("主题", null);
         TagOrder tagOrder3 = new TagOrder("场景", null);
         TagOrder tagOrder4 = new TagOrder("心情", null);
         TagOrder tagOrder5 = new TagOrder("风格", null);
 
         List<DictTag> tags = new ArrayList<>();
-        List<DictTag> tags1 = new ArrayList<>();
+        //List<DictTag> tags1 = new ArrayList<>();
         List<DictTag> tags2 = new ArrayList<>();
         List<DictTag> tags3 = new ArrayList<>();
         List<DictTag> tags4 = new ArrayList<>();
@@ -63,7 +76,7 @@ public class DictTagController {
 
             } else if (tagId < 300) {
                 //热门
-                tags1.add(dictTag);
+                //tags1.add(dictTag);
             } else if (tagId < 400) {
                 //主题
                 tags2.add(dictTag);
@@ -80,14 +93,14 @@ public class DictTagController {
         }
 
         tagOrder.setTagList(tags);
-        tagOrder1.setTagList(tags1);
+        //tagOrder1.setTagList(tags1);
         tagOrder2.setTagList(tags2);
         tagOrder3.setTagList(tags3);
         tagOrder4.setTagList(tags4);
         tagOrder5.setTagList(tags5);
 
         result.add(tagOrder);
-        result.add(tagOrder1);
+        //result.add(tagOrder1);
         result.add(tagOrder2);
         result.add(tagOrder3);
         result.add(tagOrder4);

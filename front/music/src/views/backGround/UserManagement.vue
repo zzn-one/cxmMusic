@@ -276,7 +276,7 @@ export default {
 
             if (code === 200 && resp.data.data === true) {
                 this.pageData()
-                this.$message.success("账号已删除")
+                this.$message.success("用户已删除")
             }
         },
         async delBatch() {
@@ -289,7 +289,7 @@ export default {
             const code = resp.data.code
             if (code === 200 && resp.data.data === true) {
                 this.pageData()
-                this.$message.success("账号已删除")
+                this.$message.success("用户已删除")
             }
         },
 

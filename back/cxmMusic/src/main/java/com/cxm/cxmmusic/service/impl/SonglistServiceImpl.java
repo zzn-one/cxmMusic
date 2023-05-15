@@ -57,12 +57,17 @@ public class SonglistServiceImpl extends ServiceImpl<SonglistMapper, Songlist>
         String authorName = songListWithSongs.getAuthorName();
         String account = songListWithSongs.getAuthorAccount();
         Date createTime = new Date();
+        String introduction = songListWithSongs.getIntroduction();
+        String tag = songListWithSongs.getTag();
+
 
         Songlist songlist = new Songlist();
         songlist.setName(name);
         songlist.setAuthorName(authorName);
         songlist.setAuthorAccount(account);
         songlist.setCreatedTime(createTime);
+        songlist.setIntroduction(introduction);
+        songlist.setTag(tag);
 
         //创建歌单
         int insert = songlistMapper.insert(songlist);

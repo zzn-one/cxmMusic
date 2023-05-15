@@ -163,7 +163,7 @@ public class RecommendServiceImpl implements RecommendService {
         ArrayList<DictTag> dictTags = new ArrayList<>();
 
         int size = collect.size();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 5; i++) {
             if (i < size) {
                 DictTag dictTag = collect.get(i).getDictTag();
                 dictTags.add(dictTag);

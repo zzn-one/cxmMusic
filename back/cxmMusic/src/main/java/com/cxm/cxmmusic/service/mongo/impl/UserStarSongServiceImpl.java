@@ -89,6 +89,9 @@ public class UserStarSongServiceImpl implements UserStarSongService {
             songStarNumber = new SongStarNumber(songId, 1L);
         } else {
             //更新 收藏次数
+            if (songStarNumber.getTimes() < 0){
+                songStarNumber.setTimes(0L);
+            }
             songStarNumber.addTimes(times);
         }
 

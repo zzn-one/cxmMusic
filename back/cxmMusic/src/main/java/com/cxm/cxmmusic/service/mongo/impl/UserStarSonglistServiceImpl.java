@@ -76,7 +76,12 @@ public class UserStarSonglistServiceImpl implements UserStarSonglistService {
 
         starNumber = mongoTemplate.findById(songlistId, SonglistStarNumber.class);
 
+
+
         if (starNumber != null) {
+            if (starNumber.getTimes() < 0){
+                starNumber.setTimes(0L);
+            }
             starNumber.addTimes(times);
         }else {
             //新增记录

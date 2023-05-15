@@ -197,6 +197,7 @@ export default {
         },
         //编辑按钮点击
         editBtnClick(row) {
+            this.temporaryUrl = ''
             this.editForm = row
             this.editFormVisible = true
         },
@@ -255,10 +256,10 @@ export default {
             const isLt2M = file.size / 1024 / 1024 < 2;
 
             if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
+                this.$message.error('上传图片只能是 JPG 格式!');
             }
             if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
+                this.$message.error('上传图片大小不能超过 2MB!');
             }
             return isJPG && isLt2M;
         },
@@ -338,7 +339,7 @@ export default {
         },
         //获取标签列表
         async getTagList() {
-            const resp = await this.$axios("/dict/tag")
+            const resp = await this.$axios("/dict/tag/all")
 
             const code = resp.data.code
             if (code === 200) {
